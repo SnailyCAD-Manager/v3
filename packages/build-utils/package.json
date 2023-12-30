@@ -1,0 +1,16 @@
+{
+    "name": "@scm/build-utils",
+    "version": "1.0.0",
+    "main": "buildScript.mjs",
+    "scripts": {
+        "postbuild": "node ./buildScript.mjs"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "copy": "^0.3.2",
+        "ora": "^8.0.1"
+    },
+    "devDependencies": {
+        "@types/copy": "^0.3.5"
+    }
+}

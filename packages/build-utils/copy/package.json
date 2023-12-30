@@ -1,0 +1,12 @@
+{
+    "name": "snaliycad-manager",
+    "productName": "SnailyCAD Manager",
+    "version": "3.0.0-dev.0",
+    "main": "index.js",
+    "license": "MIT",
+    "bin": {
+        "snailycad": "./cli/index.js",
+        "snailycad-manager": "./cli/index.js",
+        "scm": "./cli/index.js"
+    }
+}
