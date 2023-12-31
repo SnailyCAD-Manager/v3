@@ -6,6 +6,7 @@ import { useSocket } from "@/hooks/useSocket";
 import NotFound from "@/pages/404";
 import EnvEditorPage from "@/pages/env-editor";
 import HomePage from "@/pages/home";
+import InstanceCreatePage from "@/pages/instance-create";
 import InstanceSelector from "@/pages/instance-selector";
 import LoginPage from "@/pages/login";
 
@@ -26,6 +27,8 @@ export default function App() {
     switch (page.id) {
         case "instance-selector":
             return <InstanceSelector />;
+        case "instance-create":
+            return <InstanceCreatePage />;
         case "home":
             return (
                 <Layout>

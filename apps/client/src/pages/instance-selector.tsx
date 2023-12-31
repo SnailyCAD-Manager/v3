@@ -1,10 +1,12 @@
 import InstanceCard from "@/components/ui/InstanceCard";
 import { useInstance } from "@/hooks/useInstance";
+import { usePage } from "@/hooks/usePage";
 import { Button, SimpleGrid } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export default function InstanceSelector() {
     const { instances } = useInstance();
+    const { setPage } = usePage();
     return (
         <div className="w-full h-full flex flex-col gap-4 items-center justify-center">
             <h1 className="text-2xl font-semibold">Select an instance</h1>
@@ -28,6 +30,7 @@ export default function InstanceSelector() {
                 variant="light"
                 color="blue"
                 leftSection={<IconPlus size={16} />}
+                onClick={() => setPage("instance-create")}
             >
                 Create new instance
             </Button>
