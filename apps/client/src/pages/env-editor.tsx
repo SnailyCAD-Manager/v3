@@ -1,8 +1,8 @@
 import { useInstance } from "@/hooks/useInstance";
 import { Env } from "@/types/env";
-import { Alert, Button, TextInput } from "@mantine/core";
+import { ActionIcon, Alert, Button, TextInput, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconDeviceFloppy } from "@tabler/icons-react";
+import { IconDeviceFloppy, IconDownload } from "@tabler/icons-react";
 
 export default function EnvEditorPage() {
     const { activeInstanceData } = useInstance();
@@ -36,9 +36,35 @@ export default function EnvEditorPage() {
     });
 
     // function handleSubmit() {}
+    function handleDownloadEnv() {
+        const env = Object.entries(envForm.values)
+            .map(([key, value]) => `${key}="${value}"`)
+            .join("\n");
+
+        // Download it as a txt file
+        const element = document.createElement("a");
+        const file = new Blob([env], { type: "text/plain" });
+        element.href = URL.createObjectURL(file);
+        element.download = "manager-env.txt";
+        document.body.appendChild(element);
+        element.click();
+    }
     return (
         <form className="h-full flex flex-col justify-center gap-3 bg-neutral-900 rounded-md outline outline-1 outline-neutral-800">
-            <h1 className="text-xl font-semibold px-4 py-2 pb-0">ENV Editor</h1>
+            <div className="flex flex-row items-center justify-between">
+                <h1 className="text-xl font-semibold px-4 py-3 pb-0">
+                    ENV Editor
+                </h1>
+                <Tooltip
+                    label="Download .env file"
+                    className="mt-2.5 mr-3"
+                    onClick={handleDownloadEnv}
+                >
+                    <ActionIcon variant="default">
+                        <IconDownload size={16} />
+                    </ActionIcon>
+                </Tooltip>
+            </div>
             <div className="w-full h-full relative flex flex-col items-center justify-center gap-3 overflow-y-auto border-solid border-t-2 border-t-neutral-800">
                 <div className="flex flex-col items-center justify-center gap-3 absolute top-0 w-full p-3">
                     {Object.entries(envForm.values).map(([key, value]) => (
