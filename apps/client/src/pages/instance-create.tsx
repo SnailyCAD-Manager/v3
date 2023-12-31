@@ -16,7 +16,7 @@ export default function InstanceCreatePage() {
         },
     });
 
-    function handleSubmit(values) {
+    function handleSubmit(values: typeof form.values) {
         console.log(values);
     }
     return (
