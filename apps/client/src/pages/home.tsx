@@ -1,4 +1,4 @@
-import { useSocket } from "@/hooks/useSocket";
+import { useInstance } from "@/hooks/useInstance";
 import { ActionIcon, Button, Card, TextInput, Tooltip } from "@mantine/core";
 import {
     IconChevronRight,
@@ -7,7 +7,8 @@ import {
 } from "@tabler/icons-react";
 
 export default function HomePage() {
-    const { connected } = useSocket();
+    const { activeInstanceData } = useInstance();
+
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
             <div className="w-full">
@@ -43,52 +44,9 @@ export default function HomePage() {
                     {/* Terminal Style */}
                     <div className="w-full h-full relative rounded-md bg-black/50">
                         <pre className="absolute flex flex-col top-0 left-0 h-[calc(100%-2.5rem)] w-full p-2 overflow-hidden hover:overflow-y-auto whitespace-pre-wrap text-sm">
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
-                            <span>log</span>
+                            {activeInstanceData?.logs.map((log, index) => (
+                                <span key={index}>{log}</span>
+                            ))}
                         </pre>
                         <TextInput
                             variant="transparent"
@@ -98,9 +56,9 @@ export default function HomePage() {
                         />
                         <Tooltip label="Download logs">
                             <ActionIcon
-                                className="absolute top-2 left-[calc(100%-2.5rem)]"
-                                size={32}
-                                variant="subtle"
+                                className="absolute top-2 left-[calc(100%-2.2rem)]"
+                                size={28}
+                                variant="default"
                             >
                                 <IconDownload size={16} />
                             </ActionIcon>

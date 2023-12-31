@@ -1,3 +1,4 @@
+import { useInstance } from "@/hooks/useInstance";
 import { AppPages, usePage } from "@/hooks/usePage";
 import {
     Anchor,
@@ -13,14 +14,8 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
-import { IconSwitch3, IconSwitchHorizontal } from "@tabler/icons-react";
-import {
-    IconBrandDiscord,
-    IconChevronRight,
-    IconSearch,
-    IconSwitch,
-    IconSwitch2,
-} from "@tabler/icons-react";
+import { IconSwitchHorizontal } from "@tabler/icons-react";
+import { IconBrandDiscord, IconSearch } from "@tabler/icons-react";
 
 interface Props {
     children: React.ReactNode;
@@ -29,6 +24,7 @@ interface Props {
 export function Layout(props: Props) {
     const [opened, { toggle }] = useDisclosure();
     const { page: activePage, setPage } = usePage();
+    const { activeInstanceData } = useInstance();
 
     return (
         <AppShell
@@ -74,7 +70,9 @@ export function Layout(props: Props) {
                         label={
                             <div className="flex flex-row gap-1">
                                 <span>Instance:</span>
-                                <span className="font-normal">Test</span>
+                                <span className="font-normal">
+                                    {activeInstanceData?.name || "None"}
+                                </span>
                             </div>
                         }
                         rightSection={<IconSwitchHorizontal size="1rem" />}

@@ -1,3 +1,4 @@
+import { useInstance } from "@/hooks/useInstance";
 import { useSocket } from "@/hooks/useSocket";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
@@ -5,7 +6,8 @@ import { nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 
 export default function SocketProvider(): null {
-    const { connected, setConnected } = useSocket();
+    const { setConnected } = useSocket();
+    const { setActiveInstance, instances } = useInstance();
 
     useEffect(() => {
         function onConnect() {
@@ -17,6 +19,9 @@ export default function SocketProvider(): null {
             setConnected(true);
             nprogress.complete();
         }
+
+        console.log(instances);
+        setActiveInstance("dev");
 
         function onDisconnect() {
             notifications.show({

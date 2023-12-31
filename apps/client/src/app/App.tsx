@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePage } from "@/hooks/usePage";
 import { useSocket } from "@/hooks/useSocket";
 import NotFound from "@/pages/404";
+import EnvEditorPage from "@/pages/env-editor";
 import HomePage from "@/pages/home";
 import LoginPage from "@/pages/login";
 
@@ -30,6 +31,12 @@ export default function App() {
             );
         case "login":
             return <LoginPage />;
+        case "env-editor":
+            return (
+                <Layout>
+                    <EnvEditorPage />
+                </Layout>
+            );
         default:
             return <NotFound />;
     }

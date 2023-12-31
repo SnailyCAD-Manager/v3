@@ -3,13 +3,13 @@ export type Env = {
     POSTGRES_USER?: string;
     POSTGRES_DB?: string;
     DB_HOST?: string;
-    DB_PORT?: number;
+    DB_PORT?: string;
     JWT_SECRET?: string;
     CORS_ORIGIN_URL?: string;
     NEXT_PUBLIC_CLIENT_URL?: string;
     NEXT_PUBLIC_PROD_ORIGIN?: string;
-    PORT_API?: number;
-    PORT_CLIENT?: number;
+    PORT_API?: string;
+    PORT_CLIENT?: string;
     ENCRYPTION_TOKEN?: string;
     DOMAIN?: string;
     SECURE_COOKIES_FOR_IFRAME?: boolean;

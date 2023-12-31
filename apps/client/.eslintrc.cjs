@@ -8,7 +8,7 @@ module.exports = {
     ],
     ignorePatterns: ["dist", ".eslintrc.cjs"],
     parser: "@typescript-eslint/parser",
-    plugins: ["react-refresh", "import-resolver-typescript"],
+    plugins: ["react-refresh", "import"],
     rules: {
         "react-refresh/only-export-components": [
             "warn",
@@ -16,8 +16,14 @@ module.exports = {
         ],
     },
     settings: {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"],
+        },
         "import/resolver": {
-            typescript: {},
+            typescript: {
+                alwaysTryTypes: true,
+                project: "./tsconfig.json",
+            },
         },
     },
 };
