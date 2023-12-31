@@ -1,6 +1,6 @@
 import { useInstance } from "@/hooks/useInstance";
 import { Env } from "@/types/env";
-import { ActionIcon, Alert, Button, TextInput, Tooltip } from "@mantine/core";
+import { Alert, Button, TextInput, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDeviceFloppy, IconDownload } from "@tabler/icons-react";
 
@@ -55,15 +55,6 @@ export default function EnvEditorPage() {
                 <h1 className="text-xl font-semibold px-4 py-3 pb-0">
                     ENV Editor
                 </h1>
-                <Tooltip
-                    label="Download .env file"
-                    className="mt-2.5 mr-3"
-                    onClick={handleDownloadEnv}
-                >
-                    <ActionIcon variant="default">
-                        <IconDownload size={16} />
-                    </ActionIcon>
-                </Tooltip>
             </div>
             <div className="w-full h-full relative flex flex-col items-center justify-center gap-3 overflow-y-auto border-solid border-t-2 border-t-neutral-800">
                 <div className="flex flex-col items-center justify-center gap-3 absolute top-0 w-full p-3">
@@ -83,18 +74,29 @@ export default function EnvEditorPage() {
                     ))}
                 </div>
             </div>
-            <div className="flex flex-row items-center justify-end gap-3 px-4 py-2 border-t-2 border-t-neutral-800">
-                <Alert color="orange" className="text-xs">
-                    <b>Warning:</b>&nbsp; Changing these values can cause issues
-                    with your SnailyCAD instance. Please be careful, and consult
-                    the documentation.
-                </Alert>
-                <Button
-                    variant="light"
-                    leftSection={<IconDeviceFloppy size={16} />}
-                >
-                    Save
-                </Button>
+            <div className="flex flex-row items-center justify-between gap-3 px-4 py-2 border-t-2 border-t-neutral-800">
+                <Tooltip label="Download .env file" onClick={handleDownloadEnv}>
+                    <Button
+                        variant="default"
+                        size="xs"
+                        leftSection={<IconDownload size={16} />}
+                    >
+                        Download
+                    </Button>
+                </Tooltip>
+                <div className="flex flex-row gap-2 items-center">
+                    <Alert color="orange" className="text-xs">
+                        <b>Warning:</b>&nbsp; Changing these values can cause
+                        issues with your SnailyCAD instance. Please be careful,
+                        and consult the documentation.
+                    </Alert>
+                    <Button
+                        variant="light"
+                        leftSection={<IconDeviceFloppy size={16} />}
+                    >
+                        Save
+                    </Button>
+                </div>
             </div>
         </form>
     );
