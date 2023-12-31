@@ -77,6 +77,7 @@ export function Layout(props: Props) {
                         }
                         rightSection={<IconSwitchHorizontal size="1rem" />}
                         className="!bg-white/5 hover:!bg-white/10"
+                        onClick={() => setPage("instance-selector")}
                     />
                 </AppShell.Section>
                 <Divider className="mt-4" />

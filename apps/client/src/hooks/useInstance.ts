@@ -1,4 +1,5 @@
 import { Instance } from "@/types/instance";
+import { devInstances } from "@/utils/devValues/instances";
 import { create } from "zustand";
 
 type InstanceState = {
@@ -13,38 +14,7 @@ type InstanceState = {
 };
 
 export const useInstance = create<InstanceState>((set) => ({
-    instances: [
-        {
-            id: "dev",
-            name: "Development",
-            logs: ["log1", "log2", "log3"],
-            env: {
-                CORS_ORIGIN_URL: "http://localhost:3000",
-                DB_HOST: "localhost",
-                DB_PORT: "5432",
-                DISCORD_BOT_TOKEN: "token",
-                DISCORD_CLIENT_ID: "id",
-                DISCORD_CLIENT_SECRET: "secret",
-                DISCORD_SERVER_ID: "id",
-                DOMAIN: "localhost",
-                ENCRYPTION_TOKEN: "token",
-                JWT_SECRET: "secret",
-                NEXT_PUBLIC_CLIENT_URL: "http://localhost:3000",
-                NEXT_PUBLIC_PROD_ORIGIN: "http://localhost:3000",
-                PORT_API: "4000",
-                PORT_CLIENT: "3000",
-                POSTGRES_DB: "db",
-                POSTGRES_PASSWORD: "password",
-                POSTGRES_USER: "user",
-                SECURE_COOKIES_FOR_IFRAME: false,
-                STEAM_API_KEY: "key",
-            },
-            status: {
-                api: true,
-                client: true,
-            },
-        },
-    ],
+    instances: process.env.NODE_ENV === "development" ? devInstances : [],
     activeInstance: "",
     activeInstanceData: null,
     setActiveInstance: (id) =>

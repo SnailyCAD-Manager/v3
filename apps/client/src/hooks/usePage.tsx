@@ -1,7 +1,7 @@
 import { IconDashboard, IconEdit } from "@tabler/icons-react";
 import { create } from "zustand";
 
-type ValidPageId = "login" | "home" | "env-editor";
+type ValidPageId = "login" | "instance-selector" | "home" | "env-editor";
 
 type Page = {
     name: string;
@@ -11,6 +11,11 @@ type Page = {
 };
 
 export const AppPages: Page[] = [
+    {
+        name: "Instance Selector",
+        id: "instance-selector",
+        noNav: true,
+    },
     {
         name: "Login",
         id: "login",
@@ -34,7 +39,7 @@ type PageState = {
 };
 
 export const usePage = create<PageState>((set) => ({
-    page: process.env.NODE_ENV === "development" ? AppPages[1] : AppPages[0],
+    page: process.env.NODE_ENV === "development" ? AppPages[0] : AppPages[1],
     setPage: (page) =>
         set(() => ({ page: AppPages.find((p) => p.id === page) })),
 }));

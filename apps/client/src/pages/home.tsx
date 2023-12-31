@@ -12,7 +12,7 @@ export default function HomePage() {
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
             <div className="w-full">
-                <Card className="w-full">
+                <Card className="w-full !bg-neutral-900 !outline !outline-1 !outline-neutral-800">
                     <div className="w-full h-full gap-2 flex flex-col items-center justify-center">
                         <h1 className="text-lg font-semibold text-center">
                             SnailyCAD Controls
@@ -36,7 +36,7 @@ export default function HomePage() {
                     </div>
                 </Card>
             </div>
-            <Card className="w-full h-full flex flex-col gap-2">
+            <Card className="w-full h-full flex flex-col gap-2 !bg-neutral-900 !outline !outline-1 !outline-neutral-800">
                 <h1 className="text-xl font-semibold text-center">
                     SnailyCAD Console
                 </h1>
