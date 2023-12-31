@@ -1,6 +1,6 @@
 import { useInstance } from "@/hooks/useInstance";
 import { Env } from "@/types/env";
-import { Alert, Button, Card, ScrollArea, TextInput } from "@mantine/core";
+import { Alert, Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 
@@ -35,7 +35,7 @@ export default function EnvEditorPage() {
         } as Env,
     });
 
-    function handleSubmit() {}
+    // function handleSubmit() {}
     return (
         <form className="h-full flex flex-col justify-center gap-3 bg-neutral-900 rounded-md outline outline-1 outline-neutral-800">
             <h1 className="text-xl font-semibold px-4 py-2 pb-0">ENV Editor</h1>

@@ -1,6 +1,6 @@
 import InstanceCard from "@/components/ui/InstanceCard";
 import { useInstance } from "@/hooks/useInstance";
-import { Alert, Button, SimpleGrid } from "@mantine/core";
+import { Button, SimpleGrid } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export default function InstanceSelector() {
