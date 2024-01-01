@@ -5,6 +5,7 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import HandleAllSockets from "./sockets";
+import { exec } from "child_process";
 
 // Create a new express app that runs a socket.io server that accepts traffic from any origin
 let settings: any = null;
@@ -100,8 +101,15 @@ async function initAPI() {
     // #region Start Server
     server.listen(settings.port, () => {
         console.log(`Server listening on port ${settings.port}`);
+        openInBrowser();
     });
     // #endregion
 }
 
 initAPI();
+
+function openInBrowser() {
+    if (process.env.NODE_ENV === "development") {
+        exec(`start http://localhost:${settings.port}`);
+    }
+}
