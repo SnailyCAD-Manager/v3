@@ -9,6 +9,20 @@ import {
 export default function HomePage() {
     const { activeInstanceData } = useInstance();
 
+    function downloadLogs() {
+        const logs = activeInstanceData?.logs.join("\n");
+
+        // Download it as a txt file
+        const element = document.createElement("a");
+        const file = new Blob([logs || "Logs were empty!"], {
+            type: "text/plain",
+        });
+        element.href = URL.createObjectURL(file);
+        element.download = "manager-logs.txt";
+        document.body.appendChild(element);
+        element.click();
+    }
+
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
             <div className="w-full">
@@ -54,7 +68,7 @@ export default function HomePage() {
                             placeholder="Enter command..."
                             leftSection={<IconChevronRight size={16} />}
                         />
-                        <Tooltip label="Download logs">
+                        <Tooltip label="Download logs" onClick={downloadLogs}>
                             <ActionIcon
                                 className="absolute top-2 left-[calc(100%-2.2rem)]"
                                 size={28}

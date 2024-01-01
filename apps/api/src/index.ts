@@ -3,45 +3,105 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import path from "path";
+import fs from "fs";
+import HandleAllSockets from "./sockets";
 
 // Create a new express app that runs a socket.io server that accepts traffic from any origin
-const app = express();
-app.use(cors());
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-    },
-});
+let settings: any = null;
 
-app.get("/", (req, res) => {
-    if (process.env.NODE_ENV === "production") {
-        res.sendFile(path.resolve(process.cwd(), "../../client/index.html"));
-    } else {
-        res.redirect("http://localhost:5173");
+async function initAPI() {
+    // #region Create Settings
+    if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
+        await fs.promises.writeFile(
+            path.resolve(process.cwd(), "data/settings.json"),
+            await fs.promises.readFile(
+                path.resolve(process.cwd(), "data/settings.default.json")
+            )
+        );
     }
-});
+    // #endregion
 
-// Listen for incoming connections
-io.on("connection", (socket) => {
-    console.log(`New Client: ${socket.id}`);
+    // #region Check for Settings Updates
+    const defaultSettings = JSON.parse(
+        await fs.promises.readFile(
+            path.resolve(process.cwd(), "data/settings.default.json"),
+            "utf-8"
+        )
+    );
+    const currentSettings = JSON.parse(
+        await fs.promises.readFile(
+            path.resolve(process.cwd(), "data/settings.json"),
+            "utf-8"
+        )
+    );
 
-    // Listen for "message" events from the client
-    socket.on("message", (message) => {
-        console.log("Message received: ", message);
+    const isSettingsOutdated = Object.keys(defaultSettings).some(
+        (key) => !currentSettings.hasOwnProperty(key)
+    );
 
-        // Broadcast the message to all connected clients
-        io.emit("message", message);
+    if (isSettingsOutdated) {
+        Object.keys(defaultSettings).forEach((key) => {
+            if (!currentSettings.hasOwnProperty(key)) {
+                currentSettings[key] = defaultSettings[key];
+            }
+        });
+
+        await fs.promises.writeFile(
+            path.resolve(process.cwd(), "data/settings.json"),
+            JSON.stringify(currentSettings, null, 4)
+        );
+    }
+    // #endregion
+
+    // #region Set Settings
+    settings = JSON.parse(
+        await fs.promises.readFile(
+            path.resolve(process.cwd(), "data/settings.json"),
+            "utf-8"
+        )
+    );
+    // #endregion
+
+    // #region Create App
+    const app = express();
+    app.use(cors());
+    const server = http.createServer(app);
+    const io = new Server(server, {
+        cors: {
+            origin: "*",
+        },
     });
+    // #endregion
 
-    // Listen for "disconnect" events from the client
-    socket.on("disconnect", () => {
-        console.log(`Client disconnected: ${socket.id}`);
+    // #region Serve client and API
+    app.get("/", (req, res) => {
+        if (process.env.NODE_ENV === "production") {
+            res.sendFile(
+                path.resolve(process.cwd(), "../../client/index.html")
+            );
+        } else {
+            res.redirect("http://localhost:5173");
+        }
     });
-});
+    // #endregion
 
-// Start the server
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+    // #region Socket.io
+    io.on("connection", (socket) => {
+        console.log(`New Client: ${socket.id}`);
+
+        HandleAllSockets(socket);
+
+        socket.on("disconnect", () => {
+            console.log(`Client disconnected: ${socket.id}`);
+        });
+    });
+    // #endregion
+
+    // #region Start Server
+    server.listen(settings.port, () => {
+        console.log(`Server listening on port ${settings.port}`);
+    });
+    // #endregion
+}
+
+initAPI();
