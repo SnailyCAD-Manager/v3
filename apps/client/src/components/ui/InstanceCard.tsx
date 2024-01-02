@@ -18,12 +18,13 @@ export default function InstanceCard(props: Props) {
     }
 
     return (
-        <CustomCard className="flex flex-col items-center gap-2 w-80">
+        <CustomCard
+            className={`flex flex-col items-center gap-2 w-full h-fit ${
+                activeInstance === props.id && "!outline-2 !outline-blue-500"
+            }`}
+        >
             <h1 className="text-md font-semibold flex flex-row gap-1 items-center">
                 {props.name}{" "}
-                {activeInstance === props.id && (
-                    <span className="text-green-500">{"(Current)"}</span>
-                )}
             </h1>
             <Button variant="default" color="blue" onClick={selectInstance}>
                 Select

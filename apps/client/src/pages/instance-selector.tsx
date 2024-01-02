@@ -1,7 +1,7 @@
 import InstanceCard from "@/components/ui/InstanceCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
-import { Button, SimpleGrid } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export default function InstanceSelector() {
@@ -13,18 +13,16 @@ export default function InstanceSelector() {
             {instances.length === 0 ? (
                 <div className="text-red-500">No instances found!</div>
             ) : (
-                <SimpleGrid
-                    // If there's only 1 instance, show 1 col. If there's 2, show 2, if there's 3, show 3, if there's 4, show 4, if there's more than 4, show 4
-                    cols={instances.length > 4 ? 4 : instances.length}
-                >
+                // Grid of instance cards
+                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full sm:w-full md:w-3/4 lg:w-1/2 gap-4">
                     {instances.map((instance) => (
                         <InstanceCard
-                            key={instance.id}
                             name={instance.name}
                             id={instance.id}
+                            key={instance.id}
                         />
                     ))}
-                </SimpleGrid>
+                </div>
             )}
             <Button
                 variant="light"

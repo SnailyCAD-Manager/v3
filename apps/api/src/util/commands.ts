@@ -3,11 +3,11 @@ type Command = {
     args: string[];
 };
 
-type CommandTree = {
+export type CommandTree = {
     [key: string]: Command | CommandTree;
 };
 
-const command: CommandTree = {
+const commands: CommandTree = {
     install: {
         clone: {
             command: "git",
@@ -15,11 +15,15 @@ const command: CommandTree = {
                 "clone",
                 "https://github.com/SnailyCAD/snaily-cadv4.git",
                 ".",
-            ], //? I use . because it'll go into the instance dir on install (src/sockets/creat-instance.ts)
+            ],
         },
         deps: {
             command: "pnpm",
-            args: ["install", "--config.confirmModulesPurge=false"],
+            args: [
+                "install",
+                "--config.confirmModulesPurge=false",
+                "--prod=false",
+            ],
         },
         moveEnv: {
             command: "node",
@@ -27,3 +31,5 @@ const command: CommandTree = {
         },
     },
 };
+
+export default commands as CommandTree;
