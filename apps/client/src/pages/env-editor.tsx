@@ -5,7 +5,6 @@ import {
     ActionIcon,
     Alert,
     Button,
-    Divider,
     ScrollArea,
     TextInput,
     Tooltip,
@@ -62,7 +61,7 @@ export default function EnvEditorPage() {
         <form className="w-full h-full">
             <CustomCard className="w-full h-full flex flex-col items-center">
                 {/* Header (Just a title with a download button on the right) */}
-                <div className="w-full flex flex-row items-center justify-between">
+                <div className="w-full flex flex-row items-center justify-between border-b border-b-neutral-500 pb-3">
                     <h1 className="text-xl font-semibold">Env Editor</h1>
                     <Tooltip label="Download ENV">
                         <ActionIcon
@@ -73,10 +72,9 @@ export default function EnvEditorPage() {
                         </ActionIcon>
                     </Tooltip>
                 </div>
-                <Divider className="mt-3 h-0.5 bg-neutral-500 w-full" />
                 {/* Form */}
                 <ScrollArea className="w-full h-full">
-                    <div className="w-full h-full flex flex-col gap-2 mt-3">
+                    <div className="w-full h-full flex flex-col gap-2 mt-3 mb-3">
                         {Object.entries(envForm.values).map(([key], index) => (
                             <TextInput
                                 key={index}
@@ -89,7 +87,7 @@ export default function EnvEditorPage() {
                     </div>
                 </ScrollArea>
                 {/* Footer (Just a save button) */}
-                <div className="w-full flex flex-row items-center justify-end gap-2 mt-3">
+                <div className="w-full flex flex-row items-center justify-end gap-2 border-t-neutral-500 border-t pt-3">
                     <Alert>
                         <b>WARNING</b>&nbsp;Editing the ENV can cause issues
                     </Alert>
