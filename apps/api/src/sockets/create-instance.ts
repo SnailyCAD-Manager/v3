@@ -109,8 +109,9 @@ export default function HandleCreateInstance(socket: Socket) {
             });
         }
 
-        fs.mkdirSync(path.resolve(process.cwd(), "data/instances", id));
-        socket.emit("create-instance-stdout", "Created instance directory");
-        cloneRepo();
+        // Check to see if the instance directory already exists based on the ID
+        if (fs.existsSync(path.resolve(process.cwd(), "data/instances", id))) {
+            socket.emit("create-instance-fail", "Instance Already Exists");
+        }
     });
 }

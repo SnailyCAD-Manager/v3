@@ -1,3 +1,4 @@
+import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { ActionIcon, Button, Card, TextInput, Tooltip } from "@mantine/core";
 import {
@@ -25,32 +26,30 @@ export default function HomePage() {
 
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
-            <div className="w-full">
-                <Card className="w-full !bg-neutral-900 !outline !outline-1 !outline-neutral-800">
-                    <div className="w-full h-full gap-2 flex flex-col items-center justify-center">
-                        <h1 className="text-lg font-semibold text-center">
-                            SnailyCAD Controls
-                        </h1>
-                        <div className="flex flex-row gap-2 items-center justify-center w-full">
-                            <Button
-                                variant="light"
-                                color="green"
-                                leftSection={<IconPlayerPlay size={16} />}
-                            >
-                                Start
-                            </Button>
-                            <Button
-                                variant="light"
-                                color="blue"
-                                leftSection={<IconDownload size={16} />}
-                            >
-                                Update
-                            </Button>
-                        </div>
+            <CustomCard className="w-full">
+                <div className="w-full h-full gap-2 flex flex-col items-center justify-center">
+                    <h1 className="text-lg font-semibold text-center">
+                        SnailyCAD Controls
+                    </h1>
+                    <div className="flex flex-row gap-2 items-center justify-center w-full">
+                        <Button
+                            variant="light"
+                            color="green"
+                            leftSection={<IconPlayerPlay size={16} />}
+                        >
+                            Start
+                        </Button>
+                        <Button
+                            variant="light"
+                            color="blue"
+                            leftSection={<IconDownload size={16} />}
+                        >
+                            Update
+                        </Button>
                     </div>
-                </Card>
-            </div>
-            <Card className="w-full h-full flex flex-col gap-2 !bg-neutral-900 !outline !outline-1 !outline-neutral-800">
+                </div>
+            </CustomCard>
+            <CustomCard className="h-full w-full flex flex-col gap-2">
                 <h1 className="text-xl font-semibold text-center">
                     SnailyCAD Console
                 </h1>
@@ -79,7 +78,7 @@ export default function HomePage() {
                         </Tooltip>
                     </div>
                 </Card.Section>
-            </Card>
+            </CustomCard>
         </div>
     );
 }

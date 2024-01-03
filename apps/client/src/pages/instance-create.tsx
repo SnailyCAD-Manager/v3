@@ -1,7 +1,10 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { usePage } from "@/hooks/usePage";
+import socket from "@/utils/socket";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { useEffect } from "react";
 
 export default function InstanceCreatePage() {
     const form = useForm({
@@ -18,10 +21,33 @@ export default function InstanceCreatePage() {
     });
 
     function handleSubmit(values: typeof form.values) {
-        console.log(values);
+        socket.emit("create-instance", values);
     }
 
     const { setPage } = usePage();
+
+    useEffect(() => {
+        socket.on("create-instance-fail", (error: string) => {
+            notifications.show({
+                title: "Error creating instance",
+                message: error,
+                color: "red",
+            });
+        });
+
+        socket.on("create-instance-success", () => {
+            notifications.show({
+                title: "Instance Created",
+                message: `Your instance ${form.values.name} has been created successfully!`,
+                color: "green",
+            });
+            setPage("instance-selector");
+        });
+
+        return () => {
+            socket.off("create-instance-fail");
+        };
+    }, []);
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">

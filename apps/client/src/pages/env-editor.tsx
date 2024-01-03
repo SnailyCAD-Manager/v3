@@ -1,6 +1,15 @@
+import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { Env } from "@/types/env";
-import { Alert, Button, TextInput, Tooltip } from "@mantine/core";
+import {
+    ActionIcon,
+    Alert,
+    Button,
+    Divider,
+    ScrollArea,
+    TextInput,
+    Tooltip,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDeviceFloppy, IconDownload } from "@tabler/icons-react";
 
@@ -50,54 +59,49 @@ export default function EnvEditorPage() {
         element.click();
     }
     return (
-        <form className="h-full flex flex-col justify-center gap-3 bg-neutral-900 rounded-md outline outline-1 outline-neutral-800">
-            <div className="flex flex-row items-center justify-between">
-                <h1 className="text-xl font-semibold px-4 py-3 pb-0">
-                    ENV Editor
-                </h1>
-            </div>
-            <div className="w-full h-full relative flex flex-col items-center justify-center gap-3 overflow-y-auto border-solid border-t-2 border-t-neutral-800">
-                <div className="flex flex-col items-center justify-center gap-3 absolute top-0 w-full p-3">
-                    {Object.entries(envForm.values).map(([key, value]) => (
-                        <TextInput
-                            key={key}
-                            label={key}
-                            value={value as string}
-                            className="w-full"
-                            onChange={(e) =>
-                                envForm.setFieldValue(
-                                    key,
-                                    e.currentTarget.value
-                                )
-                            }
-                        />
-                    ))}
+        <form className="w-full h-full">
+            <CustomCard className="w-full h-full flex flex-col items-center">
+                {/* Header (Just a title with a download button on the right) */}
+                <div className="w-full flex flex-row items-center justify-between">
+                    <h1 className="text-xl font-semibold">Env Editor</h1>
+                    <Tooltip label="Download ENV">
+                        <ActionIcon
+                            variant="default"
+                            onClick={handleDownloadEnv}
+                        >
+                            <IconDownload size={16} />
+                        </ActionIcon>
+                    </Tooltip>
                 </div>
-            </div>
-            <div className="flex flex-row items-center justify-between gap-3 px-4 py-2 border-t-2 border-t-neutral-800">
-                <Tooltip label="Download .env file" onClick={handleDownloadEnv}>
-                    <Button
-                        variant="default"
-                        size="xs"
-                        leftSection={<IconDownload size={16} />}
-                    >
-                        Download
-                    </Button>
-                </Tooltip>
-                <div className="flex flex-row gap-2 items-center">
-                    <Alert color="orange" className="text-xs">
-                        <b>Warning:</b>&nbsp; Changing these values can cause
-                        issues with your SnailyCAD instance. Please be careful,
-                        and consult the documentation.
+                <Divider className="mt-3 h-0.5 bg-neutral-500 w-full" />
+                {/* Form */}
+                <ScrollArea className="w-full h-full">
+                    <div className="w-full h-full flex flex-col gap-2 mt-3">
+                        {Object.entries(envForm.values).map(([key], index) => (
+                            <TextInput
+                                key={index}
+                                label={key}
+                                className="w-full"
+                                required
+                                {...envForm.getInputProps(key)}
+                            />
+                        ))}
+                    </div>
+                </ScrollArea>
+                {/* Footer (Just a save button) */}
+                <div className="w-full flex flex-row items-center justify-end gap-2 mt-3">
+                    <Alert>
+                        <b>WARNING</b>&nbsp;Editing the ENV can cause issues
                     </Alert>
                     <Button
                         variant="light"
+                        color="blue"
                         leftSection={<IconDeviceFloppy size={16} />}
                     >
                         Save
                     </Button>
                 </div>
-            </div>
+            </CustomCard>
         </form>
     );
 }

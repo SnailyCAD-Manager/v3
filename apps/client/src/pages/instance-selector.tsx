@@ -1,7 +1,8 @@
+import CustomCard from "@/components/ui/CustomCard";
 import InstanceCard from "@/components/ui/InstanceCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
-import { Button } from "@mantine/core";
+import { Button, ScrollArea } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export default function InstanceSelector() {
@@ -13,16 +14,22 @@ export default function InstanceSelector() {
             {instances.length === 0 ? (
                 <div className="text-red-500">No instances found!</div>
             ) : (
-                // Grid of instance cards
-                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full sm:w-full md:w-3/4 lg:w-1/2 gap-4">
-                    {instances.map((instance) => (
-                        <InstanceCard
-                            name={instance.name}
-                            id={instance.id}
-                            key={instance.id}
-                        />
-                    ))}
-                </div>
+                <CustomCard
+                    variant="darker"
+                    className="w-full sm:w-full md:w-4/5 lg:w-3/4 xl:w-1/2 !h-3/4 !px-3"
+                >
+                    <ScrollArea className="w-full h-full flex">
+                        <div className="flex flex-col gap-3 w-full h-full rounded-md p-2">
+                            {instances.map((instance) => (
+                                <InstanceCard
+                                    key={instance.id}
+                                    name={instance.name}
+                                    id={instance.id}
+                                />
+                            ))}
+                        </div>
+                    </ScrollArea>
+                </CustomCard>
             )}
             <Button
                 variant="light"
