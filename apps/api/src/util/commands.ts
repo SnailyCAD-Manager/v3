@@ -27,7 +27,7 @@ const commands: CommandTree = {
         },
         copyEnv: {
             command: "node",
-            args: ["scripts/copy-env.js", "--client", "--api"],
+            args: ["scripts/copy-env.mjs", "--client", "--api"],
         },
     },
 };

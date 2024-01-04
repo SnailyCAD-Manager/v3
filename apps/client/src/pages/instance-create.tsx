@@ -69,7 +69,7 @@ export default function InstanceCreatePage() {
                 color: "red",
             });
 
-            setLogs([...logs, error]);
+            setLogs((logs) => [...logs, error]);
 
             setLoading({
                 message: "",
@@ -89,6 +89,8 @@ export default function InstanceCreatePage() {
                 message: "",
                 state: false,
             });
+
+            setLogs((logs) => [...logs, "Instance created successfully!"]);
         });
 
         socket.on("create-instance-stdout", (data: string) => {
@@ -98,7 +100,7 @@ export default function InstanceCreatePage() {
                 message: data,
             });
 
-            setLogs([...logs, data]);
+            setLogs((logs) => [...logs, data]);
         });
 
         socket.on("create-instance-stderr", (data: string) => {
@@ -108,7 +110,7 @@ export default function InstanceCreatePage() {
                 message: data,
             });
 
-            setLogs([...logs, data]);
+            setLogs((logs) => [...logs, data]);
         });
 
         return () => {
