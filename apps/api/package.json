@@ -5,7 +5,7 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "dev": "nodemon ./src/index.ts",
+        "dev": "nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/index.ts --ignore \"data/**/*\"",
         "build": "tsc -p ."
     },
     "devDependencies": {

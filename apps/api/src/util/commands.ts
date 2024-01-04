@@ -25,9 +25,9 @@ const commands: CommandTree = {
                 "--prod=false",
             ],
         },
-        moveEnv: {
+        copyEnv: {
             command: "node",
-            args: ["scripts/move-env.js", "--client", "--api"],
+            args: ["scripts/copy-env.js", "--client", "--api"],
         },
     },
 };
