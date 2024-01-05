@@ -1,6 +1,7 @@
 import { useInstance } from "@/hooks/useInstance";
 import { useSocket } from "@/hooks/useSocket";
 import { Instance } from "@/types/instance";
+import { LogData } from "@/types/socket";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
 import { nprogress } from "@mantine/nprogress";
@@ -69,9 +70,20 @@ export default function SocketProvider(): null {
             });
         }
 
+        function onInstanceLog(data: LogData) {
+            const instance = instances.find((i) => i.id === data.id);
+            if (!instance) return;
+
+            instance.logs.push(data.log);
+            updateInstance(instance);
+
+            console.log(`Instance ${data.id} log:` + data.log);
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("load-instances", onInstanceUpdate);
+        socket.on("instance-log", onInstanceLog);
         socket.connect();
 
         return () => {

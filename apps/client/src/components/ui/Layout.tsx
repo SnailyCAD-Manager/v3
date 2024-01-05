@@ -26,6 +26,24 @@ export function Layout(props: Props) {
     const { page: activePage, setPage } = usePage();
     const { activeInstanceData } = useInstance();
 
+    function GetActiveInstanceStatus(): "offline" | "partial" | "online" {
+        if (
+            activeInstanceData?.status.api &&
+            activeInstanceData?.status.client
+        ) {
+            return "online";
+        }
+
+        if (
+            !activeInstanceData?.status.api &&
+            !activeInstanceData?.status.client
+        ) {
+            return "offline";
+        }
+
+        return "partial";
+    }
+
     return (
         <AppShell
             header={{ height: 60 }}
@@ -68,7 +86,17 @@ export function Layout(props: Props) {
                     <Divider className="my-2" />
                     <NavLink
                         label={
-                            <div className="flex flex-row gap-1">
+                            <div className="flex flex-row items-center gap-1">
+                                <div
+                                    className={`w-2 h-2 rounded-full ${
+                                        GetActiveInstanceStatus() === "online"
+                                            ? "!bg-green-500"
+                                            : GetActiveInstanceStatus() ===
+                                                "partial"
+                                              ? "!bg-yellow-500"
+                                              : "!bg-red-500"
+                                    }`}
+                                />
                                 <span>Instance:</span>
                                 <span className="font-normal">
                                     {activeInstanceData?.name || "None"}

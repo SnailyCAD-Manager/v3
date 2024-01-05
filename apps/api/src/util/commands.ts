@@ -30,6 +30,16 @@ const commands: CommandTree = {
             args: ["scripts/copy-env.mjs", "--client", "--api"],
         },
     },
+    start: {
+        withBuild: {
+            command: "pnpm",
+            args: ["run", "build", "&&", "pnpm", "run", "start"],
+        },
+        withoutBuild: {
+            command: "pnpm",
+            args: ["run", "start"],
+        },
+    },
 };
 
 export default commands as CommandTree;
