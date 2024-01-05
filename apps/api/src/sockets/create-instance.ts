@@ -130,6 +130,14 @@ export default function HandleCreateInstance(socket: Socket) {
             return;
         }
 
+        !fs.existsSync(
+            path.resolve(process.cwd(), "data/instances/instances.json")
+        ) &&
+            fs.writeFileSync(
+                path.resolve(process.cwd(), "data/instances/instances.json"),
+                JSON.stringify([])
+            );
+
         // Create the instance directory
         fs.mkdirSync(path.resolve(process.cwd(), "data/instances", id));
 

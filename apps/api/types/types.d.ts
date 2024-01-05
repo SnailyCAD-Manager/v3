@@ -1,6 +1,12 @@
 export type Instance = {
     name: string;
     id: string;
+    logs: string[];
+    env: Env;
+    status: {
+        api: boolean;
+        client: boolean;
+    };
 };
 
 export type Env = {

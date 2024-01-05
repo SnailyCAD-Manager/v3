@@ -14,7 +14,7 @@ type InstanceState = {
 };
 
 export const useInstance = create<InstanceState>((set) => ({
-    instances: process.env.NODE_ENV === "development" ? devInstances : [],
+    instances: [],
     activeInstance: "",
     activeInstanceData: null,
     setActiveInstance: (id) =>
