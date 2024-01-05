@@ -40,26 +40,32 @@ export default function SocketProvider(): null {
         }
 
         function onInstanceUpdate(updatedInstances: Instance[]) {
-            updatedInstances.forEach((instance: Instance) => {
-                // If the instance is already in the list, update it
-                if (instances.find((i) => i.id === instance.id)) {
-                    updateInstance({
-                        id: instance.id,
-                        logs: instances.find((i) => i.id === instance.id)!.logs,
-                        env: instance.env,
-                        name: instance.name,
-                        status: instance.status,
-                    });
-                } else {
-                    // Otherwise, add it
-                    addInstance(instance);
-                }
+            /* 
+                If the instances already exists, and it's found in the updatedInstances array, update it.
+                If the instance already exists, but it's not found in the updatedInstances array, remove it.
+                If the instance doesn't exist, but it's found in the updatedInstances array, add it.
+            */
 
-                instances.forEach((i) => {
-                    if (!updatedInstances.find((u) => u.id === i.id)) {
-                        removeInstance(i.id);
-                    }
-                });
+            const updatedInstanceIds = updatedInstances.map((i) => i.id);
+            const instanceIds = useInstance
+                .getState()
+                .instances.map((i) => i.id);
+
+            updatedInstances.forEach((instance) => {
+                if (instanceIds.includes(instance.id)) {
+                    updateInstance(instance);
+                    console.log("updated", instance.id);
+                } else {
+                    console.log(instanceIds, instance.id);
+                    addInstance(instance);
+                    console.log("added", instance.id);
+                }
+            });
+
+            instanceIds.forEach((id) => {
+                if (!updatedInstanceIds.includes(id)) {
+                    removeInstance(id);
+                }
             });
         }
 
