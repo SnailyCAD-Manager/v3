@@ -40,35 +40,26 @@ export default function SocketProvider(): null {
         }
 
         function onInstanceUpdate(updatedInstances: Instance[]) {
-            console.log("updated instances", updatedInstances);
-            const updatedInstanceIds = updatedInstances.map(
-                (instance) => instance.id
-            );
-            const currentInstanceIds = instances.map((instance) => instance.id);
-
-            const removedInstanceIds = currentInstanceIds.filter(
-                (id) => !updatedInstanceIds.includes(id)
-            );
-            const addedInstanceIds = updatedInstanceIds.filter(
-                (id) => !currentInstanceIds.includes(id)
-            );
-
-            removedInstanceIds.forEach((id) => removeInstance(id));
-            addedInstanceIds.forEach((id) =>
-                addInstance(
-                    updatedInstances.find((instance) => instance.id === id)!
-                )
-            );
-
-            updatedInstances.forEach((instance) => {
-                if (currentInstanceIds.includes(instance.id)) {
+            updatedInstances.forEach((instance: Instance) => {
+                // If the instance is already in the list, update it
+                if (instances.find((i) => i.id === instance.id)) {
                     updateInstance({
-                        ...instance,
-                        logs:
-                            instances.find((i) => i.id === instance.id)?.logs ||
-                            [],
+                        id: instance.id,
+                        logs: instances.find((i) => i.id === instance.id)!.logs,
+                        env: instance.env,
+                        name: instance.name,
+                        status: instance.status,
                     });
+                } else {
+                    // Otherwise, add it
+                    addInstance(instance);
                 }
+
+                instances.forEach((i) => {
+                    if (!updatedInstances.find((u) => u.id === i.id)) {
+                        removeInstance(i.id);
+                    }
+                });
             });
         }
 
