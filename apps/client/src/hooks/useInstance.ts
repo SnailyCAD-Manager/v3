@@ -35,20 +35,18 @@ export const useInstance = create<InstanceState>((set) => ({
                 i.id === instance.id ? instance : i
             ),
         })),
-    addLog: (id, log) =>
-        set((state) => ({
-            instances: state.instances.map((i) =>
-                i.id === id
-                    ? {
-                          ...i,
-                          logs:
-                              i.logs.length >= 150
-                                  ? [...i.logs.slice(1), log]
-                                  : [...i.logs, log],
-                      }
-                    : i
-            ),
-        })),
+    // addLog should add a log to the instance based on the id
+    addLog: (id, log) => {
+        const instance = useInstance
+            .getState()
+            .instances.find((i) => i.id === id);
+
+        if (!instance) return;
+
+        instance.logs.push(log);
+
+        useInstance.getState().updateInstance(instance);
+    },
 }));
 
 function getActiveInstance() {

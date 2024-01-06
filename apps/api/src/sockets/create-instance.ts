@@ -7,7 +7,7 @@ import commands, { CommandTree } from "../util/commands";
 export default function HandleCreateInstance(socket: Socket) {
     const installCommands = commands.install as CommandTree;
 
-    socket.on("create-instance", async (data) => {
+    socket.on("server:create-instance", async (data) => {
         const { name, id } = data;
 
         function cloneRepo() {

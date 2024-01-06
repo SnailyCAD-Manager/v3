@@ -22,7 +22,7 @@ export default function InstanceCreatePage() {
     });
 
     function handleSubmit(values: typeof form.values) {
-        socket.emit("create-instance", values);
+        socket.emit("server:create-instance", values);
 
         setInstanceInfo({
             name: values.name,
@@ -173,6 +173,7 @@ export default function InstanceCreatePage() {
                         className="w-full"
                         required
                         autoFocus
+                        autoComplete="off"
                         disabled={loading.state}
                         {...form.getInputProps("name")}
                     />
@@ -181,6 +182,7 @@ export default function InstanceCreatePage() {
                         description="A unique ID for your instance, this will be used to identify your instance."
                         className="w-full"
                         required
+                        autoComplete="off"
                         disabled={loading.state}
                         {...form.getInputProps("id")}
                     />

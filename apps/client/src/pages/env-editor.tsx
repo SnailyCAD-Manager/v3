@@ -1,6 +1,7 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { Env } from "@/types/env";
+import SaveEnv from "@/utils/controls/env";
 import {
     ActionIcon,
     Alert,
@@ -11,6 +12,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDeviceFloppy, IconDownload } from "@tabler/icons-react";
+import invalidValues from "../utils/env/invalidValues";
 
 export default function EnvEditorPage() {
     const { activeInstanceData } = useInstance();
@@ -41,6 +43,51 @@ export default function EnvEditorPage() {
                 activeInstanceData?.env.SECURE_COOKIES_FOR_IFRAME,
             STEAM_API_KEY: activeInstanceData?.env.STEAM_API_KEY,
         } as Env,
+
+        validate: {
+            CORS_ORIGIN_URL: (value) => {
+                if (
+                    invalidValues.CORS_ORIGIN_URL.some(
+                        (v) => v.includes?.some((i) => value?.includes(i))
+                    )
+                ) {
+                    // Return the reason for that specific invalidValue
+                    return invalidValues.CORS_ORIGIN_URL.find(
+                        (v) => v.includes?.some((i) => value?.includes(i))
+                    )?.reason;
+                } else {
+                    return null;
+                }
+            },
+            NEXT_PUBLIC_CLIENT_URL: (value) => {
+                if (
+                    invalidValues.NEXT_PUBLIC_CLIENT_URL.some(
+                        (v) => v.includes?.some((i) => value?.includes(i))
+                    )
+                ) {
+                    // Return the reason for that specific invalidValue
+                    return invalidValues.NEXT_PUBLIC_CLIENT_URL.find(
+                        (v) => v.includes?.some((i) => value?.includes(i))
+                    )?.reason;
+                } else {
+                    return null;
+                }
+            },
+            NEXT_PUBLIC_PROD_ORIGIN: (value) => {
+                if (
+                    invalidValues.NEXT_PUBLIC_PROD_ORIGIN.some(
+                        (v) => v.includes?.some((i) => value?.includes(i))
+                    )
+                ) {
+                    // Return the reason for that specific invalidValue
+                    return invalidValues.NEXT_PUBLIC_PROD_ORIGIN.find(
+                        (v) => v.includes?.some((i) => value?.includes(i))
+                    )?.reason;
+                } else {
+                    return null;
+                }
+            },
+        },
     });
 
     // function handleSubmit() {}
@@ -57,8 +104,16 @@ export default function EnvEditorPage() {
         document.body.appendChild(element);
         element.click();
     }
+
+    function handleSaveEnv(values: typeof envForm.values) {
+        SaveEnv(values);
+    }
+
     return (
-        <form className="w-full h-full">
+        <form
+            className="w-full h-full"
+            onSubmit={envForm.onSubmit((values) => handleSaveEnv(values))}
+        >
             <CustomCard className="w-full h-full flex flex-col items-center">
                 {/* Header (Just a title with a download button on the right) */}
                 <div className="w-full flex flex-row items-center justify-between border-b border-b-neutral-500 pb-3">
@@ -80,7 +135,6 @@ export default function EnvEditorPage() {
                                 key={index}
                                 label={key}
                                 className="w-full"
-                                required
                                 {...envForm.getInputProps(key)}
                             />
                         ))}
@@ -95,6 +149,7 @@ export default function EnvEditorPage() {
                         variant="light"
                         color="blue"
                         leftSection={<IconDeviceFloppy size={16} />}
+                        type="submit"
                     >
                         Save
                     </Button>

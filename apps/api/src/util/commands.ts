@@ -32,12 +32,12 @@ const commands: CommandTree = {
     },
     start: {
         withBuild: {
-            command: "pnpm",
-            args: ["run", "build", "&&", "pnpm", "run", "start"],
+            command: "pnpm run build && pnpm run start",
+            args: [],
         },
         withoutBuild: {
-            command: "pnpm",
-            args: ["run", "start"],
+            command: "pnpm run start",
+            args: [],
         },
     },
 };

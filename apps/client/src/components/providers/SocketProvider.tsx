@@ -54,7 +54,17 @@ export default function SocketProvider(): null {
 
             updatedInstances.forEach((instance) => {
                 if (instanceIds.includes(instance.id)) {
-                    updateInstance(instance);
+                    updateInstance({
+                        id: instance.id,
+                        name: instance.name,
+                        status: instance.status,
+                        logs:
+                            useInstance
+                                .getState()
+                                .instances.find((i) => i.id === instance.id)
+                                ?.logs || [],
+                        env: instance.env,
+                    });
                     console.log("updated", instance.id);
                 } else {
                     console.log(instanceIds, instance.id);
@@ -74,8 +84,9 @@ export default function SocketProvider(): null {
             const instance = instances.find((i) => i.id === data.id);
             if (!instance) return;
 
-            instance.logs.push(data.log);
-            updateInstance(instance);
+            console.log(data);
+
+            useInstance.getState().addLog(instance.id, data.log);
 
             console.log(`Instance ${data.id} log:` + data.log);
         }

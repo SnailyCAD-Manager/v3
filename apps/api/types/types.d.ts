@@ -30,3 +30,9 @@ export type Env = {
     DISCORD_SERVER_ID?: string;
     STEAM_API_KEY?: string;
 };
+
+export type LogData = {
+    id: string;
+    log: string;
+    type: "stdout" | "stderr";
+};
