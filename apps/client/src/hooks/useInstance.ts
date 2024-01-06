@@ -1,5 +1,4 @@
 import { Instance } from "@/types/instance";
-// import { devInstances } from "@/utils/devValues/instances";
 import { create } from "zustand";
 
 type InstanceState = {
@@ -35,13 +34,16 @@ export const useInstance = create<InstanceState>((set) => ({
                 i.id === instance.id ? instance : i
             ),
         })),
-    // addLog should add a log to the instance based on the id
     addLog: (id, log) => {
         const instance = useInstance
             .getState()
             .instances.find((i) => i.id === id);
 
         if (!instance) return;
+
+        if (instance.logs.length > 1000) {
+            instance.logs.shift();
+        }
 
         instance.logs.push(log);
 

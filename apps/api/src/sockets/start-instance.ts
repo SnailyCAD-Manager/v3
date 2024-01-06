@@ -12,41 +12,62 @@ type StartData = {
     build: boolean;
 };
 
+function getStartCommand(build: boolean) {
+    const startCommands = commands.start as CommandTree;
+
+    if (build) {
+        return {
+            command: startCommands.withBuild.command as string,
+            args: startCommands.withBuild.args as string[],
+        };
+    }
+
+    return {
+        command: startCommands.withoutBuild.command as string,
+        args: startCommands.withoutBuild.args as string[],
+    };
+}
+
 export default function HandleStartInstance(socket: Socket) {
     socket.on("server:start-instance", async (data: StartData) => {
-        const proc = spawn("echo", ["Hello world!"], {
+        if (!data.id) {
+            socket.emit(
+                "error",
+                "No instance ID was provided to the server for starting the instance"
+            );
+            return;
+        }
+
+        const { id } = data;
+
+        const startCommand = getStartCommand(data.build);
+
+        const startProcess = spawn("pnpm", ["run", "build"], {
             cwd: path.resolve(process.cwd(), "data/instances", data.id),
-            shell: true,
         });
 
-        proc.stdout.on("data", (data) => {
+        startProcess.stdout.on("data", (data) => {
             socket.emit("instance-log", {
-                id: data.id,
+                id,
                 log: ansi.toHtml(data.toString()),
                 type: "stdout",
             } as LogData);
-
-            console.log(data.toString());
         });
 
-        proc.stderr.on("data", (data) => {
+        startProcess.stderr.on("data", (data) => {
             socket.emit("instance-log", {
-                id: data.id,
+                id,
                 log: ansi.toHtml(data.toString()),
                 type: "stderr",
             } as LogData);
-
-            console.log(data.toString());
         });
 
-        proc.on("close", (code) => {
+        startProcess.on("close", (code) => {
             socket.emit("instance-log", {
-                id: data.id,
-                log: ansi.toHtml(`Process exited with code ${code}`),
+                id,
+                log: ansi.toHtml(`child process exited with code ${code}`),
                 type: "stdout",
             } as LogData);
-
-            console.log(`Process exited with code ${code}`);
         });
     });
 }

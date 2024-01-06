@@ -14,7 +14,6 @@ type SaveEnvData = {
 
 export default function HandleSaveEnv(socket: Socket) {
     socket.on("server:save-env", (data) => {
-        console.log("Save env triggered for ", data.id);
         const { id, env } = data;
         const instancePath = path.resolve(process.cwd(), "data/instances", id);
 

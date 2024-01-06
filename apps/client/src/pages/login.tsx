@@ -1,16 +1,10 @@
 import { Button, Card, PasswordInput, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+// import { useForm } from "@mantine/form";
 
 export default function LoginPage() {
-    const form = useForm();
+    // const form = useForm();
 
-    function handleSubmit() {
-        console.log(
-            form.onSubmit((values) => {
-                console.log(values);
-            })
-        );
-    }
+    function handleSubmit() {}
 
     return (
         <div className="flex flex-col items-center justify-center h-full w-full">

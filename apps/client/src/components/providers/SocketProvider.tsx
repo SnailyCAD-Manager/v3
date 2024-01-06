@@ -2,6 +2,7 @@ import { useInstance } from "@/hooks/useInstance";
 import { useSocket } from "@/hooks/useSocket";
 import { Instance } from "@/types/instance";
 import { LogData } from "@/types/socket";
+import logs from "@/utils/debug/logs";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
 import { nprogress } from "@mantine/nprogress";
@@ -28,8 +29,7 @@ export default function SocketProvider(): null {
             nprogress.complete();
         }
 
-        console.log(instances);
-        setActiveInstance("dev");
+        setActiveInstance("new");
 
         function onDisconnect() {
             notifications.show({
@@ -58,18 +58,13 @@ export default function SocketProvider(): null {
                         id: instance.id,
                         name: instance.name,
                         status: instance.status,
-                        logs:
-                            useInstance
-                                .getState()
-                                .instances.find((i) => i.id === instance.id)
-                                ?.logs || [],
+                        logs: useInstance.getState().activeInstanceData
+                            ?.logs as string[],
                         env: instance.env,
                     });
-                    console.log("updated", instance.id);
                 } else {
-                    console.log(instanceIds, instance.id);
                     addInstance(instance);
-                    console.log("added", instance.id);
+                    logs.info(`Added instance ${instance.name}`);
                 }
             });
 
@@ -84,23 +79,29 @@ export default function SocketProvider(): null {
             const instance = instances.find((i) => i.id === data.id);
             if (!instance) return;
 
-            console.log(data);
-
-            useInstance.getState().addLog(instance.id, data.log);
-
-            console.log(`Instance ${data.id} log:` + data.log);
+            useInstance.getState().addLog(data.id, data.log);
         }
 
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("load-instances", onInstanceUpdate);
         socket.on("instance-log", onInstanceLog);
+        socket.on("error", (error: string) => {
+            notifications.show({
+                title: "Error",
+                message: error,
+                color: "red",
+            });
+        });
         socket.connect();
 
         return () => {
             socket.off("connect", onConnect);
             socket.off("disconnect", onDisconnect);
             socket.off("load-instances", onInstanceUpdate);
+            socket.off("instance-log", onInstanceLog);
+            socket.off("error");
+            // socket.disconnect();
         };
     }, []);
 

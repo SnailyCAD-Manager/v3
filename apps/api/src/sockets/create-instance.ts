@@ -21,7 +21,6 @@ export default function HandleCreateInstance(socket: Socket) {
 
             cloneProcess.stdout.on("data", (data) => {
                 socket.emit("create-instance-stdout", data.toString());
-                console.log(data.toString());
             });
 
             cloneProcess.stderr.on("data", (data) => {
