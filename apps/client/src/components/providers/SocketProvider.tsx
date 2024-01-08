@@ -63,7 +63,14 @@ export default function SocketProvider(): null {
                         env: instance.env,
                     });
                 } else {
-                    addInstance(instance);
+                    addInstance({
+                        id: instance.id,
+                        name: instance.name,
+                        status: instance.status,
+                        logs: [],
+                        env: instance.env,
+                    });
+                    console.log(instance);
                     logs.info(`Added instance ${instance.name}`);
                 }
             });
@@ -76,6 +83,8 @@ export default function SocketProvider(): null {
         }
 
         function onInstanceLog(data: LogData) {
+            console.log(data);
+
             const instance = instances.find((i) => i.id === data.id);
             if (!instance) return;
 
