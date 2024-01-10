@@ -2,14 +2,17 @@ import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import Start from "@/utils/controls/start";
 import { ActionIcon, Button, Card, TextInput, Tooltip } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import {
     IconChevronRight,
     IconDownload,
     IconPlayerPlay,
+    IconSquare,
 } from "@tabler/icons-react";
+import { useRef } from "react";
 
 export default function HomePage() {
-    const { activeInstanceData } = useInstance();
+    const { activeInstanceData, clearLogs } = useInstance();
 
     function downloadLogs() {
         const logs = activeInstanceData?.logs.join("\n");
@@ -36,6 +39,27 @@ export default function HomePage() {
         document.body.removeChild(element);
     }
 
+    const terminalRef = useRef<HTMLPreElement>(null);
+
+    // Scroll to bottom of terminal when a new log is added
+    if (terminalRef.current) {
+        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+
+    const commandForm = useForm({
+        initialValues: {
+            command: "",
+        },
+    });
+
+    function handleCommandSubmit(values: typeof commandForm.values) {
+        if (values.command === "cls" || values.command === "clear") {
+            clearLogs(activeInstanceData?.id as string);
+        }
+
+        commandForm.reset();
+    }
+
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
             <CustomCard className="w-full">
@@ -44,21 +68,25 @@ export default function HomePage() {
                         SnailyCAD Controls
                     </h1>
                     <div className="flex flex-row gap-2 items-center justify-center w-full">
-                        <Button
-                            variant="light"
-                            color="green"
-                            leftSection={<IconPlayerPlay size={16} />}
-                            onClick={() => Start()}
-                        >
-                            Start
-                        </Button>
-                        <Button
-                            variant="light"
-                            color="blue"
-                            leftSection={<IconDownload size={16} />}
-                        >
-                            Update
-                        </Button>
+                        {!activeInstanceData?.status.api &&
+                        !activeInstanceData?.status.client ? (
+                            <Button
+                                variant="light"
+                                color="green"
+                                leftSection={<IconPlayerPlay size={16} />}
+                                onClick={() => Start()}
+                            >
+                                Start
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="light"
+                                color="blue"
+                                leftSection={<IconSquare size={16} />}
+                            >
+                                Stop
+                            </Button>
+                        )}
                     </div>
                 </div>
             </CustomCard>
@@ -69,7 +97,10 @@ export default function HomePage() {
                 <Card.Section p={12} className="h-full">
                     {/* Terminal Style */}
                     <div className="w-full h-full relative rounded-md bg-black/50">
-                        <pre className="absolute flex flex-col top-0 left-0 h-[calc(100%-2.5rem)] w-full p-2 overflow-hidden hover:overflow-y-auto whitespace-pre-wrap text-sm">
+                        <pre
+                            ref={terminalRef}
+                            className="absolute flex flex-col top-0 left-0 h-[calc(100%-2.5rem)] w-full p-2 overflow-hidden hover:overflow-y-auto whitespace-pre-wrap text-sm"
+                        >
                             {activeInstanceData?.logs.map(
                                 (log, index) =>
                                     // span with the log but allow HTML to be rendered, and only render the first 150 entries
@@ -83,12 +114,20 @@ export default function HomePage() {
                                     )
                             )}
                         </pre>
-                        <TextInput
-                            variant="transparent"
-                            className="w-full absolute bottom-0 left-0 h-[2.5rem]"
-                            placeholder="Enter command..."
-                            leftSection={<IconChevronRight size={16} />}
-                        />
+                        <form
+                            onSubmit={commandForm.onSubmit((values) =>
+                                handleCommandSubmit(values)
+                            )}
+                        >
+                            <TextInput
+                                autoComplete="off"
+                                variant="transparent"
+                                className="w-full absolute bottom-0 left-0 h-[2.5rem]"
+                                placeholder="Enter command..."
+                                leftSection={<IconChevronRight size={16} />}
+                                {...commandForm.getInputProps("command")}
+                            />
+                        </form>
                         <Tooltip label="Download logs" onClick={downloadLogs}>
                             <ActionIcon
                                 className="absolute top-2 left-[calc(100%-2.2rem)]"

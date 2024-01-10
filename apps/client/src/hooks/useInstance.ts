@@ -10,6 +10,7 @@ type InstanceState = {
     removeInstance: (id: string) => void;
     updateInstance: (instance: Instance) => void;
     addLog: (id: string, log: string) => void;
+    clearLogs: (id: string) => void;
 };
 
 export const useInstance = create<InstanceState>((set) => ({
@@ -46,6 +47,17 @@ export const useInstance = create<InstanceState>((set) => ({
         }
 
         instance.logs.push(log);
+
+        useInstance.getState().updateInstance(instance);
+    },
+    clearLogs: (id) => {
+        const instance = useInstance
+            .getState()
+            .instances.find((i) => i.id === id);
+
+        if (!instance) return;
+
+        instance.logs = [];
 
         useInstance.getState().updateInstance(instance);
     },

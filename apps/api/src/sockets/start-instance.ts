@@ -43,32 +43,41 @@ export default function HandleStartInstance(socket: Socket) {
 
         const startCommand = getStartCommand(data.build);
 
-        const startProcess = spawn("pnpm", ["run", "start"], {
-            cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
-        });
+        try {
+            const startProcess = spawn("pnpm", ["run", "start"], {
+                cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
+            });
 
-        startProcess.stdout.on("data", (data) => {
+            startProcess.stdout.on("data", (data) => {
+                socket.emit("instance-log", {
+                    id,
+                    log: ansi.toHtml(data.toString()),
+                    type: "stdout",
+                } as LogData);
+            });
+
+            startProcess.stderr.on("data", (data) => {
+                socket.emit("instance-log", {
+                    id,
+                    log: ansi.toHtml(data.toString()),
+                    type: "stderr",
+                } as LogData);
+            });
+
+            startProcess.on("close", (code) => {
+                socket.emit("instance-log", {
+                    id,
+                    log: ansi.toHtml(`child process exited with code ${code}`),
+                    type: "stdout",
+                } as LogData);
+            });
+        } catch (err: any) {
             socket.emit("instance-log", {
                 id,
-                log: ansi.toHtml(data.toString()),
-                type: "stdout",
-            } as LogData);
-        });
-
-        startProcess.stderr.on("data", (data) => {
-            socket.emit("instance-log", {
-                id,
-                log: ansi.toHtml(data.toString()),
+                log: ansi.toHtml(err.toString()),
                 type: "stderr",
             } as LogData);
-        });
-
-        startProcess.on("close", (code) => {
-            socket.emit("instance-log", {
-                id,
-                log: ansi.toHtml(`child process exited with code ${code}`),
-                type: "stdout",
-            } as LogData);
-        });
+            throw new Error(err);
+        }
     });
 }
