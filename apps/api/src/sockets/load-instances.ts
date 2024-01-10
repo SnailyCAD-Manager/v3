@@ -4,13 +4,14 @@ import path from "path";
 import { Instance, Env } from "../../types/types";
 import { default as findProcess } from "find-process";
 import dotenv from "dotenv";
+import GetPlatformStorageDirectory from "../util/directories";
 
 export default function HandleLoadInstances(socket: Socket) {
     async function sendInstances() {
         const instanceStore = JSON.parse(
             fs
                 .readFileSync(
-                    path.resolve(process.cwd(), "data/instances/instances.json")
+                    path.resolve(process.cwd(), "data/instances.json")
                 )
                 .toString()
         );
@@ -21,8 +22,7 @@ export default function HandleLoadInstances(socket: Socket) {
             async (instance: { name: string; id: string }) => {
                 const env = dotenv.config({
                     path: path.resolve(
-                        process.cwd(),
-                        "data/instances",
+                        GetPlatformStorageDirectory(),
                         instance.id,
                         ".env"
                     ),

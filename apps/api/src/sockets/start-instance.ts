@@ -4,6 +4,7 @@ import { spawn } from "child_process";
 import commands, { CommandTree } from "../util/commands";
 import ansi_to_html from "ansi-to-html";
 import { LogData } from "../../types/types";
+import GetPlatformStorageDirectory from "../util/directories";
 
 const ansi = new ansi_to_html();
 
@@ -42,8 +43,8 @@ export default function HandleStartInstance(socket: Socket) {
 
         const startCommand = getStartCommand(data.build);
 
-        const startProcess = spawn("pnpm", ["run", "build"], {
-            cwd: path.resolve(process.cwd(), "data/instances", data.id),
+        const startProcess = spawn("pnpm", ["run", "start"], {
+            cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
         });
 
         startProcess.stdout.on("data", (data) => {

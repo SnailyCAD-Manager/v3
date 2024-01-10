@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { spawn } from "child_process";
 import commands, { CommandTree } from "../util/commands";
+import GetPlatformStorageDirectory from "../util/directories";
 
 export default function HandleCreateInstance(socket: Socket) {
     const installCommands = commands.install as CommandTree;
@@ -11,11 +12,13 @@ export default function HandleCreateInstance(socket: Socket) {
         const { name, id } = data;
 
         function cloneRepo() {
+            fs.mkdirSync(path.resolve(GetPlatformStorageDirectory(), id));
+
             const cloneProcess = spawn(
                 installCommands.clone.command as string,
                 [...(installCommands.clone.args as string[]), "--progress"],
                 {
-                    cwd: path.resolve(process.cwd(), "data/instances", id),
+                    cwd: path.resolve(GetPlatformStorageDirectory(), id),
                 }
             );
 
@@ -36,17 +39,11 @@ export default function HandleCreateInstance(socket: Socket) {
 
                     fs.copyFileSync(
                         path.resolve(
-                            process.cwd(),
-                            "data/instances",
+                            GetPlatformStorageDirectory(),
                             id,
                             ".env.example"
                         ),
-                        path.resolve(
-                            process.cwd(),
-                            "data/instances",
-                            id,
-                            ".env"
-                        )
+                        path.resolve(GetPlatformStorageDirectory(), id, ".env")
                     );
 
                     installDeps();
@@ -61,7 +58,7 @@ export default function HandleCreateInstance(socket: Socket) {
                 installCommands.deps.command as string,
                 installCommands.deps.args as string[],
                 {
-                    cwd: path.resolve(process.cwd(), "data/instances", id),
+                    cwd: path.resolve(GetPlatformStorageDirectory(), id),
                 }
             );
 
@@ -94,7 +91,7 @@ export default function HandleCreateInstance(socket: Socket) {
                 installCommands.copyEnv.command as string,
                 installCommands.copyEnv.args as string[],
                 {
-                    cwd: path.resolve(process.cwd(), "data/instances", id),
+                    cwd: path.resolve(GetPlatformStorageDirectory(), id),
                 }
             );
 
@@ -112,6 +109,21 @@ export default function HandleCreateInstance(socket: Socket) {
                         "create-instance-stdout",
                         "Moved env files successfully"
                     );
+                    const instances = JSON.parse(
+                        fs
+                            .readFileSync(
+                                path.resolve(
+                                    process.cwd(),
+                                    "data/instances.json"
+                                )
+                            )
+                            .toString()
+                    );
+                    instances.push({ name, id });
+                    fs.writeFileSync(
+                        path.resolve(process.cwd(), "data/instances.json"),
+                        JSON.stringify(instances)
+                    );
                     socket.emit("create-instance-success");
                 } else {
                     socket.emit(
@@ -123,22 +135,11 @@ export default function HandleCreateInstance(socket: Socket) {
         }
 
         // Check to see if the instance directory already exists based on the ID
-        if (fs.existsSync(path.resolve(process.cwd(), "data/instances", id))) {
+        if (fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id))) {
             socket.emit("create-instance-fail", "Instance Already Exists");
 
             return;
         }
-
-        !fs.existsSync(
-            path.resolve(process.cwd(), "data/instances/instances.json")
-        ) &&
-            fs.writeFileSync(
-                path.resolve(process.cwd(), "data/instances/instances.json"),
-                JSON.stringify([])
-            );
-
-        // Create the instance directory
-        fs.mkdirSync(path.resolve(process.cwd(), "data/instances", id));
 
         cloneRepo();
     });

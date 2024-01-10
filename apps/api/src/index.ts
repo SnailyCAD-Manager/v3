@@ -6,12 +6,13 @@ import path from "path";
 import fs from "fs";
 import HandleAllSockets from "./sockets";
 import { exec } from "child_process";
+import GetPlatformStorageDirectory from "./util/directories";
 
 // Create a new express app that runs a socket.io server that accepts traffic from any origin
 let settings: any = null;
 
 async function initAPI() {
-    // #region Create Settings
+    // #region Create Files & Directories if they don't exist
     if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
         await fs.promises.writeFile(
             path.resolve(process.cwd(), "data/settings.json"),
@@ -19,6 +20,17 @@ async function initAPI() {
                 path.resolve(process.cwd(), "data/settings.default.json")
             )
         );
+    }
+
+    if (!fs.existsSync(path.resolve(process.cwd(), "data/instances.json"))) {
+        await fs.promises.writeFile(
+            path.resolve(process.cwd(), "data/instances.json"),
+            "[]"
+        );
+    }
+
+    if (!fs.existsSync(GetPlatformStorageDirectory())) {
+        await fs.promises.mkdir(GetPlatformStorageDirectory());
     }
     // #endregion
 

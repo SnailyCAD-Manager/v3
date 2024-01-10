@@ -12,10 +12,10 @@ export default function SocketProvider(): null {
     const { setConnected } = useSocket();
     const {
         setActiveInstance,
-        instances,
         removeInstance,
         addInstance,
         updateInstance,
+        addLog,
     } = useInstance();
 
     useEffect(() => {
@@ -58,8 +58,9 @@ export default function SocketProvider(): null {
                         id: instance.id,
                         name: instance.name,
                         status: instance.status,
-                        logs: useInstance.getState().activeInstanceData
-                            ?.logs as string[],
+                        logs:
+                            useInstance.getState().activeInstanceData?.logs ||
+                            ([""] as string[]),
                         env: instance.env,
                     });
                 } else {
@@ -85,10 +86,7 @@ export default function SocketProvider(): null {
         function onInstanceLog(data: LogData) {
             console.log(data);
 
-            const instance = instances.find((i) => i.id === data.id);
-            if (!instance) return;
-
-            useInstance.getState().addLog(data.id, data.log);
+            addLog(data.id, data.log);
         }
 
         socket.on("connect", onConnect);
