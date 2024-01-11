@@ -25,25 +25,7 @@ interface Props {
 export function Layout(props: Props) {
     const [opened, { toggle }] = useDisclosure();
     const { page: activePage, setPage } = usePage();
-    const { activeInstanceData } = useInstance();
-
-    function GetActiveInstanceStatus(): "offline" | "partial" | "online" {
-        if (
-            activeInstanceData?.status.api &&
-            activeInstanceData?.status.client
-        ) {
-            return "online";
-        }
-
-        if (
-            !activeInstanceData?.status.api &&
-            !activeInstanceData?.status.client
-        ) {
-            return "offline";
-        }
-
-        return "partial";
-    }
+    const activeInstanceData = useInstance((state) => state.activeInstanceData);
 
     return (
         <>
@@ -96,11 +78,13 @@ export function Layout(props: Props) {
                                 <div className="flex flex-row items-center gap-1">
                                     <div
                                         className={`w-2 h-2 rounded-full ${
-                                            GetActiveInstanceStatus() ===
-                                            "online"
+                                            activeInstanceData?.status.api &&
+                                            activeInstanceData?.status.client
                                                 ? "!bg-green-500"
-                                                : GetActiveInstanceStatus() ===
-                                                    "partial"
+                                                : activeInstanceData?.status
+                                                        .api ||
+                                                    activeInstanceData?.status
+                                                        .client
                                                   ? "!bg-yellow-500"
                                                   : "!bg-red-500"
                                         }`}

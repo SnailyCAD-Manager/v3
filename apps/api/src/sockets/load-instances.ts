@@ -53,7 +53,7 @@ export default function HandleLoadInstances(socket: Socket) {
             if (instances.length === instanceStore.length) {
                 socket.emit("load-instances", instances);
                 clearInterval(interval);
-                setTimeout(sendInstances, 1000);
+                setTimeout(sendInstances, 500);
             }
         }, 100);
     }

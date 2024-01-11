@@ -15,7 +15,7 @@ import { IconDeviceFloppy, IconDownload } from "@tabler/icons-react";
 import invalidValues from "../utils/env/invalidValues";
 
 export default function EnvEditorPage() {
-    const { activeInstanceData } = useInstance();
+    const activeInstanceData = useInstance((state) => state.activeInstanceData);
 
     const envForm = useForm({
         initialValues: {

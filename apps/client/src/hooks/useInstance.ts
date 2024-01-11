@@ -1,22 +1,25 @@
 import { Instance } from "@/types/instance";
-import { create } from "zustand";
+import create from "zustand";
 
 type InstanceState = {
     instances: Instance[];
     activeInstance: string;
     activeInstanceData: Instance | null;
+    instancesLoaded: boolean;
     setActiveInstance: (id: string) => void;
     addInstance: (instance: Instance) => void;
     removeInstance: (id: string) => void;
     updateInstance: (instance: Instance) => void;
     addLog: (id: string, log: string) => void;
     clearLogs: (id: string) => void;
+    setInstancesLoaded: (loaded: boolean) => void;
 };
 
 export const useInstance = create<InstanceState>((set) => ({
     instances: [],
     activeInstance: "",
     activeInstanceData: null,
+    instancesLoaded: false,
     setActiveInstance: (id) =>
         set((state) => ({
             activeInstance: id,
@@ -29,12 +32,13 @@ export const useInstance = create<InstanceState>((set) => ({
         set((state) => ({
             instances: state.instances.filter((instance) => instance.id !== id),
         })),
-    updateInstance: (instance) =>
+    updateInstance: (instance) => {
         set((state) => ({
             instances: state.instances.map((i) =>
                 i.id === instance.id ? instance : i
             ),
-        })),
+        }));
+    },
     addLog: (id, log) => {
         const instance = useInstance
             .getState()
@@ -61,6 +65,7 @@ export const useInstance = create<InstanceState>((set) => ({
 
         useInstance.getState().updateInstance(instance);
     },
+    setInstancesLoaded: (loaded) => set({ instancesLoaded: loaded }),
 }));
 
 function getActiveInstance() {

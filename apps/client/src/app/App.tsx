@@ -1,6 +1,7 @@
 import { Layout } from "@/components/ui/Layout";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
 import { useAuth } from "@/hooks/useAuth";
+import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
 import { useSocket } from "@/hooks/useSocket";
 import NotFound from "@/pages/404";
@@ -14,6 +15,7 @@ export default function App() {
     const { page } = usePage();
     const { isAuth } = useAuth();
     const { connected } = useSocket();
+    const activeInstance = useInstance((state) => state.activeInstance);
 
     // If not connected, show loading screen but never show anything else below
     if (!connected) {
@@ -22,6 +24,10 @@ export default function App() {
 
     if (!isAuth) {
         return <LoginPage />;
+    }
+
+    if (!activeInstance) {
+        return <InstanceSelector />;
     }
 
     switch (page.id) {

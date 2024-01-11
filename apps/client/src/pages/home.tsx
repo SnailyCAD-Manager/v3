@@ -1,18 +1,39 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
+import { Instance } from "@/types/instance";
 import Start from "@/utils/controls/start";
-import { ActionIcon, Button, Card, TextInput, Tooltip } from "@mantine/core";
+import Stop from "@/utils/controls/stop";
+import {
+    ActionIcon,
+    Button,
+    Card,
+    Menu,
+    TextInput,
+    Tooltip,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
     IconChevronRight,
+    IconDotsVertical,
     IconDownload,
     IconPlayerPlay,
+    IconReload,
     IconSquare,
 } from "@tabler/icons-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function HomePage() {
-    const { activeInstanceData, clearLogs } = useInstance();
+    const [activeInstanceData, setActiveInstanceData] =
+        useState<Instance | null>(null);
+    const _activeInstanceData = useInstance(
+        (state) => state.activeInstanceData
+    );
+    const clearLogs = useInstance((state) => state.clearLogs);
+
+    useEffect(() => {
+        setActiveInstanceData(_activeInstanceData);
+        console.log("Instance Change");
+    }, [_activeInstanceData]);
 
     function downloadLogs() {
         const logs = activeInstanceData?.logs.join("\n");
@@ -81,15 +102,39 @@ export default function HomePage() {
                         ) : (
                             <Button
                                 variant="light"
-                                color="blue"
+                                color="orange"
                                 leftSection={<IconSquare size={16} />}
+                                onClick={() => Stop()}
                             >
                                 Stop
                             </Button>
                         )}
+                        <Menu>
+                            <Menu.Target>
+                                <ActionIcon variant="default">
+                                    <IconDotsVertical size={16} />
+                                </ActionIcon>
+                            </Menu.Target>
+
+                            <Menu.Dropdown>
+                                <Menu.Label>Instance Management</Menu.Label>
+                                <Menu.Item
+                                    leftSection={<IconReload />}
+                                    disabled={
+                                        !activeInstanceData?.status.client &&
+                                        !activeInstanceData?.status.api
+                                    }
+                                >
+                                    Restart Instance
+                                </Menu.Item>
+                            </Menu.Dropdown>
+                        </Menu>
                     </div>
                 </div>
             </CustomCard>
+            <div className="text-[10px] text-wrap">
+                {JSON.stringify(activeInstanceData?.status)}
+            </div>
             <CustomCard className="h-full w-full flex flex-col gap-2">
                 <h1 className="text-xl font-semibold text-center">
                     SnailyCAD Console

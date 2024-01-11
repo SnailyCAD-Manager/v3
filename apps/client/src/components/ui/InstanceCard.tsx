@@ -19,7 +19,9 @@ interface Props {
 }
 
 export default function InstanceCard(props: Props) {
-    const { setActiveInstance, activeInstance, instances } = useInstance();
+    const setActiveInstance = useInstance((state) => state.setActiveInstance);
+    const activeInstance = useInstance((state) => state.activeInstance);
+    const instances = useInstance((state) => state.instances);
     const { setPage } = usePage();
 
     function selectInstance() {

@@ -10,13 +10,13 @@ import { useEffect } from "react";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();
-    const {
-        setActiveInstance,
-        removeInstance,
-        addInstance,
-        updateInstance,
-        addLog,
-    } = useInstance();
+    const setActiveInstance = useInstance((state) => state.setActiveInstance);
+    const activeInstanceData = useInstance((state) => state.activeInstanceData);
+    const removeInstance = useInstance((state) => state.removeInstance);
+    const addInstance = useInstance((state) => state.addInstance);
+    const updateInstance = useInstance((state) => state.updateInstance);
+    const addLog = useInstance((state) => state.addLog);
+    const setInstancesLoaded = useInstance((state) => state.setInstancesLoaded);
 
     useEffect(() => {
         function onConnect() {
@@ -41,11 +41,7 @@ export default function SocketProvider(): null {
         }
 
         function onInstanceUpdate(updatedInstances: Instance[]) {
-            /* 
-                If the instances already exists, and it's found in the updatedInstances array, update it.
-                If the instance already exists, but it's not found in the updatedInstances array, remove it.
-                If the instance doesn't exist, but it's found in the updatedInstances array, add it.
-            */
+            setInstancesLoaded(true);
 
             const updatedInstanceIds = updatedInstances.map((i) => i.id);
             const instanceIds = useInstance
@@ -58,9 +54,7 @@ export default function SocketProvider(): null {
                         id: instance.id,
                         name: instance.name,
                         status: instance.status,
-                        logs:
-                            useInstance.getState().activeInstanceData?.logs ||
-                            ([""] as string[]),
+                        logs: activeInstanceData?.logs || [],
                         env: instance.env,
                     });
                 } else {
@@ -108,7 +102,7 @@ export default function SocketProvider(): null {
             socket.off("load-instances", onInstanceUpdate);
             socket.off("instance-log", onInstanceLog);
             socket.off("error");
-            // socket.disconnect();
+            socket.disconnect();
         };
     }, []);
 
