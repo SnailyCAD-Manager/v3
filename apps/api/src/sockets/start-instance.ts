@@ -5,6 +5,7 @@ import commands, { CommandTree } from "../util/commands";
 import ansi_to_html from "ansi-to-html";
 import { LogData } from "../../types/types";
 import GetPlatformStorageDirectory from "../util/directories";
+import fs from "fs";
 
 const ansi = new ansi_to_html();
 
@@ -40,6 +41,14 @@ export default function HandleStartInstance(socket: Socket) {
         }
 
         const { id } = data;
+
+        if (!fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id))) {
+            socket.emit(
+                "error",
+                `The instance with the ID ${id} does not exist`
+            );
+            return;
+        }
 
         const startCommand = getStartCommand(data.build);
 

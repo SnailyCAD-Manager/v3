@@ -1,6 +1,6 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
-import { Instance } from "@/types/instance";
+import { usePage } from "@/hooks/usePage";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
 import {
@@ -20,20 +20,17 @@ import {
     IconReload,
     IconSquare,
 } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function HomePage() {
-    const [activeInstanceData, setActiveInstanceData] =
-        useState<Instance | null>(null);
-    const _activeInstanceData = useInstance(
-        (state) => state.activeInstanceData
-    );
     const clearLogs = useInstance((state) => state.clearLogs);
+    const activeInstance = useInstance((state) => state.activeInstance);
+    const setPage = usePage((state) => state.setPage);
+    const instances = useInstance((state) => state.instances);
 
-    useEffect(() => {
-        setActiveInstanceData(_activeInstanceData);
-        console.log("Instance Change");
-    }, [_activeInstanceData]);
+    const activeInstanceData = instances.find(
+        (instance) => instance.id === activeInstance
+    );
 
     function downloadLogs() {
         const logs = activeInstanceData?.logs.join("\n");
@@ -80,6 +77,12 @@ export default function HomePage() {
 
         commandForm.reset();
     }
+
+    useEffect(() => {
+        if (!activeInstance) {
+            setPage("instance-selector");
+        }
+    }, [activeInstance]);
 
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
@@ -133,7 +136,7 @@ export default function HomePage() {
                 </div>
             </CustomCard>
             <div className="text-[10px] text-wrap">
-                {JSON.stringify(activeInstanceData?.status)}
+                {JSON.stringify(activeInstanceData?.logs)}
             </div>
             <CustomCard className="h-full w-full flex flex-col gap-2">
                 <h1 className="text-xl font-semibold text-center">

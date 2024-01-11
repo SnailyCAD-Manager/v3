@@ -16,8 +16,39 @@ export default function App() {
     const { isAuth } = useAuth();
     const { connected } = useSocket();
     const activeInstance = useInstance((state) => state.activeInstance);
+    const { activeInstanceData } = useInstance();
 
-    // If not connected, show loading screen but never show anything else below
+    return (
+        <>
+            <div className="absolute top-0 right-0 z-[10000] bg-neutral-500/20 select-none p-2">
+                {JSON.stringify(activeInstanceData?.status)}
+            </div>
+            {!connected && <LoadingOverlay />}
+            {!isAuth && <LoginPage />}
+            {!activeInstance && <InstanceSelector />}
+            {/* Add pages MUST BE WITH SWITCH */}
+            {page.id === "instance-selector" && <InstanceSelector />}
+            {page.id === "instance-create" && <InstanceCreatePage />}
+            {page.id === "home" && (
+                <Layout>
+                    <HomePage />
+                </Layout>
+            )}
+            {page.id === "login" && <LoginPage />}
+            {page.id === "env-editor" && (
+                <Layout>
+                    <EnvEditorPage />
+                </Layout>
+            )}
+            {/* Default to 404 without checking for each page */}
+            {page.id !== "instance-selector" &&
+                page.id !== "instance-create" &&
+                page.id !== "home" &&
+                page.id !== "login" &&
+                page.id !== "env-editor" && <NotFound />}
+        </>
+    );
+
     if (!connected) {
         return <LoadingOverlay />;
     }

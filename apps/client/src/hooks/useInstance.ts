@@ -1,5 +1,5 @@
 import { Instance } from "@/types/instance";
-import create from "zustand";
+import { create } from "zustand";
 
 type InstanceState = {
     instances: Instance[];
@@ -20,52 +20,49 @@ export const useInstance = create<InstanceState>((set) => ({
     activeInstance: "",
     activeInstanceData: null,
     instancesLoaded: false,
-    setActiveInstance: (id) =>
+    setActiveInstance: (id: string) => {
         set((state) => ({
+            ...state,
             activeInstance: id,
-            activeInstanceData:
-                state.instances.find((i) => i.id === id) || null,
-        })),
-    addInstance: (instance) =>
-        set((state) => ({ instances: [...state.instances, instance] })),
-    removeInstance: (id) =>
+            activeInstanceData: state.instances.find(
+                (instance) => instance.id === id
+            )!,
+        }));
+    },
+    addInstance: (instance: Instance) =>
         set((state) => ({
+            ...state,
+            instances: [...state.instances, instance],
+        })),
+    removeInstance: (id: string) =>
+        set((state) => ({
+            ...state,
             instances: state.instances.filter((instance) => instance.id !== id),
         })),
-    updateInstance: (instance) => {
+    updateInstance: (instance: Instance) => {
         set((state) => ({
-            instances: state.instances.map((i) =>
-                i.id === instance.id ? instance : i
+            ...state,
+            instances: state.instances.map((inst) =>
+                inst.id === instance.id ? instance : inst
             ),
         }));
     },
-    addLog: (id, log) => {
-        const instance = useInstance
-            .getState()
-            .instances.find((i) => i.id === id);
-
-        if (!instance) return;
-
-        if (instance.logs.length > 1000) {
-            instance.logs.shift();
-        }
-
-        instance.logs.push(log);
-
-        useInstance.getState().updateInstance(instance);
-    },
-    clearLogs: (id) => {
-        const instance = useInstance
-            .getState()
-            .instances.find((i) => i.id === id);
-
-        if (!instance) return;
-
-        instance.logs = [];
-
-        useInstance.getState().updateInstance(instance);
-    },
-    setInstancesLoaded: (loaded) => set({ instancesLoaded: loaded }),
+    addLog: (id: string, log: string) =>
+        set((state) => ({
+            ...state,
+            instances: state.instances.map((inst) =>
+                inst.id === id ? { ...inst, logs: [...inst.logs, log] } : inst
+            ),
+        })),
+    clearLogs: (id: string) =>
+        set((state) => ({
+            ...state,
+            instances: state.instances.map((inst) =>
+                inst.id === id ? { ...inst, logs: [] } : inst
+            ),
+        })),
+    setInstancesLoaded: (loaded: boolean) =>
+        set((state) => ({ ...state, instancesLoaded: loaded })),
 }));
 
 function getActiveInstance() {
@@ -77,3 +74,12 @@ function getActiveInstanceData() {
 }
 
 export { getActiveInstance, getActiveInstanceData };
+
+let val: Instance | null = null;
+
+useInstance.subscribe((state) => {
+    if (state.activeInstanceData !== val) {
+        console.log("activeInstanceData changed to", state.activeInstanceData);
+    }
+    val = state.activeInstanceData;
+});

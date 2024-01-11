@@ -10,13 +10,12 @@ import { useEffect } from "react";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();
-    const setActiveInstance = useInstance((state) => state.setActiveInstance);
-    const activeInstanceData = useInstance((state) => state.activeInstanceData);
     const removeInstance = useInstance((state) => state.removeInstance);
     const addInstance = useInstance((state) => state.addInstance);
     const updateInstance = useInstance((state) => state.updateInstance);
     const addLog = useInstance((state) => state.addLog);
     const setInstancesLoaded = useInstance((state) => state.setInstancesLoaded);
+    const instances = useInstance((state) => state.instances);
 
     useEffect(() => {
         function onConnect() {
@@ -28,8 +27,6 @@ export default function SocketProvider(): null {
             setConnected(true);
             nprogress.complete();
         }
-
-        setActiveInstance("new");
 
         function onDisconnect() {
             notifications.show({
@@ -54,7 +51,9 @@ export default function SocketProvider(): null {
                         id: instance.id,
                         name: instance.name,
                         status: instance.status,
-                        logs: activeInstanceData?.logs || [],
+                        logs:
+                            instances.find((i) => i.id === instance.id)?.logs ||
+                            [],
                         env: instance.env,
                     });
                 } else {
