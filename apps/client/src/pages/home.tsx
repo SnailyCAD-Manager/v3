@@ -37,8 +37,6 @@ export default function HomePage() {
 
     function downloadLogs() {
         const logs = activeInstanceData?.logs.join("\n");
-
-        // Download as "manager-logs.txt". Logs will contain HTML tags (sometimes multiple). We need to remove them before downloading.
         const element = document.createElement("a");
         const logOuput: string[] = [];
 
@@ -62,19 +60,12 @@ export default function HomePage() {
 
     const terminalRef = useRef<HTMLPreElement>(null);
 
-    // Scroll to bottom of terminal when a new log is added if the user is at the bottom of the terminal
     useEffect(() => {
-        const terminal = terminalRef.current;
-
-        if (terminal) {
-            if (
-                terminal.scrollTop + terminal.clientHeight >=
-                terminal.scrollHeight
-            ) {
-                terminal.scrollTop = terminal.scrollHeight;
-            }
-        }
-    }, [activeInstanceData?.logs]);
+        terminalRef.current?.scrollTo({
+            top: terminalRef.current.scrollHeight,
+            behavior: "smooth",
+        });
+    }, [activeInstanceData?.logs.length]);
 
     const commandForm = useForm({
         initialValues: {
@@ -173,7 +164,6 @@ export default function HomePage() {
                         >
                             {activeInstanceData?.logs.map(
                                 (log, index) =>
-                                    // span with the log but allow HTML to be rendered, and only render the first 150 entries
                                     index < 150 && (
                                         <span
                                             key={index}

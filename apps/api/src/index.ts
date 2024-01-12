@@ -8,7 +8,6 @@ import HandleAllSockets from "./sockets";
 import { exec } from "child_process";
 import GetPlatformStorageDirectory from "./util/directories";
 
-// Create a new express app that runs a socket.io server that accepts traffic from any origin
 let settings: any = null;
 
 async function initAPI() {

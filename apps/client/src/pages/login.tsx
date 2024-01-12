@@ -1,9 +1,6 @@
 import { Button, Card, PasswordInput, TextInput } from "@mantine/core";
-// import { useForm } from "@mantine/form";
 
 export default function LoginPage() {
-    // const form = useForm();
-
     function handleSubmit() {}
 
     return (

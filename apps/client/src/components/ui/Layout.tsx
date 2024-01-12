@@ -116,7 +116,7 @@ export function Layout(props: Props) {
                                         label={page.name}
                                         onClick={() => {
                                             setPage(page.id);
-                                            toggle();
+                                            opened && toggle();
                                         }}
                                     />
                                 )

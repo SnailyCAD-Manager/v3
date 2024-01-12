@@ -51,7 +51,6 @@ export default function EnvEditorPage() {
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )
                 ) {
-                    // Return the reason for that specific invalidValue
                     return invalidValues.CORS_ORIGIN_URL.find(
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )?.reason;
@@ -65,7 +64,6 @@ export default function EnvEditorPage() {
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )
                 ) {
-                    // Return the reason for that specific invalidValue
                     return invalidValues.NEXT_PUBLIC_CLIENT_URL.find(
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )?.reason;
@@ -79,7 +77,6 @@ export default function EnvEditorPage() {
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )
                 ) {
-                    // Return the reason for that specific invalidValue
                     return invalidValues.NEXT_PUBLIC_PROD_ORIGIN.find(
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )?.reason;
@@ -90,13 +87,11 @@ export default function EnvEditorPage() {
         },
     });
 
-    // function handleSubmit() {}
     function handleDownloadEnv() {
         const env = Object.entries(envForm.values)
             .map(([key, value]) => `${key}="${value}"`)
             .join("\n");
 
-        // Download it as a txt file
         const element = document.createElement("a");
         const file = new Blob([env], { type: "text/plain" });
         element.href = URL.createObjectURL(file);

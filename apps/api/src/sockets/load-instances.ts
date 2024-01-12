@@ -48,7 +48,6 @@ export default function HandleLoadInstances(socket: Socket) {
             }
         );
 
-        // Wait for instances.length to equal instanceStore.length
         const interval = setInterval(() => {
             if (instances.length === instanceStore.length) {
                 socket.emit("load-instances", instances);
