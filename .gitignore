@@ -44,3 +44,6 @@ apps/api/data/instances/**/*
 # Allow apps/api/data/instances/ to be pushed along with apps/api/data/instances/INSTANCE
 !apps/api/data/instances/
 !apps/api/data/instances/INSTANCES
+
+# Build Utils
+build-error.txt

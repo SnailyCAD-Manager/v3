@@ -15,7 +15,13 @@ async function buildScript() {
     if (doesBuildExist) {
         const spinner = ora("Removing build folder").start();
         try {
-            await fs.promises.rm(buildPath, {
+            await fs.promises.rm(path.resolve(buildPath, "api"), {
+                recursive: true,
+            });
+            await fs.promises.rm(path.resolve(buildPath, "client"), {
+                recursive: true,
+            });
+            await fs.promises.rm(path.resolve(buildPath, "cli"), {
                 recursive: true,
             });
             spinner.succeed();

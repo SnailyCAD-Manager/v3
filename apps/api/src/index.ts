@@ -86,14 +86,10 @@ async function initAPI() {
     // #endregion
 
     // #region Serve client and API
+    app.use(express.static(path.resolve(process.cwd(), "../client")));
+
     app.get("/", (req, res) => {
-        if (process.env.NODE_ENV === "production") {
-            res.sendFile(
-                path.resolve(process.cwd(), "../../client/index.html")
-            );
-        } else {
-            res.redirect("http://localhost:5173");
-        }
+        res.sendFile(path.resolve(process.cwd(), "../client/index.html"));
     });
     // #endregion
 
