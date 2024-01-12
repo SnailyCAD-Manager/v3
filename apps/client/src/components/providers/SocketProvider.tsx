@@ -15,7 +15,6 @@ export default function SocketProvider(): null {
     const updateInstance = useInstance((state) => state.updateInstance);
     const addLog = useInstance((state) => state.addLog);
     const setInstancesLoaded = useInstance((state) => state.setInstancesLoaded);
-    const instances = useInstance((state) => state.instances);
 
     useEffect(() => {
         function onConnect() {
@@ -52,8 +51,10 @@ export default function SocketProvider(): null {
                         name: instance.name,
                         status: instance.status,
                         logs:
-                            instances.find((i) => i.id === instance.id)?.logs ||
-                            [],
+                            useInstance
+                                .getState()
+                                .instances.find((i) => i.id === instance.id)
+                                ?.logs || [],
                         env: instance.env,
                     });
                 } else {

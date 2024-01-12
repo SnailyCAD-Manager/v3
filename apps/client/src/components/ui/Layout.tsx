@@ -25,7 +25,10 @@ interface Props {
 export function Layout(props: Props) {
     const [opened, { toggle }] = useDisclosure();
     const { page: activePage, setPage } = usePage();
-    const activeInstanceData = useInstance((state) => state.activeInstanceData);
+    const instances = useInstance((state) => state.instances);
+    const activeInstanceData = instances.find(
+        (i) => i.id === useInstance.getState().activeInstance
+    );
 
     return (
         <>
@@ -111,7 +114,10 @@ export function Layout(props: Props) {
                                         key={page.id}
                                         leftSection={page.icon}
                                         label={page.name}
-                                        onClick={() => setPage(page.id)}
+                                        onClick={() => {
+                                            setPage(page.id);
+                                            toggle();
+                                        }}
                                     />
                                 )
                         )}

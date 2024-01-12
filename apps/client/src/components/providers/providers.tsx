@@ -4,6 +4,7 @@ import { ModalsProvider } from "@mantine/modals";
 import { NavigationProgress } from "@mantine/nprogress";
 import PageProvider from "./PageProvider";
 import SocketProvider from "./SocketProvider";
+import ShortcutProvider from "./ShortcutProvider";
 
 interface Props {
     children: React.ReactNode;
@@ -12,6 +13,7 @@ interface Props {
 export default function Providers(props: Props) {
     return (
         <MantineProvider forceColorScheme="dark" defaultColorScheme="dark">
+            <ShortcutProvider />
             <PageProvider />
             <Notifications />
             <SocketProvider />

@@ -55,6 +55,7 @@ export default function HandleStartInstance(socket: Socket) {
         try {
             const startProcess = spawn("pnpm", ["run", "start"], {
                 cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
+                shell: true,
             });
 
             startProcess.stdout.on("data", (data) => {

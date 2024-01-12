@@ -9,12 +9,20 @@ type CommandData = {
     command: string;
 };
 
-export default function CommandHandler(socket: Socket) {
+export default function HandleCommands(socket: Socket) {
     socket.on("server:command", (data: CommandData) => {
+        console.log(data);
+        console.log(path.resolve(GetPlatformStorageDirectory(), data.id));
         try {
-            const commandProcess = spawn(data.command, [], {
-                cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
-            });
+            const commandProcess = spawn(
+                data.command.split(" ")[0],
+                data.command.split(" ").slice(1),
+                {
+                    cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
+                    shell: true,
+                    stdio: "pipe",
+                }
+            );
 
             commandProcess.stdout.on("data", (data) => {
                 socket.emit("instance-log", {
@@ -22,6 +30,8 @@ export default function CommandHandler(socket: Socket) {
                     log: data.toString(),
                     type: "stdout",
                 } as LogData);
+
+                console.log(data.toString());
             });
 
             commandProcess.stderr.on("data", (data) => {

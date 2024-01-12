@@ -74,12 +74,3 @@ function getActiveInstanceData() {
 }
 
 export { getActiveInstance, getActiveInstanceData };
-
-let val: Instance | null = null;
-
-useInstance.subscribe((state) => {
-    if (state.activeInstanceData !== val) {
-        console.log("activeInstanceData changed to", state.activeInstanceData);
-    }
-    val = state.activeInstanceData;
-});

@@ -8,3 +8,8 @@ export type StartData = {
     id: string;
     build: boolean;
 };
+
+export type CommandData = {
+    id: string;
+    command: string;
+};

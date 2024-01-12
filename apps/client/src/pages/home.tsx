@@ -1,8 +1,10 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
+import { CommandData } from "@/types/socket";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
+import socket from "@/utils/socket";
 import {
     ActionIcon,
     Button,
@@ -27,6 +29,7 @@ export default function HomePage() {
     const activeInstance = useInstance((state) => state.activeInstance);
     const setPage = usePage((state) => state.setPage);
     const instances = useInstance((state) => state.instances);
+    const addLog = useInstance((state) => state.addLog);
 
     const activeInstanceData = instances.find(
         (instance) => instance.id === activeInstance
@@ -59,10 +62,19 @@ export default function HomePage() {
 
     const terminalRef = useRef<HTMLPreElement>(null);
 
-    // Scroll to bottom of terminal when a new log is added
-    if (terminalRef.current) {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
+    // Scroll to bottom of terminal when a new log is added if the user is at the bottom of the terminal
+    useEffect(() => {
+        const terminal = terminalRef.current;
+
+        if (terminal) {
+            if (
+                terminal.scrollTop + terminal.clientHeight >=
+                terminal.scrollHeight
+            ) {
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        }
+    }, [activeInstanceData?.logs]);
 
     const commandForm = useForm({
         initialValues: {
@@ -73,8 +85,20 @@ export default function HomePage() {
     function handleCommandSubmit(values: typeof commandForm.values) {
         if (values.command === "cls" || values.command === "clear") {
             clearLogs(activeInstanceData?.id as string);
+            addLog(activeInstance, "Logs cleared!");
+
+            return commandForm.reset();
         }
 
+        addLog(
+            activeInstance,
+            `<span style="color: rgba(255, 255, 255, 0.5);">> ${values.command}</span>`
+        );
+        values.command !== "" &&
+            socket.emit("server:command", {
+                id: activeInstance,
+                command: values.command,
+            } as CommandData);
         commandForm.reset();
     }
 
@@ -92,24 +116,25 @@ export default function HomePage() {
                         SnailyCAD Controls
                     </h1>
                     <div className="flex flex-row gap-2 items-center justify-center w-full">
-                        {!activeInstanceData?.status.api &&
-                        !activeInstanceData?.status.client ? (
+                        {/* If both client and api are offline, show start, if both are online, show stop */}
+                        {activeInstanceData?.status.client &&
+                        activeInstanceData?.status.api ? (
                             <Button
-                                variant="light"
-                                color="green"
-                                leftSection={<IconPlayerPlay size={16} />}
-                                onClick={() => Start()}
-                            >
-                                Start
-                            </Button>
-                        ) : (
-                            <Button
+                                leftSection={<IconSquare size={16} />}
                                 variant="light"
                                 color="orange"
-                                leftSection={<IconSquare size={16} />}
                                 onClick={() => Stop()}
                             >
                                 Stop
+                            </Button>
+                        ) : (
+                            <Button
+                                leftSection={<IconPlayerPlay size={16} />}
+                                variant="light"
+                                color="green"
+                                onClick={() => Start()}
+                            >
+                                Start
                             </Button>
                         )}
                         <Menu>
@@ -135,9 +160,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </CustomCard>
-            <div className="text-[10px] text-wrap">
-                {JSON.stringify(activeInstanceData?.logs)}
-            </div>
             <CustomCard className="h-full w-full flex flex-col gap-2">
                 <h1 className="text-xl font-semibold text-center">
                     SnailyCAD Console

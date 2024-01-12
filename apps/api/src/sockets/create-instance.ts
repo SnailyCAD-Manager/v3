@@ -19,6 +19,7 @@ export default function HandleCreateInstance(socket: Socket) {
                 [...(installCommands.clone.args as string[]), "--progress"],
                 {
                     cwd: path.resolve(GetPlatformStorageDirectory(), id),
+                    shell: true,
                 }
             );
 
@@ -59,6 +60,7 @@ export default function HandleCreateInstance(socket: Socket) {
                 installCommands.deps.args as string[],
                 {
                     cwd: path.resolve(GetPlatformStorageDirectory(), id),
+                    shell: true,
                 }
             );
 
@@ -92,6 +94,7 @@ export default function HandleCreateInstance(socket: Socket) {
                 installCommands.copyEnv.args as string[],
                 {
                     cwd: path.resolve(GetPlatformStorageDirectory(), id),
+                    shell: true,
                 }
             );
 
