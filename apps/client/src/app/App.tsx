@@ -10,6 +10,7 @@ import HomePage from "@/pages/home";
 import InstanceCreatePage from "@/pages/instance-create";
 import InstanceSelector from "@/pages/instance-selector";
 import LoginPage from "@/pages/login";
+import ToolsPage from "@/pages/tools";
 
 export default function App() {
     const { page } = usePage();
@@ -46,6 +47,12 @@ export default function App() {
             return (
                 <Layout>
                     <EnvEditorPage />
+                </Layout>
+            );
+        case "tools":
+            return (
+                <Layout>
+                    <ToolsPage />
                 </Layout>
             );
         default:
