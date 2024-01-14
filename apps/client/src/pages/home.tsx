@@ -5,6 +5,7 @@ import { CommandData } from "@/types/socket";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
 import socket from "@/utils/socket";
+import invalidTerminalCommands from "@/utils/terminal/invalid";
 import {
     ActionIcon,
     Button,
@@ -74,6 +75,21 @@ export default function HomePage() {
     });
 
     function handleCommandSubmit(values: typeof commandForm.values) {
+        addLog(
+            activeInstance,
+            `<span style="color: rgba(255, 255, 255, 0.5);">> ${values.command}</span>`
+        );
+
+        if (
+            invalidTerminalCommands.some((cmd) => values.command.includes(cmd))
+        ) {
+            addLog(
+                activeInstance,
+                `<span style="background-color: #ff0000; padding: 0 15px; color: white;">COMMAND NOT ALLOWED!</span>`
+            );
+            return commandForm.reset();
+        }
+
         if (values.command === "cls" || values.command === "clear") {
             clearLogs(activeInstanceData?.id as string);
             addLog(activeInstance, "Logs cleared!");
@@ -81,10 +97,6 @@ export default function HomePage() {
             return commandForm.reset();
         }
 
-        addLog(
-            activeInstance,
-            `<span style="color: rgba(255, 255, 255, 0.5);">> ${values.command}</span>`
-        );
         values.command !== "" &&
             socket.emit("server:command", {
                 id: activeInstance,

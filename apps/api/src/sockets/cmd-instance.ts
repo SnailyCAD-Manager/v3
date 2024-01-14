@@ -11,8 +11,6 @@ type CommandData = {
 
 export default function HandleCommands(socket: Socket) {
     socket.on("server:command", (data: CommandData) => {
-        console.log(data);
-        console.log(path.resolve(GetPlatformStorageDirectory(), data.id));
         try {
             const commandProcess = spawn(
                 data.command.split(" ")[0],
@@ -24,20 +22,18 @@ export default function HandleCommands(socket: Socket) {
                 }
             );
 
-            commandProcess.stdout.on("data", (data) => {
+            commandProcess.stdout.on("data", (stdout) => {
                 socket.emit("instance-log", {
                     id: data.id,
-                    log: data.toString(),
+                    log: stdout.toString(),
                     type: "stdout",
                 } as LogData);
-
-                console.log(data.toString());
             });
 
-            commandProcess.stderr.on("data", (data) => {
+            commandProcess.stderr.on("data", (stderr) => {
                 socket.emit("instance-log", {
                     id: data.id,
-                    log: data.toString(),
+                    log: stderr.toString(),
                     type: "stderr",
                 } as LogData);
             });
@@ -46,7 +42,7 @@ export default function HandleCommands(socket: Socket) {
                 socket.emit("instance-log", {
                     id: data.id,
                     log: `Command exited with code ${code}`,
-                    type: "stdout",
+                    type: "console",
                 } as LogData);
             });
         } catch (err: any) {

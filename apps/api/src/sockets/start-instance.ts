@@ -78,7 +78,7 @@ export default function HandleStartInstance(socket: Socket) {
                 socket.emit("instance-log", {
                     id,
                     log: ansi.toHtml(`child process exited with code ${code}`),
-                    type: "stdout",
+                    type: "console",
                 } as LogData);
             });
         } catch (err: any) {

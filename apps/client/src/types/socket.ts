@@ -1,7 +1,7 @@
 export type LogData = {
     id: string;
     log: string;
-    type: "stdout" | "stderr" | "error";
+    type: "stdout" | "stderr" | "error" | "console";
 };
 
 export type StartData = {

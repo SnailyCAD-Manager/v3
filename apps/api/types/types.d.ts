@@ -34,5 +34,5 @@ export type Env = {
 export type LogData = {
     id: string;
     log: string;
-    type: "stdout" | "stderr";
+    type: "stdout" | "stderr" | "error" | "console";
 };

@@ -78,7 +78,10 @@ export default function SocketProvider(): null {
         }
 
         function onInstanceLog(data: LogData) {
-            console.log(data);
+            if (data.type === "console") {
+                console.log(data.log);
+                return;
+            }
 
             addLog(data.id, data.log);
         }

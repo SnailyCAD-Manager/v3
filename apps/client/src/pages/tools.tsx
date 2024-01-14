@@ -46,9 +46,9 @@ export default function ToolsPage() {
 
     return (
         <>
-            <div className="w-full h-full">
-                <div className="flex flex-col items-center justify-center w-full h-full p-4">
-                    <div className="flex flex-row items-center justify-center w-full h-16">
+            <div className="w-full h-full flex flex-col item-center gap-4">
+                <div className="flex flex-col items-center justify-center w-full h-full gap-3 p-4">
+                    <div className="flex flex-row items-center justify-center w-full">
                         <h1 className="text-3xl font-bold">General Tools</h1>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -81,6 +81,61 @@ export default function ToolsPage() {
                                 onClick={() => setWebhookModalOpened(true)}
                             >
                                 Configure Webhooks
+                            </Button>
+                        </CustomCard>
+                        <CustomCard>
+                            <h1 className="text-lg font-bold">
+                                Open CAD Directory
+                            </h1>
+                            <p className="text-sm text-muted">
+                                {"(Windows Only)"} Open the directory on the
+                                machine that's running SnailyCAD Manager.
+                            </p>
+                            <Button className="mt-4" variant="light" fullWidth>
+                                Manage Whitelisted IPs
+                            </Button>
+                        </CustomCard>
+                    </div>
+                </div>
+                <div className="flex flex-col items-center justify-center w-full h-full gap-3 p-4">
+                    <div className="flex flex-row items-center justify-center w-full">
+                        <h1 className="text-3xl font-bold">Database Tools</h1>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <CustomCard>
+                            <h1 className="text-lg font-bold">
+                                Manage Whitelisted IPs
+                            </h1>
+                            <p className="text-sm text-muted">
+                                Manage the IPs that are whitelisted to access
+                                your CAD.
+                            </p>
+                            <Button className="mt-4" variant="light" fullWidth>
+                                Manage Whitelisted IPs
+                            </Button>
+                        </CustomCard>
+                        <CustomCard>
+                            <h1 className="text-lg font-bold">
+                                Manage Whitelisted IPs
+                            </h1>
+                            <p className="text-sm text-muted">
+                                Manage the IPs that are whitelisted to access
+                                your CAD.
+                            </p>
+                            <Button className="mt-4" variant="light" fullWidth>
+                                Manage Whitelisted IPs
+                            </Button>
+                        </CustomCard>
+                        <CustomCard>
+                            <h1 className="text-lg font-bold">
+                                Manage Whitelisted IPs
+                            </h1>
+                            <p className="text-sm text-muted">
+                                Manage the IPs that are whitelisted to access
+                                your CAD.
+                            </p>
+                            <Button className="mt-4" variant="light" fullWidth>
+                                Manage Whitelisted IPs
                             </Button>
                         </CustomCard>
                     </div>
