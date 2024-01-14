@@ -19,28 +19,28 @@ export default function EnvEditorPage() {
 
     const envForm = useForm({
         initialValues: {
-            CORS_ORIGIN_URL: activeInstanceData?.env.CORS_ORIGIN_URL,
+            POSTGRES_USER: activeInstanceData?.env.POSTGRES_USER,
+            POSTGRES_PASSWORD: activeInstanceData?.env.POSTGRES_PASSWORD,
+            POSTGRES_DB: activeInstanceData?.env.POSTGRES_DB,
             DB_HOST: activeInstanceData?.env.DB_HOST,
             DB_PORT: activeInstanceData?.env.DB_PORT,
-            DISCORD_BOT_TOKEN: activeInstanceData?.env.DISCORD_BOT_TOKEN,
-            DISCORD_CLIENT_ID: activeInstanceData?.env.DISCORD_CLIENT_ID,
-            DISCORD_CLIENT_SECRET:
-                activeInstanceData?.env.DISCORD_CLIENT_SECRET,
-            DISCORD_SERVER_ID: activeInstanceData?.env.DISCORD_SERVER_ID,
-            DOMAIN: activeInstanceData?.env.DOMAIN,
-            ENCRYPTION_TOKEN: activeInstanceData?.env.ENCRYPTION_TOKEN,
             JWT_SECRET: activeInstanceData?.env.JWT_SECRET,
+            CORS_ORIGIN_URL: activeInstanceData?.env.CORS_ORIGIN_URL,
             NEXT_PUBLIC_CLIENT_URL:
                 activeInstanceData?.env.NEXT_PUBLIC_CLIENT_URL,
             NEXT_PUBLIC_PROD_ORIGIN:
                 activeInstanceData?.env.NEXT_PUBLIC_PROD_ORIGIN,
             PORT_API: activeInstanceData?.env.PORT_API,
             PORT_CLIENT: activeInstanceData?.env.PORT_CLIENT,
-            POSTGRES_DB: activeInstanceData?.env.POSTGRES_DB,
-            POSTGRES_PASSWORD: activeInstanceData?.env.POSTGRES_PASSWORD,
-            POSTGRES_USER: activeInstanceData?.env.POSTGRES_USER,
+            ENCRYPTION_TOKEN: activeInstanceData?.env.ENCRYPTION_TOKEN,
+            DOMAIN: activeInstanceData?.env.DOMAIN,
             SECURE_COOKIES_FOR_IFRAME:
                 activeInstanceData?.env.SECURE_COOKIES_FOR_IFRAME,
+            DISCORD_CLIENT_ID: activeInstanceData?.env.DISCORD_CLIENT_ID,
+            DISCORD_CLIENT_SECRET:
+                activeInstanceData?.env.DISCORD_CLIENT_SECRET,
+            DISCORD_BOT_TOKEN: activeInstanceData?.env.DISCORD_BOT_TOKEN,
+            DISCORD_SERVER_ID: activeInstanceData?.env.DISCORD_SERVER_ID,
             STEAM_API_KEY: activeInstanceData?.env.STEAM_API_KEY,
         } as Env,
 
