@@ -3,13 +3,6 @@ export default function GetPlatformStorageDirectory() {
     switch (process.platform) {
         case "win32":
             return path.resolve(process.env.APPDATA as string, "scm-instances");
-        case "darwin":
-            return path.resolve(
-                process.env.HOME as string,
-                "Library",
-                "Application Support",
-                "scm-instances"
-            );
         case "linux":
             return path.resolve(process.env.HOME as string, ".scm-instances");
         default:
