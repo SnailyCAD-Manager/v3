@@ -4,12 +4,18 @@ import fs from "fs";
 import { spawn } from "child_process";
 import commands, { CommandTree } from "../util/commands";
 import GetPlatformStorageDirectory from "../util/directories";
+import axios from "axios";
+import dotenv from "dotenv";
+import { Env } from "../../types/types";
 
 export default function HandleCreateInstance(socket: Socket) {
     const installCommands = commands.install as CommandTree;
 
     socket.on("server:create-instance", async (data) => {
         const { name, id } = data;
+        const { data: ipData } = await axios.get(
+            "https://api.ipify.org?format=json"
+        );
 
         function cloneRepo() {
             fs.mkdirSync(path.resolve(GetPlatformStorageDirectory(), id));
@@ -45,6 +51,40 @@ export default function HandleCreateInstance(socket: Socket) {
                             ".env.example"
                         ),
                         path.resolve(GetPlatformStorageDirectory(), id, ".env")
+                    );
+
+                    dotenv.config({
+                        path: path.resolve(
+                            GetPlatformStorageDirectory(),
+                            id,
+                            ".env"
+                        ),
+                    });
+                    const env = dotenv.parse(
+                        fs.readFileSync(
+                            path.resolve(
+                                GetPlatformStorageDirectory(),
+                                id,
+                                ".env"
+                            )
+                        )
+                    ) as Env;
+                    env.CORS_ORIGIN_URL = `http://${
+                        ipData.ip || "192.168.x.x"
+                    }:3000`;
+                    env.NEXT_PUBLIC_CLIENT_URL = `http://${
+                        ipData.ip || "192.168.x.x"
+                    }:3000`;
+                    env.NEXT_PUBLIC_PROD_ORIGIN = `http://${
+                        ipData.ip || "192.168.x.x"
+                    }:8080/v1`;
+
+                    const envString = Object.entries(env)
+                        .map(([key, value]) => `${key}=${value}`)
+                        .join("\n");
+                    fs.writeFileSync(
+                        path.resolve(GetPlatformStorageDirectory(), id, ".env"),
+                        envString
                     );
 
                     installDeps();

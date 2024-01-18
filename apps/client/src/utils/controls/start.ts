@@ -7,15 +7,17 @@ import socket from "../socket";
 import { StartData } from "@/types/socket";
 import invalidValues from "../env/invalidValues";
 import { notifications } from "@mantine/notifications";
+import useKeys from "@/hooks/useKeys";
 
 export default async function Start() {
     const id = getActiveInstance();
+    const shiftKey = useKeys.getState().shiftKey;
 
     await invalidValueCheck();
 
     socket.emit("server:start-instance", {
         id,
-        build: false,
+        build: !shiftKey,
     } as StartData);
 }
 

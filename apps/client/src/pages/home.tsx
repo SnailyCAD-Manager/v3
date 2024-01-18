@@ -1,9 +1,11 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
+import useKeys from "@/hooks/useKeys";
 import { usePage } from "@/hooks/usePage";
 import { CommandData } from "@/types/socket";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
+import DeleteInstanceModal from "@/utils/modals/deleteInstance";
 import socket from "@/utils/socket";
 import invalidTerminalCommands from "@/utils/terminal/invalid";
 import {
@@ -22,6 +24,7 @@ import {
     IconPlayerPlay,
     IconReload,
     IconSquare,
+    IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 
@@ -31,6 +34,7 @@ export default function HomePage() {
     const setPage = usePage((state) => state.setPage);
     const instances = useInstance((state) => state.instances);
     const addLog = useInstance((state) => state.addLog);
+    const shiftKey = useKeys((state) => state.shiftKey);
 
     const activeInstanceData = instances.find(
         (instance) => instance.id === activeInstance
@@ -137,7 +141,7 @@ export default function HomePage() {
                                 color="green"
                                 onClick={() => Start()}
                             >
-                                Start
+                                Start {shiftKey ? "(Skip Build)" : ""}
                             </Button>
                         )}
                         <Menu>
@@ -150,13 +154,36 @@ export default function HomePage() {
                             <Menu.Dropdown>
                                 <Menu.Label>Instance Management</Menu.Label>
                                 <Menu.Item
-                                    leftSection={<IconReload />}
+                                    leftSection={<IconReload size={16} />}
                                     disabled={
                                         !activeInstanceData?.status.client &&
                                         !activeInstanceData?.status.api
                                     }
                                 >
                                     Restart Instance
+                                </Menu.Item>
+                                <Tooltip label="This will kill any process running on the ports configured in the .env">
+                                    <Menu.Item
+                                        leftSection={<IconSquare size={16} />}
+                                        color="orange"
+                                    >
+                                        Force Stop
+                                    </Menu.Item>
+                                </Tooltip>
+                                <Menu.Divider />
+                                <Menu.Label>Danger Area</Menu.Label>
+                                <Menu.Item
+                                    leftSection={<IconTrash size={16} />}
+                                    color="red"
+                                    onClick={() =>
+                                        DeleteInstanceModal({
+                                            instanceId: activeInstance,
+                                            instanceName:
+                                                activeInstanceData?.name as string,
+                                        })
+                                    }
+                                >
+                                    Delete Instance
                                 </Menu.Item>
                             </Menu.Dropdown>
                         </Menu>

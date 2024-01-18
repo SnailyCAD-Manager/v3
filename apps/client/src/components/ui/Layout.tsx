@@ -127,7 +127,7 @@ export function Layout(props: Props) {
                         <div className="text-center flex flex-row items-center justify-center gap-2 text-xs">
                             <span>Need help?</span>
                             <Anchor
-                                href="https://discord.gg/snailycad-community-792479048457912360"
+                                href="https://dsc.gg/snailycad"
                                 target="_blank"
                             >
                                 <div className="flex flex-row items-center justify-center gap-1 text-xs">

@@ -53,10 +53,14 @@ export default function HandleStartInstance(socket: Socket) {
         const startCommand = getStartCommand(data.build);
 
         try {
-            const startProcess = spawn("pnpm", ["run", "start"], {
-                cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
-                shell: true,
-            });
+            const startProcess = spawn(
+                startCommand.command,
+                startCommand.args,
+                {
+                    cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
+                    shell: true,
+                }
+            );
 
             startProcess.stdout.on("data", (data) => {
                 socket.emit("instance-log", {
@@ -77,7 +81,7 @@ export default function HandleStartInstance(socket: Socket) {
             startProcess.on("close", (code) => {
                 socket.emit("instance-log", {
                     id,
-                    log: ansi.toHtml(`child process exited with code ${code}`),
+                    log: ansi.toHtml(`CAD Process exited with code ${code}`),
                     type: "console",
                 } as LogData);
             });

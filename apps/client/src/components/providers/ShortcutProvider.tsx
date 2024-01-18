@@ -1,4 +1,5 @@
 import { useInstance } from "@/hooks/useInstance";
+import useKeys from "@/hooks/useKeys";
 import { usePage } from "@/hooks/usePage";
 import { useEffect } from "react";
 
@@ -7,6 +8,7 @@ export default function ShortcutProvider() {
     const activeInstance = useInstance((state) => state.activeInstance);
     const clearLogs = useInstance((state) => state.clearLogs);
     const addLog = useInstance((state) => state.addLog);
+    const setShiftKey = useKeys((state) => state.setShiftKey);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,9 +28,20 @@ export default function ShortcutProvider() {
                     }
                 }
             }
+
+            if (e.shiftKey) {
+                setShiftKey(true);
+            }
+        };
+
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (e.key === "Shift") {
+                setShiftKey(false);
+            }
         };
 
         window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
     }, []);
 
     return null;
