@@ -54,6 +54,12 @@ export default function EnvEditorPage() {
                     return invalidValues.CORS_ORIGIN_URL.find(
                         (v) => v.includes?.some((i) => value?.includes(i))
                     )?.reason;
+                } else if (value !== envForm.values.NEXT_PUBLIC_CLIENT_URL) {
+                    if (value !== "*") {
+                        return "CORS_ORIGIN_URL must be the same as NEXT_PUBLIC_CLIENT_URL or *";
+                    } else {
+                        return null;
+                    }
                 } else {
                     return null;
                 }
