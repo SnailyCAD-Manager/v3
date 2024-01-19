@@ -7,6 +7,7 @@ import fs from "fs";
 import HandleAllSockets from "./sockets";
 import { exec } from "child_process";
 import GetPlatformStorageDirectory from "./util/directories";
+import { StartVersionCheck } from "./util/version";
 
 let settings: any = null;
 
@@ -110,6 +111,10 @@ async function initAPI() {
         console.log(`Server listening on port ${settings.port}`);
         openInBrowser();
     });
+    // #endregion
+
+    // #region Start Version Check
+    StartVersionCheck();
     // #endregion
 }
 

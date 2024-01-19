@@ -144,9 +144,27 @@ export default function HomePage() {
                                 Start {shiftKey ? "(Skip Build)" : ""}
                             </Button>
                         )}
+                        {/* If the latest version is not "ERROR" and the current version is not eaqual to the latest version, show an update button in blue */}
+                        {activeInstanceData?.versions.latest !== "ERROR" &&
+                            activeInstanceData?.versions.current !==
+                                activeInstanceData?.versions.latest && (
+                                <Button
+                                    leftSection={<IconDownload size={16} />}
+                                    variant="light"
+                                    color="blue"
+                                >
+                                    Update to v
+                                    {activeInstanceData?.versions.latest}
+                                </Button>
+                            )}
+                        {/* If the latest version is "ERROR", show a red button */}
                         <Menu>
                             <Menu.Target>
-                                <ActionIcon variant="default">
+                                <ActionIcon
+                                    variant="subtle"
+                                    color="gray"
+                                    className="!rounded-full"
+                                >
                                     <IconDotsVertical size={16} />
                                 </ActionIcon>
                             </Menu.Target>
@@ -239,6 +257,25 @@ export default function HomePage() {
                     </div>
                 </Card.Section>
             </CustomCard>
+            <div className="w-full text-center text-xs text-muted">
+                {`${activeInstanceData?.name} running atop SnailyCAD v${activeInstanceData?.versions.current}`}{" "}
+                {activeInstanceData?.versions.latest === "ERROR" && (
+                    <span className="text-red-500">
+                        {"[ERROR FETCHING LATEST VERSION]"}
+                    </span>
+                )}
+                {activeInstanceData?.versions.current ===
+                    activeInstanceData?.versions.latest && (
+                    <span className="text-green-500">{"[UP TO DATE]"}</span>
+                )}
+                {activeInstanceData?.versions.current !==
+                    activeInstanceData?.versions.latest &&
+                    activeInstanceData?.versions.latest !== "ERROR" && (
+                        <span className="text-yellow-500">
+                            {"[UPDATE AVAILABLE]"}
+                        </span>
+                    )}
+            </div>
         </div>
     );
 }

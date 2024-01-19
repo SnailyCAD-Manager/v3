@@ -3,6 +3,10 @@ export type Instance = {
     id: string;
     logs: string[];
     env: Env;
+    versions: {
+        current: string;
+        latest: string;
+    };
     status: {
         api: boolean;
         client: boolean;
@@ -35,4 +39,8 @@ export type LogData = {
     id: string;
     log: string;
     type: "stdout" | "stderr" | "error" | "console";
+};
+
+export type PackageJson = {
+    version: string;
 };

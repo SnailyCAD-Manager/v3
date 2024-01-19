@@ -1,10 +1,11 @@
 import type { Socket } from "socket.io";
 import fs from "fs";
 import path from "path";
-import { Instance, Env } from "../../types/types";
+import { Instance, Env, PackageJson } from "../../types/types";
 import { default as findProcess } from "find-process";
 import dotenv from "dotenv";
 import GetPlatformStorageDirectory from "../util/directories";
+import { GetLatestVersion } from "../util/version";
 
 export default function HandleLoadInstances(socket: Socket) {
     async function sendInstances() {
@@ -38,10 +39,27 @@ export default function HandleLoadInstances(socket: Socket) {
                         parseInt(env.PORT_CLIENT as string)
                     ).then((res) => res.length > 0),
                 };
+
+                const packageJson: PackageJson = JSON.parse(
+                    fs
+                        .readFileSync(
+                            path.resolve(
+                                GetPlatformStorageDirectory(),
+                                instance.id,
+                                "package.json"
+                            )
+                        )
+                        .toString()
+                );
+
                 instances.push({
                     name: instance.name,
                     id: instance.id,
                     logs: [],
+                    versions: {
+                        current: packageJson.version,
+                        latest: GetLatestVersion(),
+                    },
                     env: env,
                     status,
                 });

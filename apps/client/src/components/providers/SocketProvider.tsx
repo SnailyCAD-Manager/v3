@@ -55,6 +55,7 @@ export default function SocketProvider(): null {
                                 .getState()
                                 .instances.find((i) => i.id === instance.id)
                                 ?.logs || [],
+                        versions: instance.versions,
                         env: instance.env,
                     });
                 } else {
@@ -63,6 +64,7 @@ export default function SocketProvider(): null {
                         name: instance.name,
                         status: instance.status,
                         logs: [],
+                        versions: instance.versions,
                         env: instance.env,
                     });
                     console.log(instance);

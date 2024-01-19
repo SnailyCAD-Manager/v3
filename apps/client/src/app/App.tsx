@@ -9,6 +9,7 @@ import EnvEditorPage from "@/pages/env-editor";
 import HomePage from "@/pages/home";
 import InstanceCreatePage from "@/pages/instance-create";
 import InstanceSelector from "@/pages/instance-selector";
+import KeyboardShortcutsPage from "@/pages/keyboard-shortcuts";
 import LoginPage from "@/pages/login";
 import ToolsPage from "@/pages/tools";
 
@@ -53,6 +54,12 @@ export default function App() {
             return (
                 <Layout>
                     <ToolsPage />
+                </Layout>
+            );
+        case "keyboard-shortcuts":
+            return (
+                <Layout>
+                    <KeyboardShortcutsPage />
                 </Layout>
             );
         default:
