@@ -2,6 +2,7 @@ import {
     IconDashboard,
     IconEdit,
     IconKeyboard,
+    IconSettings,
     IconTools,
 } from "@tabler/icons-react";
 import { create } from "zustand";
@@ -13,7 +14,8 @@ type ValidPageId =
     | "env-editor"
     | "instance-create"
     | "tools"
-    | "keyboard-shortcuts";
+    | "keyboard-shortcuts"
+    | "settings";
 
 type Page = {
     name: string;
@@ -52,6 +54,11 @@ export const AppPages: Page[] = [
         name: "Keyboard Shortcuts",
         icon: <IconKeyboard size={20} />,
         id: "keyboard-shortcuts",
+    },
+    {
+        name: "Settings",
+        icon: <IconSettings size={20} />,
+        id: "settings",
     },
     {
         name: "Instance Create",

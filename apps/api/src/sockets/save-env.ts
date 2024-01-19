@@ -27,7 +27,9 @@ export default function HandleSaveEnv(socket: Socket) {
 
         socket.emit("instance-log", {
             id,
-            log: ansi.toHtml(`${styles.green("Saved env successfully")}`),
+            log: ansi.toHtml(
+                `${styles.green("Successfully saved environment variables.")}`
+            ),
             type: "stdout",
         } as LogData);
     });

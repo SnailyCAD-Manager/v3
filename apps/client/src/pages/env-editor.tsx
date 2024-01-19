@@ -124,7 +124,9 @@ export default function EnvEditorPage() {
             <CustomCard className="w-full h-full flex flex-col items-center">
                 {/* Header (Just a title with a download button on the right) */}
                 <div className="w-full flex flex-row items-center justify-between border-b border-b-neutral-500 pb-3">
-                    <h1 className="text-xl font-semibold">Env Editor</h1>
+                    <h1 className="text-xl font-semibold">
+                        Environment Variables Editor
+                    </h1>
                     <Tooltip label="Download ENV">
                         <ActionIcon
                             variant="default"

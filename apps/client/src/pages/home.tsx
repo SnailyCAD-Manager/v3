@@ -184,6 +184,7 @@ export default function HomePage() {
                                     <Menu.Item
                                         leftSection={<IconSquare size={16} />}
                                         color="orange"
+                                        onClick={() => Stop()}
                                     >
                                         Force Stop
                                     </Menu.Item>

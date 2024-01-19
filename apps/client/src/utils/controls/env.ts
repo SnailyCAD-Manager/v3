@@ -27,7 +27,7 @@ export default function SaveEnv(newEnv: Env) {
 
     notifications.show({
         title: "Saved env",
-        message: "Successfully saved env.",
+        message: "Successfully saved environment variables.",
         color: "green",
     });
 

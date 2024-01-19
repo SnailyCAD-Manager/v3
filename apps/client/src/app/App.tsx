@@ -11,6 +11,7 @@ import InstanceCreatePage from "@/pages/instance-create";
 import InstanceSelector from "@/pages/instance-selector";
 import KeyboardShortcutsPage from "@/pages/keyboard-shortcuts";
 import LoginPage from "@/pages/login";
+import SettingsPage from "@/pages/settings";
 import ToolsPage from "@/pages/tools";
 
 export default function App() {
@@ -60,6 +61,12 @@ export default function App() {
             return (
                 <Layout>
                     <KeyboardShortcutsPage />
+                </Layout>
+            );
+        case "settings":
+            return (
+                <Layout>
+                    <SettingsPage />
                 </Layout>
             );
         default:
