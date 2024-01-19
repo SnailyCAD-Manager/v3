@@ -258,7 +258,7 @@ export default function HomePage() {
                 </Card.Section>
             </CustomCard>
             <div className="w-full text-center text-xs text-muted">
-                {`${activeInstanceData?.name} running atop SnailyCAD v${activeInstanceData?.versions.current}`}{" "}
+                {`${activeInstanceData?.name} running SnailyCAD v${activeInstanceData?.versions.current}`}{" "}
                 {activeInstanceData?.versions.latest === "ERROR" && (
                     <span className="text-red-500">
                         {"[ERROR FETCHING LATEST VERSION]"}
