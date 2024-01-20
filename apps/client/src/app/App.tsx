@@ -11,8 +11,8 @@ import InstanceCreatePage from "@/pages/instance-create";
 import InstanceSelector from "@/pages/instance-selector";
 import KeyboardShortcutsPage from "@/pages/keyboard-shortcuts";
 import LoginPage from "@/pages/login";
-import SettingsPage from "@/pages/settings";
 import ToolsPage from "@/pages/tools";
+import InstanceSettingsPage from "@/pages/instance-settings";
 
 export default function App() {
     const { page } = usePage();
@@ -63,10 +63,10 @@ export default function App() {
                     <KeyboardShortcutsPage />
                 </Layout>
             );
-        case "settings":
+        case "instance-settings":
             return (
                 <Layout>
-                    <SettingsPage />
+                    <InstanceSettingsPage />
                 </Layout>
             );
         default:

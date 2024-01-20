@@ -15,7 +15,7 @@ type ValidPageId =
     | "instance-create"
     | "tools"
     | "keyboard-shortcuts"
-    | "settings";
+    | "instance-settings";
 
 type Page = {
     name: string;
@@ -56,9 +56,9 @@ export const AppPages: Page[] = [
         id: "keyboard-shortcuts",
     },
     {
-        name: "Settings",
+        name: "Instance Settings",
         icon: <IconSettings size={20} />,
-        id: "settings",
+        id: "instance-settings",
     },
     {
         name: "Instance Create",
