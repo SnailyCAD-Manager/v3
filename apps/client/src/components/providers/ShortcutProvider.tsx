@@ -9,6 +9,7 @@ export default function ShortcutProvider() {
     const clearLogs = useInstance((state) => state.clearLogs);
     const addLog = useInstance((state) => state.addLog);
     const setShiftKey = useKeys((state) => state.setShiftKey);
+    const setPage = usePage((state) => state.setPage);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -16,6 +17,11 @@ export default function ShortcutProvider() {
                 if (e.key === "s") {
                     e.preventDefault();
                     e.stopPropagation();
+                }
+
+                if (e.key === "d") {
+                    e.preventDefault();
+                    setPage("home");
                 }
 
                 if (e.key === "l") {

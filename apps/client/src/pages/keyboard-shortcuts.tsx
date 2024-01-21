@@ -3,7 +3,8 @@ import { Kbd, Table } from "@mantine/core";
 
 export default function KeyboardShortcutsPage() {
     return (
-        <CustomCard>
+        <CustomCard className="flex flex-col gap-4">
+            <h1 className="text-2xl font-bold">Keyboard Shortcuts</h1>
             <Table>
                 <Table.Thead>
                     <Table.Tr>

@@ -1,4 +1,5 @@
 import CustomCard from "@/components/ui/CustomCard";
+import Downgrade from "@/utils/controls/downgrade";
 import {
     Button,
     Checkbox,
@@ -73,6 +74,57 @@ export default function ToolsPage() {
                                     </div>
                                 </Fieldset>
                             </form>
+                        </div>
+                    </CustomCard>
+                    <CustomCard className="flex flex-col gap-4">
+                        <h1 className="text-2xl font-bold">
+                            General CAD Tools
+                        </h1>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                            <CustomCard className="flex flex-col">
+                                <h3 className="text-lg font-semibold">
+                                    Reset Dependencies
+                                </h3>
+                                <p className="text-xs text-muted mb-2 grow">
+                                    Uninstall & reinstall SnailyCAD
+                                    dependencies.
+                                </p>
+                                <Button variant="light">
+                                    Reset Dependencies
+                                </Button>
+                            </CustomCard>
+                            <CustomCard className="flex flex-col">
+                                <h3 className="text-lg font-semibold">
+                                    Downgrade SnailyCAD
+                                </h3>
+                                <p className="text-xs text-muted mb-2 grow">
+                                    Downgrade SnailyCAD to a previous stable
+                                    release.
+                                </p>
+                                <Button
+                                    variant="light"
+                                    color="yellow"
+                                    onClick={Downgrade}
+                                    className="justify-self-end"
+                                >
+                                    Downgrade SnailyCAD
+                                </Button>
+                            </CustomCard>
+                            <CustomCard className="flex flex-col">
+                                <h3 className="text-lg font-semibold">
+                                    Force Update SnailyCAD
+                                </h3>
+                                <p className="text-xs text-muted mb-2 grow">
+                                    Force update SnailyCAD to the latest commit.
+                                </p>
+                                <Button
+                                    variant="light"
+                                    color="orange"
+                                    className="justify-self-end"
+                                >
+                                    Force Update SnailyCAD
+                                </Button>
+                            </CustomCard>
                         </div>
                     </CustomCard>
                 </div>
