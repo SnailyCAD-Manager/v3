@@ -208,7 +208,7 @@ export default function InstanceCreatePage() {
                 leftSection={<IconDownload size={12} />}
                 onClick={downloadCreateLogs}
             >
-                Downlaod Creation Logs
+                Download Creation Logs
             </Button>
         </div>
     );

@@ -43,10 +43,10 @@ export default function HomePage() {
     function downloadLogs() {
         const logs = activeInstanceData?.logs.join("\n");
         const element = document.createElement("a");
-        const logOuput: string[] = [];
+        const logOutput: string[] = [];
 
         logs?.split("\n").forEach((log) => {
-            logOuput.push(
+            logOutput.push(
                 log.replace(/<[^>]*>?/gm, "").replace(/&nbsp;/g, " ")
             );
         });
@@ -54,7 +54,7 @@ export default function HomePage() {
         element.setAttribute(
             "href",
             "data:text/plain;charset=utf-8," +
-                encodeURIComponent(logOuput.join("\n") || "Empty Logs")
+                encodeURIComponent(logOutput.join("\n") || "Empty Logs")
         );
         element.setAttribute("download", "manager-logs.txt");
         element.style.display = "none";
@@ -144,7 +144,7 @@ export default function HomePage() {
                                 Start {shiftKey ? "(Skip Build)" : ""}
                             </Button>
                         )}
-                        {/* If the latest version is not "ERROR" and the current version is not eaqual to the latest version, show an update button in blue */}
+                        {/* If the latest version is not "ERROR" and the current version is not equal to the latest version, show an update button in blue */}
                         {activeInstanceData?.versions.latest !== "ERROR" &&
                             activeInstanceData?.versions.current !==
                                 activeInstanceData?.versions.latest && (
