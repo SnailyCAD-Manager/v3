@@ -19,40 +19,40 @@ export default function EnvEditorPage() {
 
     const envForm = useForm({
         initialValues: {
-            POSTGRES_USER: activeInstanceData?.env.POSTGRES_USER,
-            POSTGRES_PASSWORD: activeInstanceData?.env.POSTGRES_PASSWORD,
-            POSTGRES_DB: activeInstanceData?.env.POSTGRES_DB,
-            DB_HOST: activeInstanceData?.env.DB_HOST,
-            DB_PORT: activeInstanceData?.env.DB_PORT,
-            JWT_SECRET: activeInstanceData?.env.JWT_SECRET,
-            CORS_ORIGIN_URL: activeInstanceData?.env.CORS_ORIGIN_URL,
+            POSTGRES_USER: activeInstanceData?.env.POSTGRES_USER || "",
+            POSTGRES_PASSWORD: activeInstanceData?.env.POSTGRES_PASSWORD || "",
+            POSTGRES_DB: activeInstanceData?.env.POSTGRES_DB || "",
+            DB_HOST: activeInstanceData?.env.DB_HOST || "",
+            DB_PORT: activeInstanceData?.env.DB_PORT || "",
+            JWT_SECRET: activeInstanceData?.env.JWT_SECRET || "",
+            CORS_ORIGIN_URL: activeInstanceData?.env.CORS_ORIGIN_URL || "",
             NEXT_PUBLIC_CLIENT_URL:
-                activeInstanceData?.env.NEXT_PUBLIC_CLIENT_URL,
+                activeInstanceData?.env.NEXT_PUBLIC_CLIENT_URL || "",
             NEXT_PUBLIC_PROD_ORIGIN:
-                activeInstanceData?.env.NEXT_PUBLIC_PROD_ORIGIN,
-            PORT_API: activeInstanceData?.env.PORT_API,
-            PORT_CLIENT: activeInstanceData?.env.PORT_CLIENT,
-            ENCRYPTION_TOKEN: activeInstanceData?.env.ENCRYPTION_TOKEN,
-            DOMAIN: activeInstanceData?.env.DOMAIN,
+                activeInstanceData?.env.NEXT_PUBLIC_PROD_ORIGIN || "",
+            PORT_API: activeInstanceData?.env.PORT_API || "",
+            PORT_CLIENT: activeInstanceData?.env.PORT_CLIENT || "",
+            ENCRYPTION_TOKEN: activeInstanceData?.env.ENCRYPTION_TOKEN || "",
+            DOMAIN: activeInstanceData?.env.DOMAIN || "",
             SECURE_COOKIES_FOR_IFRAME:
-                activeInstanceData?.env.SECURE_COOKIES_FOR_IFRAME,
-            DISCORD_CLIENT_ID: activeInstanceData?.env.DISCORD_CLIENT_ID,
+                activeInstanceData?.env.SECURE_COOKIES_FOR_IFRAME || "",
+            DISCORD_CLIENT_ID: activeInstanceData?.env.DISCORD_CLIENT_ID || "",
             DISCORD_CLIENT_SECRET:
-                activeInstanceData?.env.DISCORD_CLIENT_SECRET,
-            DISCORD_BOT_TOKEN: activeInstanceData?.env.DISCORD_BOT_TOKEN,
-            DISCORD_SERVER_ID: activeInstanceData?.env.DISCORD_SERVER_ID,
-            STEAM_API_KEY: activeInstanceData?.env.STEAM_API_KEY,
+                activeInstanceData?.env.DISCORD_CLIENT_SECRET || "",
+            DISCORD_BOT_TOKEN: activeInstanceData?.env.DISCORD_BOT_TOKEN || "",
+            DISCORD_SERVER_ID: activeInstanceData?.env.DISCORD_SERVER_ID || "",
+            STEAM_API_KEY: activeInstanceData?.env.STEAM_API_KEY || "",
         } as Env,
 
         validate: {
             CORS_ORIGIN_URL: (value) => {
                 if (
-                    invalidValues.CORS_ORIGIN_URL.some(
-                        (v) => v.includes?.some((i) => value?.includes(i))
+                    invalidValues.CORS_ORIGIN_URL.some((v) =>
+                        v.includes?.some((i) => value?.includes(i))
                     )
                 ) {
-                    return invalidValues.CORS_ORIGIN_URL.find(
-                        (v) => v.includes?.some((i) => value?.includes(i))
+                    return invalidValues.CORS_ORIGIN_URL.find((v) =>
+                        v.includes?.some((i) => value?.includes(i))
                     )?.reason;
                 } else if (value !== envForm.values.NEXT_PUBLIC_CLIENT_URL) {
                     if (value !== "*") {
@@ -66,12 +66,12 @@ export default function EnvEditorPage() {
             },
             NEXT_PUBLIC_CLIENT_URL: (value) => {
                 if (
-                    invalidValues.NEXT_PUBLIC_CLIENT_URL.some(
-                        (v) => v.includes?.some((i) => value?.includes(i))
+                    invalidValues.NEXT_PUBLIC_CLIENT_URL.some((v) =>
+                        v.includes?.some((i) => value?.includes(i))
                     )
                 ) {
-                    return invalidValues.NEXT_PUBLIC_CLIENT_URL.find(
-                        (v) => v.includes?.some((i) => value?.includes(i))
+                    return invalidValues.NEXT_PUBLIC_CLIENT_URL.find((v) =>
+                        v.includes?.some((i) => value?.includes(i))
                     )?.reason;
                 } else if (value !== envForm.values.CORS_ORIGIN_URL) {
                     if (envForm.values.CORS_ORIGIN_URL !== "*") {
@@ -85,12 +85,12 @@ export default function EnvEditorPage() {
             },
             NEXT_PUBLIC_PROD_ORIGIN: (value) => {
                 if (
-                    invalidValues.NEXT_PUBLIC_PROD_ORIGIN.some(
-                        (v) => v.includes?.some((i) => value?.includes(i))
+                    invalidValues.NEXT_PUBLIC_PROD_ORIGIN.some((v) =>
+                        v.includes?.some((i) => value?.includes(i))
                     )
                 ) {
-                    return invalidValues.NEXT_PUBLIC_PROD_ORIGIN.find(
-                        (v) => v.includes?.some((i) => value?.includes(i))
+                    return invalidValues.NEXT_PUBLIC_PROD_ORIGIN.find((v) =>
+                        v.includes?.some((i) => value?.includes(i))
                     )?.reason;
                 } else {
                     return null;
