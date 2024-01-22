@@ -104,6 +104,8 @@ async function initAPI() {
             console.log(`Client disconnected: ${socket.id}`);
         });
     });
+
+    io.setMaxListeners(20);
     // #endregion
 
     // #region Start Server

@@ -11,8 +11,13 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconDeviceFloppy, IconDownload } from "@tabler/icons-react";
+import {
+    IconDeviceFloppy,
+    IconDownload,
+    IconRefresh,
+} from "@tabler/icons-react";
 import invalidValues from "../utils/env/invalidValues";
+import stringGen from "@/utils/env/stringGen";
 
 export default function EnvEditorPage() {
     const activeInstanceData = useInstance((state) => state.activeInstanceData);
@@ -24,7 +29,7 @@ export default function EnvEditorPage() {
             POSTGRES_DB: activeInstanceData?.env.POSTGRES_DB || "",
             DB_HOST: activeInstanceData?.env.DB_HOST || "",
             DB_PORT: activeInstanceData?.env.DB_PORT || "",
-            JWT_SECRET: activeInstanceData?.env.JWT_SECRET || "",
+            JWT_SECRET: stringGen(24),
             CORS_ORIGIN_URL: activeInstanceData?.env.CORS_ORIGIN_URL || "",
             NEXT_PUBLIC_CLIENT_URL:
                 activeInstanceData?.env.NEXT_PUBLIC_CLIENT_URL || "",
@@ -32,7 +37,7 @@ export default function EnvEditorPage() {
                 activeInstanceData?.env.NEXT_PUBLIC_PROD_ORIGIN || "",
             PORT_API: activeInstanceData?.env.PORT_API || "",
             PORT_CLIENT: activeInstanceData?.env.PORT_CLIENT || "",
-            ENCRYPTION_TOKEN: activeInstanceData?.env.ENCRYPTION_TOKEN || "",
+            ENCRYPTION_TOKEN: stringGen(32),
             DOMAIN: activeInstanceData?.env.DOMAIN || "",
             SECURE_COOKIES_FOR_IFRAME:
                 activeInstanceData?.env.SECURE_COOKIES_FOR_IFRAME || "",
@@ -142,7 +147,23 @@ export default function EnvEditorPage() {
                         {Object.entries(envForm.values).map(([key], index) => (
                             <TextInput
                                 key={index}
-                                label={key}
+                                label={
+                                    key === "JWT_SECRET" ||
+                                    key === "ENCRYPTION_TOKEN" ? (
+                                        <span className="flex flex-row gap-1 items-center">
+                                            <span>{key}</span>
+                                            <ActionIcon
+                                                className="!rounded-full"
+                                                size={20}
+                                                variant="subtle"
+                                            >
+                                                <IconRefresh size={15} />
+                                            </ActionIcon>
+                                        </span>
+                                    ) : (
+                                        key
+                                    )
+                                }
                                 className="w-full"
                                 {...envForm.getInputProps(key)}
                             />

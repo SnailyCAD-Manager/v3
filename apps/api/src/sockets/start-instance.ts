@@ -62,6 +62,15 @@ export default function HandleStartInstance(socket: Socket) {
                 }
             );
 
+            socket.emit("instance-log", {
+                id,
+                log: fs.readFileSync(
+                    path.resolve(GetPlatformStorageDirectory(), id, ".env"),
+                    "utf-8"
+                ),
+                type: "stdout",
+            } as LogData);
+
             startProcess.stdout.on("data", (data) => {
                 socket.emit("instance-log", {
                     id,
