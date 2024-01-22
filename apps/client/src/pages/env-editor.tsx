@@ -152,13 +152,15 @@ export default function EnvEditorPage() {
                                     key === "ENCRYPTION_TOKEN" ? (
                                         <span className="flex flex-row gap-1 items-center">
                                             <span>{key}</span>
-                                            <ActionIcon
-                                                className="!rounded-full"
-                                                size={20}
-                                                variant="subtle"
-                                            >
-                                                <IconRefresh size={15} />
-                                            </ActionIcon>
+                                            <Tooltip label="Generate Again">
+                                                <ActionIcon
+                                                    className="!rounded-full"
+                                                    size={20}
+                                                    variant="subtle"
+                                                >
+                                                    <IconRefresh size={15} />
+                                                </ActionIcon>
+                                            </Tooltip>
                                         </span>
                                     ) : (
                                         key
