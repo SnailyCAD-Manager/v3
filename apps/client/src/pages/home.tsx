@@ -232,17 +232,14 @@ export default function HomePage() {
                             ref={terminalRef}
                             className="absolute flex flex-col top-0 left-0 h-[calc(100%-2.5rem)] w-full p-2 overflow-hidden hover:overflow-y-auto whitespace-pre-wrap text-sm"
                         >
-                            {activeInstanceData?.logs.map(
-                                (log, index) =>
-                                    index < 150 && (
-                                        <span
-                                            key={index}
-                                            dangerouslySetInnerHTML={{
-                                                __html: log,
-                                            }}
-                                        />
-                                    )
-                            )}
+                            {activeInstanceData?.logs.map((log, index) => (
+                                <span
+                                    key={index}
+                                    dangerouslySetInnerHTML={{
+                                        __html: log,
+                                    }}
+                                />
+                            ))}
                         </pre>
                         <form
                             onSubmit={commandForm.onSubmit((values) =>

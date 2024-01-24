@@ -6,6 +6,7 @@ import ansi_to_html from "ansi-to-html";
 import { LogData } from "../../types/types";
 import GetPlatformStorageDirectory from "../util/directories";
 import fs from "fs";
+import readEnv from "../util/readEnv";
 
 const ansi = new ansi_to_html();
 

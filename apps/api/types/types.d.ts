@@ -27,7 +27,7 @@ export type Env = {
     PORT_CLIENT?: string;
     ENCRYPTION_TOKEN?: string;
     DOMAIN?: string;
-    SECURE_COOKIES_FOR_IFRAME?: boolean;
+    SECURE_COOKIES_FOR_IFRAME?: string;
     DISCORD_CLIENT_ID?: string;
     DISCORD_CLIENT_SECRET?: string;
     DISCORD_BOT_TOKEN?: string;
@@ -43,4 +43,8 @@ export type LogData = {
 
 export type PackageJson = {
     version: string;
+};
+
+export type DeleteData = {
+    id: string;
 };
