@@ -12,6 +12,7 @@ import {
     IconTrash,
 } from "@tabler/icons-react";
 import RestartInstanceModal from "@/utils/modals/restartInstance";
+import Delete from "@/utils/controls/delete";
 
 interface Props {
     name: string;
@@ -131,6 +132,7 @@ export default function InstanceCard(props: Props) {
                                 <Menu.Item
                                     leftSection={<IconTrash size={16} />}
                                     color="red"
+                                    onClick={() => Delete(props.id)}
                                 >
                                     Delete Instance
                                 </Menu.Item>

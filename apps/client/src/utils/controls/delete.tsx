@@ -1,8 +1,10 @@
 import { getActiveInstance } from "@/hooks/useInstance";
 import { modals } from "@mantine/modals";
+import socket from "../socket";
+import { DeleteData } from "@/types/socket";
 
-export default function Delete() {
-    const id = getActiveInstance();
+export default function Delete(id?: string) {
+    if (!id) id = getActiveInstance();
 
     modals.openConfirmModal({
         title: <h1 className="text-lg font-bold">Delete Instance: {id}?</h1>,
@@ -16,6 +18,10 @@ export default function Delete() {
                 </p>
             </>
         ),
+        centered: true,
+        overlayProps: {
+            blur: 5,
+        },
         confirmProps: {
             children: "Delete",
             color: "red",
@@ -24,6 +30,11 @@ export default function Delete() {
         cancelProps: {
             children: "Cancel",
             variant: "light",
+        },
+        onConfirm: () => {
+            socket.emit("server:delete-instance", {
+                id,
+            } as DeleteData);
         },
     });
 }

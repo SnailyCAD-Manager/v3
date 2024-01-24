@@ -13,3 +13,7 @@ export type CommandData = {
     id: string;
     command: string;
 };
+
+export type DeleteData = {
+    id: string;
+};
