@@ -29,6 +29,13 @@ async function initAPI() {
         );
     }
 
+    if (!fs.existsSync(path.resolve(process.cwd(), "data/users.json"))) {
+        await fs.promises.writeFile(
+            path.resolve(process.cwd(), "data/users.json"),
+            "[]"
+        );
+    }
+
     if (!fs.existsSync(GetPlatformStorageDirectory())) {
         await fs.promises.mkdir(GetPlatformStorageDirectory());
     }

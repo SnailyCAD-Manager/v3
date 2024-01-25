@@ -38,8 +38,8 @@ yarn-error.log*
 *.pem
 
 # API Exclude
-apps/api/data/settings.json
-apps/api/data/instances.json
+apps/api/data/*.json
+!apps/api/data/*.default.json
 
 # Build Utils
 build-error.txt

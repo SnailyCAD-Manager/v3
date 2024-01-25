@@ -48,3 +48,10 @@ export type PackageJson = {
 export type DeleteData = {
     id: string;
 };
+
+export type User = {
+    id: string;
+    username: string;
+    password: string;
+    role: "admin" | "user";
+};
