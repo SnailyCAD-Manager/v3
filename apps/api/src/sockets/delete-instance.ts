@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
 import ManageProcess from "../util/manageProcess";
+import ManageInstances from "../util/manageInstances";
 
 export default function HandleDeleteInstance(socket: Socket) {
     socket.on("server:delete-instance", async (data: DeleteData) => {
@@ -16,7 +17,7 @@ export default function HandleDeleteInstance(socket: Socket) {
         } catch {
             socket.emit(
                 "error",
-                `Failed to kill process for instance: ${data.id} for deletion.`
+                `Unable to kill process for instance: ${data.id}. This is ok in most cases.`
             );
         }
 
@@ -25,25 +26,21 @@ export default function HandleDeleteInstance(socket: Socket) {
         } catch {
             socket.emit(
                 "error",
-                `Failed to kill API for instance: ${data.id} for deletion.`
+                `Unable to kill API for instance: ${data.id} for deletion. This is ok in most cases.`
             );
         }
+
         try {
             await killPort(parseInt(env.parsed.PORT_CLIENT!));
         } catch {
             socket.emit(
                 "error",
-                `Failed to kill Client for instance: ${data.id} for deletion.`
+                `Unable to kill client for instance: ${data.id} for deletion. This is ok in most cases.`
             );
         }
 
         try {
-            await fs.promises.rm(
-                path.resolve(GetPlatformStorageDirectory(), data.id),
-                {
-                    recursive: true,
-                }
-            );
+            ManageInstances.deleteInstance(data.id, socket);
         } catch (err) {
             socket.emit(
                 "error",

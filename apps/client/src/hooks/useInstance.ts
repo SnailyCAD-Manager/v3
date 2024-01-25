@@ -6,6 +6,7 @@ type InstanceState = {
     activeInstance: string;
     activeInstanceData: Instance | null;
     instancesLoaded: boolean;
+    instanceDeletionInProgress: boolean;
     setActiveInstance: (id: string) => void;
     addInstance: (instance: Instance) => void;
     removeInstance: (id: string) => void;
@@ -13,6 +14,7 @@ type InstanceState = {
     addLog: (id: string, log: string) => void;
     clearLogs: (id: string) => void;
     setInstancesLoaded: (loaded: boolean) => void;
+    setInstanceDeletionInProgress: (inProgress: boolean) => void;
 };
 
 export const useInstance = create<InstanceState>((set) => ({
@@ -20,6 +22,7 @@ export const useInstance = create<InstanceState>((set) => ({
     activeInstance: "",
     activeInstanceData: null,
     instancesLoaded: false,
+    instanceDeletionInProgress: false,
     setActiveInstance: (id: string) => {
         set((state) => ({
             ...state,
@@ -63,6 +66,8 @@ export const useInstance = create<InstanceState>((set) => ({
         })),
     setInstancesLoaded: (loaded: boolean) =>
         set((state) => ({ ...state, instancesLoaded: loaded })),
+    setInstanceDeletionInProgress: (inProgress: boolean) =>
+        set((state) => ({ ...state, instanceDeletionInProgress: inProgress })),
 }));
 
 function getActiveInstance() {

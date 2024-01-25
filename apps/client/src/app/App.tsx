@@ -28,10 +28,6 @@ export default function App() {
         return <LoginPage />;
     }
 
-    if (!activeInstance) {
-        return <InstanceSelector />;
-    }
-
     switch (page.id) {
         case "instance-selector":
             return <InstanceSelector />;

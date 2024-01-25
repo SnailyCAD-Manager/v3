@@ -101,6 +101,7 @@ async function initAPI() {
         HandleAllSockets(socket);
 
         socket.on("disconnect", () => {
+            socket.removeAllListeners();
             console.log(`Client disconnected: ${socket.id}`);
         });
     });

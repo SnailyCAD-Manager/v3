@@ -99,6 +99,10 @@ export default function SocketProvider(): null {
                 color: "red",
             });
         });
+        socket.on("instance-delete-complete", () => {
+            useInstance.getState().setInstanceDeletionInProgress(false);
+            window.location.reload();
+        });
         socket.connect();
 
         return () => {
@@ -107,6 +111,7 @@ export default function SocketProvider(): null {
             socket.off("load-instances", onInstanceUpdate);
             socket.off("instance-log", onInstanceLog);
             socket.off("error");
+            socket.off("instance-delete-complete");
             socket.disconnect();
         };
     }, []);

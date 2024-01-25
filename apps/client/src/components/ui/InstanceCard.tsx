@@ -1,4 +1,4 @@
-import { Button, Menu } from "@mantine/core";
+import { Button, Divider, Menu } from "@mantine/core";
 import CustomCard from "./CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
@@ -81,6 +81,7 @@ export default function InstanceCard(props: Props) {
                         >
                             Select
                         </Button>
+                        <Divider orientation="vertical" color="gray" />
                         <Menu position="bottom-end">
                             <Menu.Target>
                                 <Button

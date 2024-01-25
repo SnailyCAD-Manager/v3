@@ -2,15 +2,31 @@ import CustomCard from "@/components/ui/CustomCard";
 import InstanceCard from "@/components/ui/InstanceCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
-import { Button, ScrollArea, Loader } from "@mantine/core";
+import { Button, ScrollArea, Loader, LoadingOverlay } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export default function InstanceSelector() {
     const instances = useInstance((state) => state.instances);
     const instancesLoaded = useInstance((state) => state.instancesLoaded);
-    const { setPage } = usePage();
+    const instanceDeletionInProgress = useInstance(
+        (state) => state.instanceDeletionInProgress
+    );
+    const setPage = usePage((state) => state.setPage);
     return (
-        <div className="w-full h-full flex flex-col gap-4 items-center justify-center">
+        <div className="w-full h-full relative flex flex-col gap-4 items-center justify-center">
+            <LoadingOverlay
+                visible={instanceDeletionInProgress}
+                loaderProps={{
+                    children: (
+                        <div className="flex flex-col items-center justify-center gap-4">
+                            <Loader />
+                            <h1 className="text-2xl font-semibold">
+                                An instance is currently being deleted.
+                            </h1>
+                        </div>
+                    ),
+                }}
+            />
             <h1 className="text-2xl font-semibold">Select an instance</h1>
             {instancesLoaded ? (
                 <>
@@ -38,7 +54,10 @@ export default function InstanceSelector() {
                         variant="light"
                         color="blue"
                         leftSection={<IconPlus size={16} />}
-                        onClick={() => setPage("instance-create")}
+                        onClick={() => {
+                            console.log("Create new instance");
+                            setPage("instance-create");
+                        }}
                     >
                         Create new instance
                     </Button>
