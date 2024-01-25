@@ -1,3 +1,4 @@
+import { exec } from "child_process";
 let _processes: {
     instanceId: string;
     pid: number;
@@ -35,7 +36,11 @@ export default class ManageProcess {
             (process) => process.instanceId === instanceId
         );
         if (found) {
-            process.kill(found.pid);
+            if (process.platform === "win32") {
+                exec(`taskkill /PID ${found.pid} /T /F`);
+                return;
+            }
+            process.kill(-found.pid, "SIGKILL");
         }
 
         _processes = _processes.filter(
@@ -46,7 +51,12 @@ export default class ManageProcess {
     static killProcessByPid(pid: number) {
         const found = _processes.find((process) => process.pid === pid);
         if (found) {
-            process.kill(found.pid);
+            if (process.platform === "win32") {
+                exec(`taskkill /PID ${found.pid} /T /F`);
+                return;
+            }
+
+            process.kill(-found.pid, "SIGKILL");
         }
 
         _processes = _processes.filter((process) => process.pid !== pid);
@@ -54,7 +64,12 @@ export default class ManageProcess {
 
     static killAllProcesses() {
         _processes.forEach((itm) => {
-            process.kill(itm.pid);
+            if (process.platform === "win32") {
+                exec(`taskkill /PID ${itm.pid} /T /F`);
+                return;
+            }
+
+            process.kill(-itm.pid, "SIGKILL");
         });
 
         _processes = [];

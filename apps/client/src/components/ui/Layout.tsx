@@ -144,8 +144,10 @@ export function Layout(props: Props) {
             </AppShell>
             <Spotlight
                 actions={SpotlightActions}
+                radius={10}
                 nothingFound="No actions found"
                 highlightQuery
+                limit={4}
                 searchProps={{
                     placeholder: "Run an action...",
                     autoFocus: true,

@@ -48,7 +48,7 @@ export default function ShortcutProvider() {
 
         window.addEventListener("keydown", handleKeyDown);
         window.addEventListener("keyup", handleKeyUp);
-    }, []);
+    }, [page.id]);
 
     return null;
 }

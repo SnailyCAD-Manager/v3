@@ -18,9 +18,6 @@ export default function HandleStopInstance(socket: Socket) {
 
         ManageProcess.killProcess(data.id);
 
-        await killPort(parseInt(env.PORT_CLIENT as string));
-        await killPort(parseInt(env.PORT_API as string));
-
         socket.emit("instance-log", {
             id: data.id,
             log: `<span style="color: orange;>Instance ${data.id} stopped</span>`,

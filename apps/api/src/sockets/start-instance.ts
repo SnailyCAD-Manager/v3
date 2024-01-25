@@ -67,15 +67,6 @@ export default function HandleStartInstance(socket: Socket) {
 
             ManageProcess.addProcess(id, startProcess.pid as number);
 
-            socket.emit("instance-log", {
-                id,
-                log: fs.readFileSync(
-                    path.resolve(GetPlatformStorageDirectory(), id, ".env"),
-                    "utf-8"
-                ),
-                type: "stdout",
-            } as LogData);
-
             startProcess.stdout.on("data", (data: Buffer) => {
                 FilterLog(data.toString(), id, socket);
 
