@@ -6,6 +6,7 @@ import { default as findProcess } from "find-process";
 import dotenv from "dotenv";
 import GetPlatformStorageDirectory from "../util/directories";
 import { GetLatestVersion } from "../util/version";
+import ManageProcess from "../util/manageProcess";
 
 export default function HandleLoadInstances(socket: Socket) {
     async function sendInstances() {
@@ -30,14 +31,12 @@ export default function HandleLoadInstances(socket: Socket) {
                 }).parsed as Env;
 
                 const status = {
-                    api: await findProcess(
-                        "port",
-                        parseInt(env.PORT_API as string)
-                    ).then((res) => res.length > 0),
-                    client: await findProcess(
-                        "port",
-                        parseInt(env.PORT_CLIENT as string)
-                    ).then((res) => res.length > 0),
+                    api: ManageProcess.getProcessByInstanceId(instance.id)
+                        ? true
+                        : false,
+                    client: ManageProcess.getProcessByInstanceId(instance.id)
+                        ? true
+                        : false,
                 };
 
                 const packageJson: PackageJson = JSON.parse(

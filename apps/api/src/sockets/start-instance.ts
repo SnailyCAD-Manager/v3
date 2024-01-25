@@ -3,10 +3,11 @@ import path from "path";
 import { spawn } from "child_process";
 import commands, { CommandTree } from "../util/commands";
 import ansi_to_html from "ansi-to-html";
-import { LogData } from "../../types/types";
+import type { LogData } from "../../types/types";
 import GetPlatformStorageDirectory from "../util/directories";
 import fs from "fs";
 import readEnv from "../util/readEnv";
+import ManageProcess from "../util/manageProcess";
 
 const ansi = new ansi_to_html();
 
@@ -60,8 +61,11 @@ export default function HandleStartInstance(socket: Socket) {
                 {
                     cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
                     shell: true,
+                    env: readEnv(data.id).parsed,
                 }
             );
+
+            ManageProcess.addProcess(id, startProcess.pid as number);
 
             socket.emit("instance-log", {
                 id,
@@ -72,7 +76,9 @@ export default function HandleStartInstance(socket: Socket) {
                 type: "stdout",
             } as LogData);
 
-            startProcess.stdout.on("data", (data) => {
+            startProcess.stdout.on("data", (data: Buffer) => {
+                FilterLog(data.toString(), id, socket);
+
                 socket.emit("instance-log", {
                     id,
                     log: ansi.toHtml(data.toString()),
@@ -81,6 +87,8 @@ export default function HandleStartInstance(socket: Socket) {
             });
 
             startProcess.stderr.on("data", (data) => {
+                FilterLog(data.toString(), id, socket);
+
                 socket.emit("instance-log", {
                     id,
                     log: ansi.toHtml(data.toString()),
@@ -89,6 +97,7 @@ export default function HandleStartInstance(socket: Socket) {
             });
 
             startProcess.on("close", (code) => {
+                ManageProcess.removeProcess(id);
                 socket.emit("instance-log", {
                     id,
                     log: ansi.toHtml(`CAD Process exited with code ${code}`),
@@ -104,4 +113,34 @@ export default function HandleStartInstance(socket: Socket) {
             throw new Error(err);
         }
     });
+}
+
+function FilterLog(data: string, id: string, socket: Socket) {
+    // Common Database Errors
+    if (data.includes("Authentication failed against database server")) {
+        socket.emit("error", `Authentication failed (${id})`);
+        socket.emit("instance-log", {
+            id,
+            log: `<span style="background-color: red; padding: 0 10px;">DATABASE AUTHENTICATION FAILED</span>`,
+        } as LogData);
+        ManageProcess.killProcess(id);
+    }
+    if (data.includes("Can't reach database server at")) {
+        socket.emit("error", `Database server unreachable (${id})`);
+        socket.emit("instance-log", {
+            id,
+            log: `<span style="background-color: red; padding: 0 10px;">DATABASE SERVER UNREACHABLE</span>`,
+        } as LogData);
+        ManageProcess.killProcess(id);
+    }
+
+    // Common Port Errors
+    if (data.includes("EADDRINUSE")) {
+        socket.emit("error", `Port is already in use (${id})`);
+        socket.emit("instance-log", {
+            id,
+            log: `<span style="background-color: red; padding: 0 10px;">PORT IS ALREADY IN USE</span>`,
+        } as LogData);
+        ManageProcess.killProcess(id);
+    }
 }

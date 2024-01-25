@@ -5,10 +5,20 @@ import killPort from "kill-port";
 import fs from "fs";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
+import ManageProcess from "../util/manageProcess";
 
 export default function HandleDeleteInstance(socket: Socket) {
     socket.on("server:delete-instance", async (data: DeleteData) => {
         const env = readEnv(data.id);
+
+        try {
+            ManageProcess.killProcess(data.id);
+        } catch {
+            socket.emit(
+                "error",
+                `Failed to kill process for instance: ${data.id} for deletion.`
+            );
+        }
 
         try {
             await killPort(parseInt(env.parsed.PORT_API!));
@@ -28,8 +38,11 @@ export default function HandleDeleteInstance(socket: Socket) {
         }
 
         try {
-            await fs.promises.unlink(
-                path.resolve(GetPlatformStorageDirectory(), data.id)
+            await fs.promises.rm(
+                path.resolve(GetPlatformStorageDirectory(), data.id),
+                {
+                    recursive: true,
+                }
             );
         } catch (err) {
             socket.emit(

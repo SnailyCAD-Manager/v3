@@ -80,7 +80,7 @@ export default function HandleCreateInstance(socket: Socket) {
                     }:8080/v1`;
 
                     const envString = Object.entries(env)
-                        .map(([key, value]) => `${key}=${value}`)
+                        .map(([key, value]) => `${key}="${value}"`)
                         .join("\n");
                     fs.writeFileSync(
                         path.resolve(GetPlatformStorageDirectory(), id, ".env"),

@@ -3,9 +3,9 @@ import { useInstance } from "@/hooks/useInstance";
 import useKeys from "@/hooks/useKeys";
 import { usePage } from "@/hooks/usePage";
 import { CommandData } from "@/types/socket";
+import Delete from "@/utils/controls/delete";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
-import DeleteInstanceModal from "@/utils/modals/deleteInstance";
 import socket from "@/utils/socket";
 import invalidTerminalCommands from "@/utils/terminal/invalid";
 import {
@@ -206,13 +206,7 @@ export default function HomePage() {
                                 <Menu.Item
                                     leftSection={<IconTrash size={16} />}
                                     color="red"
-                                    onClick={() =>
-                                        DeleteInstanceModal({
-                                            instanceId: activeInstance,
-                                            instanceName:
-                                                activeInstanceData?.name as string,
-                                        })
-                                    }
+                                    onClick={() => Delete()}
                                 >
                                     Delete Instance
                                 </Menu.Item>
