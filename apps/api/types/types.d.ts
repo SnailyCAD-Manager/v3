@@ -49,9 +49,38 @@ export type DeleteData = {
     id: string;
 };
 
+export type AddUserData = {
+    username: string;
+    password: string;
+    role: "admin" | "user";
+};
+
 export type User = {
     id: string;
     username: string;
+    password: string;
+    role: "admin" | "user";
+};
+
+export type UserWithoutPassword = {
+    id: string;
+    username: string;
+    role: "admin" | "user";
+};
+
+export type UserWithoutId = {
+    username: string;
+    password: string;
+    role: "admin" | "user";
+};
+
+export type UserWithoutIdAndPassword = {
+    username: string;
+    role: "admin" | "user";
+};
+
+export type UserWithoutUsername = {
+    id: string;
     password: string;
     role: "admin" | "user";
 };

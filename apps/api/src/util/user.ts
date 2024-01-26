@@ -1,4 +1,4 @@
-import { User } from "../../types/types";
+import { User, UserWithoutId } from "../../types/types";
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
@@ -27,7 +27,7 @@ export default class ManageUser {
         return users.find((user) => user.username === username);
     }
 
-    public static async CreateUser(user: User): Promise<void> {
+    public static async CreateUser(user: UserWithoutId): Promise<void> {
         const users = await ManageUser.GetUsers();
         users.push({
             ...user,
