@@ -39,6 +39,7 @@ yarn-error.log*
 
 # API Exclude
 apps/api/data/*.json
+apps/api/data/*.db
 !apps/api/data/*.default.json
 
 # Build Utils
