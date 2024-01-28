@@ -127,7 +127,7 @@ export default function InstanceCreatePage() {
             type: "text/plain;charset=utf-8",
         });
         element.href = URL.createObjectURL(file);
-        element.download = `create-instance-${instanceInfo.name}-logs.txt`;
+        element.download = `create-instance-${instanceInfo.name}-logs.log`;
         document.body.appendChild(element);
         element.click();
     }

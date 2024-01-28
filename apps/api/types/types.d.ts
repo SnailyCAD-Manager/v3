@@ -13,6 +13,30 @@ export type Instance = {
     };
 };
 
+export type StorageInstance = {
+    name: string;
+    id: string;
+    settings: {
+        onStartup: {
+            enabled: boolean;
+            webhook?: string;
+            message?: string;
+        };
+        crashDetection: {
+            enabled: boolean;
+            webhook?: string;
+            message?: string;
+        };
+        autoRestart: {
+            enabled: boolean;
+            maxRestarts?: number;
+        };
+        autoUpdate: {
+            enabled: boolean;
+        };
+    };
+};
+
 export type Env = {
     POSTGRES_PASSWORD?: string;
     POSTGRES_USER?: string;
@@ -60,6 +84,11 @@ export type User = {
     username: string;
     password: string;
     role: "admin" | "user";
+};
+
+export type UserLoginData = {
+    username: string;
+    password: string;
 };
 
 export type UserWithoutPassword = {

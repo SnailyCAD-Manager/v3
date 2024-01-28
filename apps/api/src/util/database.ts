@@ -1,26 +1,40 @@
 import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
-import { User } from "../../types/types";
+import { StorageInstance, User } from "../../types/types";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
 const dbPath = path.resolve(process.cwd(), "data/database.db");
 
-const db = new Database(dbPath, { verbose: console.log });
+const db = new Database(dbPath);
 
 export default class ManageDatabase {
     static async init() {
         console.log(fs.existsSync(dbPath));
         if (!fs.existsSync(dbPath)) {
+            await fs.promises.mkdir(path.resolve(process.cwd(), "data"));
             await fs.promises.writeFile(dbPath, "");
             console.log("Created database file.");
         }
 
-        db.exec(
-            "CREATE TABLE IF NOT EXISTS users (id TEXT, username TEXT, password TEXT, role TEXT)"
-        );
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS users (
+                id TEXT,
+                username TEXT,
+                password TEXT,
+                role TEXT
+            )
+        `);
         console.log("Created users table.");
+
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS instances (
+                id TEXT,
+                name TEXT,
+                settings TEXT
+            )
+        `);
 
         // Insert into users if the user doesn't already exist, a default admin user.
         const adminUserExists = db.prepare(
@@ -47,7 +61,7 @@ export default class ManageDatabase {
         },
         getUser: (username: string) => {
             const stmt = db.prepare("SELECT * FROM users WHERE username = ?");
-            return stmt.get(username);
+            return stmt.get(username) as User;
         },
         getUsers: () => {
             const stmt = db.prepare("SELECT * FROM users");
@@ -62,6 +76,41 @@ export default class ManageDatabase {
                 "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?"
             );
             stmt.run(data.username, data.password, data.role, data.id);
+        },
+    };
+
+    static instances = {
+        addInstance: (instance: StorageInstance) => {
+            const stmt = db.prepare(
+                "INSERT INTO instances (id, name, settings) VALUES (?, ?, ?)"
+            );
+            stmt.run(
+                instance.id,
+                instance.name,
+                JSON.stringify(instance.settings)
+            );
+        },
+        getInstance: (id: string) => {
+            const stmt = db.prepare("SELECT * FROM instances WHERE id = ?");
+            return stmt.get(id);
+        },
+        getInstances: () => {
+            const stmt = db.prepare("SELECT * FROM instances");
+            return stmt.all();
+        },
+        deleteInstance: (id: string) => {
+            const stmt = db.prepare("DELETE FROM instances WHERE id = ?");
+            stmt.run(id);
+        },
+        updateInstance: (instance: StorageInstance) => {
+            const stmt = db.prepare(
+                "UPDATE instances SET name = ?, settings = ? WHERE id = ?"
+            );
+            stmt.run(
+                instance.name,
+                JSON.stringify(instance.settings),
+                instance.id
+            );
         },
     };
 }

@@ -7,6 +7,7 @@ import GetPlatformStorageDirectory from "../util/directories";
 import axios from "axios";
 import dotenv from "dotenv";
 import { Env } from "../../types/types";
+import ManageDatabase from "../util/database";
 
 export default function HandleCreateInstance(socket: Socket) {
     const installCommands = commands.install as CommandTree;
@@ -152,21 +153,25 @@ export default function HandleCreateInstance(socket: Socket) {
                         "create-instance-stdout",
                         "Moved env files successfully"
                     );
-                    const instances = JSON.parse(
-                        fs
-                            .readFileSync(
-                                path.resolve(
-                                    process.cwd(),
-                                    "data/instances.json"
-                                )
-                            )
-                            .toString()
-                    );
-                    instances.push({ name, id });
-                    fs.writeFileSync(
-                        path.resolve(process.cwd(), "data/instances.json"),
-                        JSON.stringify(instances)
-                    );
+                    ManageDatabase.instances.addInstance({
+                        id,
+                        name,
+                        settings: {
+                            autoRestart: {
+                                enabled: false,
+                                maxRestarts: 0,
+                            },
+                            autoUpdate: {
+                                enabled: true,
+                            },
+                            crashDetection: {
+                                enabled: false,
+                            },
+                            onStartup: {
+                                enabled: false,
+                            },
+                        },
+                    });
                     socket.emit("create-instance-success");
                 } else {
                     socket.emit(

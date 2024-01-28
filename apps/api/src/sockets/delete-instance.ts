@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
 import ManageProcess from "../util/manageProcess";
-import ManageInstances from "../util/manageInstances";
+import ManageDatabase from "../util/database";
 
 export default function HandleDeleteInstance(socket: Socket) {
     socket.on("server:delete-instance", async (data: DeleteData) => {
@@ -40,7 +40,7 @@ export default function HandleDeleteInstance(socket: Socket) {
         }
 
         try {
-            ManageInstances.deleteInstance(data.id, socket);
+            ManageDatabase.instances.deleteInstance(data.id);
         } catch (err) {
             socket.emit(
                 "error",

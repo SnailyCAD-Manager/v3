@@ -57,7 +57,7 @@ export default function HomePage() {
             "data:text/plain;charset=utf-8," +
                 encodeURIComponent(logOutput.join("\n") || "Empty Logs")
         );
-        element.setAttribute("download", "manager-logs.txt");
+        element.setAttribute("download", `${activeInstanceData?.id}-logs.log`);
         element.style.display = "none";
         document.body.appendChild(element);
         element.click();

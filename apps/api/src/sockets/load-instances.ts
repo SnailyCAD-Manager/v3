@@ -1,22 +1,18 @@
 import type { Socket } from "socket.io";
 import fs from "fs";
 import path from "path";
-import { Instance, Env, PackageJson } from "../../types/types";
+import { Instance, Env, PackageJson, StorageInstance } from "../../types/types";
 import { default as findProcess } from "find-process";
 import dotenv from "dotenv";
 import GetPlatformStorageDirectory from "../util/directories";
 import { GetLatestVersion } from "../util/version";
 import ManageProcess from "../util/manageProcess";
+import ManageDatabase from "../util/database";
 
 export default function HandleLoadInstances(socket: Socket) {
     async function sendInstances() {
-        const instanceStore = JSON.parse(
-            fs
-                .readFileSync(
-                    path.resolve(process.cwd(), "data/instances.json")
-                )
-                .toString()
-        );
+        const instanceStore =
+            ManageDatabase.instances.getInstances() as unknown as StorageInstance[];
 
         const instances = [] as Instance[];
 

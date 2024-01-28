@@ -13,7 +13,7 @@ import ManageDatabase from "./util/database";
 let settings: any = null;
 
 async function initAPI() {
-    ManageDatabase.init();
+    ManageDatabase.init(); // Initialize the database.
 
     // #region Create Files & Directories if they don't exist
     if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
@@ -22,20 +22,6 @@ async function initAPI() {
             await fs.promises.readFile(
                 path.resolve(process.cwd(), "data/settings.default.json")
             )
-        );
-    }
-
-    if (!fs.existsSync(path.resolve(process.cwd(), "data/instances.json"))) {
-        await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/instances.json"),
-            "[]"
-        );
-    }
-
-    if (!fs.existsSync(path.resolve(process.cwd(), "data/users.json"))) {
-        await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/users.json"),
-            "[]"
         );
     }
 
