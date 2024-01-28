@@ -8,10 +8,13 @@ import HandleAllSockets from "./sockets";
 import { exec } from "child_process";
 import GetPlatformStorageDirectory from "./util/directories";
 import { StartVersionCheck } from "./util/version";
+import ManageDatabase from "./util/database";
 
 let settings: any = null;
 
 async function initAPI() {
+    ManageDatabase.init();
+
     // #region Create Files & Directories if they don't exist
     if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
         await fs.promises.writeFile(
