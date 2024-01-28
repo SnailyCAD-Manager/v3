@@ -8,6 +8,7 @@ import GetPlatformStorageDirectory from "../util/directories";
 import fs from "fs";
 import readEnv from "../util/readEnv";
 import ManageProcess from "../util/manageProcess";
+import { io } from "..";
 
 const ansi = new ansi_to_html();
 
@@ -35,7 +36,7 @@ function getStartCommand(build: boolean) {
 export default function HandleStartInstance(socket: Socket) {
     socket.on("server:start-instance", async (data: StartData) => {
         if (!data.id) {
-            socket.emit(
+            io.emit(
                 "error",
                 "No instance ID was provided to the server for starting the instance"
             );
@@ -45,10 +46,7 @@ export default function HandleStartInstance(socket: Socket) {
         const { id } = data;
 
         if (!fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id))) {
-            socket.emit(
-                "error",
-                `The instance with the ID ${id} does not exist`
-            );
+            io.emit("error", `The instance with the ID ${id} does not exist`);
             return;
         }
 
@@ -70,7 +68,7 @@ export default function HandleStartInstance(socket: Socket) {
             startProcess.stdout.on("data", (data: Buffer) => {
                 FilterLog(data.toString(), id, socket);
 
-                socket.emit("instance-log", {
+                io.emit("instance-log", {
                     id,
                     log: ansi.toHtml(data.toString()),
                     type: "stdout",
@@ -80,7 +78,7 @@ export default function HandleStartInstance(socket: Socket) {
             startProcess.stderr.on("data", (data) => {
                 FilterLog(data.toString(), id, socket);
 
-                socket.emit("instance-log", {
+                io.emit("instance-log", {
                     id,
                     log: ansi.toHtml(data.toString()),
                     type: "stderr",
@@ -89,14 +87,14 @@ export default function HandleStartInstance(socket: Socket) {
 
             startProcess.on("close", (code) => {
                 ManageProcess.removeProcess(id);
-                socket.emit("instance-log", {
+                io.emit("instance-log", {
                     id,
                     log: ansi.toHtml(`CAD Process exited with code ${code}`),
                     type: "console",
                 } as LogData);
             });
         } catch (err: any) {
-            socket.emit("instance-log", {
+            io.emit("instance-log", {
                 id,
                 log: ansi.toHtml(err.toString()),
                 type: "stderr",
@@ -109,16 +107,16 @@ export default function HandleStartInstance(socket: Socket) {
 function FilterLog(data: string, id: string, socket: Socket) {
     // Common Database Errors
     if (data.includes("Authentication failed against database server")) {
-        socket.emit("error", `Authentication failed (${id})`);
-        socket.emit("instance-log", {
+        io.emit("error", `Authentication failed (${id})`);
+        io.emit("instance-log", {
             id,
             log: `<span style="background-color: red; padding: 0 10px;">DATABASE AUTHENTICATION FAILED</span>`,
         } as LogData);
         ManageProcess.killProcess(id);
     }
     if (data.includes("Can't reach database server at")) {
-        socket.emit("error", `Database server unreachable (${id})`);
-        socket.emit("instance-log", {
+        io.emit("error", `Database server unreachable (${id})`);
+        io.emit("instance-log", {
             id,
             log: `<span style="background-color: red; padding: 0 10px;">DATABASE SERVER UNREACHABLE</span>`,
         } as LogData);
@@ -127,8 +125,8 @@ function FilterLog(data: string, id: string, socket: Socket) {
 
     // Common Port Errors
     if (data.includes("EADDRINUSE")) {
-        socket.emit("error", `Port is already in use (${id})`);
-        socket.emit("instance-log", {
+        io.emit("error", `Port is already in use (${id})`);
+        io.emit("instance-log", {
             id,
             log: `<span style="background-color: red; padding: 0 10px;">PORT IS ALREADY IN USE</span>`,
         } as LogData);

@@ -3,6 +3,7 @@ import { spawn } from "child_process";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
 import { LogData } from "../../types/types";
+import { io } from "../index";
 
 type CommandData = {
     id: string;
@@ -23,7 +24,7 @@ export default function HandleCommands(socket: Socket) {
             );
 
             commandProcess.stdout.on("data", (stdout) => {
-                socket.emit("instance-log", {
+                io.emit("instance-log", {
                     id: data.id,
                     log: stdout.toString(),
                     type: "stdout",
@@ -31,7 +32,7 @@ export default function HandleCommands(socket: Socket) {
             });
 
             commandProcess.stderr.on("data", (stderr) => {
-                socket.emit("instance-log", {
+                io.emit("instance-log", {
                     id: data.id,
                     log: stderr.toString(),
                     type: "stderr",
@@ -39,14 +40,14 @@ export default function HandleCommands(socket: Socket) {
             });
 
             commandProcess.on("close", (code) => {
-                socket.emit("instance-log", {
+                io.emit("instance-log", {
                     id: data.id,
                     log: `Command exited with code ${code}`,
                     type: "console",
                 } as LogData);
             });
         } catch (err: any) {
-            socket.emit("instance-log", {
+            io.emit("instance-log", {
                 id: data.id,
                 log: err.toString(),
                 type: "stderr",

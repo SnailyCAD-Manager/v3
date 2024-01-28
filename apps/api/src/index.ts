@@ -11,6 +11,16 @@ import { StartVersionCheck } from "./util/version";
 import ManageDatabase from "./util/database";
 
 let settings: any = null;
+// #region Create App
+const app = express();
+app.use(cors());
+const server = http.createServer(app);
+export const io = new Server(server, {
+    cors: {
+        origin: "*",
+    },
+});
+// #endregion
 
 async function initAPI() {
     ManageDatabase.init(); // Initialize the database.
@@ -69,17 +79,6 @@ async function initAPI() {
             "utf-8"
         )
     );
-    // #endregion
-
-    // #region Create App
-    const app = express();
-    app.use(cors());
-    const server = http.createServer(app);
-    const io = new Server(server, {
-        cors: {
-            origin: "*",
-        },
-    });
     // #endregion
 
     // #region Serve client and API
