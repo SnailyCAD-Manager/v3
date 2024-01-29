@@ -92,11 +92,30 @@ export default class ManageDatabase {
         },
         getInstance: (id: string) => {
             const stmt = db.prepare("SELECT * FROM instances WHERE id = ?");
-            return stmt.get(id);
+            const instance = stmt.get(id) as unknown as StorageInstance;
+            const parsedSettings = JSON.parse(
+                instance.settings as unknown as string
+            );
+            const formattedInstance = {
+                ...instance,
+                settings: parsedSettings,
+            };
+            return formattedInstance;
         },
         getInstances: () => {
             const stmt = db.prepare("SELECT * FROM instances");
-            return stmt.all();
+            const instances = stmt.all() as unknown as StorageInstance[];
+            const formattedInstances = instances.map((instance) => {
+                const parsedSettings = JSON.parse(
+                    instance.settings as unknown as string
+                );
+                const formattedInstance = {
+                    ...instance,
+                    settings: parsedSettings,
+                };
+                return formattedInstance;
+            });
+            return formattedInstances;
         },
         deleteInstance: (id: string) => {
             const stmt = db.prepare("DELETE FROM instances WHERE id = ?");
