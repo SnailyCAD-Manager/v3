@@ -73,7 +73,19 @@ ncp(
             process.exit(1);
         } else {
             spinner.succeed("Files copied successfully");
-            // cleanUp();
+            cleanUp();
         }
     }
 );
+
+async function cleanUp() {
+    /* 
+        !apps/api/data/database.db (file)    - Removed
+        !apps/api/data/settings.json (file)  - Removed
+    */
+
+    const cleanupSpinner = ora("Cleaning up").start();
+    fs.promises.rm(path.resolve(buildPath, "apps/api/data/database.db"));
+    fs.promises.rm(path.resolve(buildPath, "apps/api/data/settings.json"));
+    cleanupSpinner.succeed("Cleaned up");
+}
