@@ -31,6 +31,22 @@ if (!fs.existsSync(buildPath)) {
     clearBuildPathSpinner.succeed("Build directory cleared");
 }
 
+const remove = ["dist"];
+
+const add = [
+    "apps/api/data/database.db",
+    "apps/api/data/settings.json",
+    "apps/api/types",
+    "apps/client/src/types",
+    ".vscode",
+    "README.md",
+];
+
+gitignorePatterns = gitignorePatterns.filter(
+    (pattern) => !remove.includes(pattern)
+);
+gitignorePatterns = gitignorePatterns.concat(add);
+
 const gitignoreRegex = new RegExp(
     `(${gitignorePatterns.join("|")}|yarn\\.lock|\\.git$|pnpm-lock\\.yaml)`
 );
@@ -57,33 +73,7 @@ ncp(
             process.exit(1);
         } else {
             spinner.succeed("Files copied successfully");
-            cleanUp();
+            // cleanUp();
         }
     }
 );
-
-async function cleanUp() {
-    const cleanUpSpinner = ora("Cleaning up").start();
-    /* 
-        !apps/api/data/database.db (file)    - Removed
-        !apps/api/data/settings.json (file)  - Removed
-        !apps/api/types (directory)          - Removed
-        !apps/client/src/types (directory)   - Removed
-    */
-    await fs.promises.rm(path.resolve(buildPath, "apps/api/data/database.db"), {
-        force: true,
-    });
-    await fs.promises.rm(
-        path.resolve(buildPath, "apps/api/data/settings.json"),
-        {
-            force: true,
-        }
-    );
-    await fs.promises.rm(path.resolve(buildPath, "apps/api/types"), {
-        recursive: true,
-    });
-    await fs.promises.rm(path.resolve(buildPath, "apps/client/src/types"), {
-        recursive: true,
-    });
-    cleanUpSpinner.succeed("Clean up complete");
-}

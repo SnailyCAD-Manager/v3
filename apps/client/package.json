@@ -21,8 +21,6 @@
         "@tabler/icons-react": "^2.46.0",
         "api": "latest",
         "autoprefixer": "^10.4.17",
-        "dotenv": "^16.3.2",
-        "kill-port": "^2.0.1",
         "postcss": "^8.4.33",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -31,7 +29,6 @@
         "zustand": "4.4.7"
     },
     "devDependencies": {
-        "@types/kill-port": "^2.0.3",
         "@types/node": "^20.11.5",
         "@types/react": "^18.2.48",
         "@types/react-dom": "^18.2.17",

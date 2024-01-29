@@ -4,14 +4,14 @@
     "scripts": {
         "start": "turbo start",
         "build": "pnpm moveBuild",
-        "moveBuild": "pnpm workspace @scm/build-utils postbuild",
+        "moveBuild": "pnpm --filter=\"build-utils\" postbuild",
         "dev": "turbo dev",
         "lint": "turbo lint",
         "lint:fix": "turbo lint -- --fix",
         "format": "prettier --write \"**/*.{ts,tsx,md}\""
     },
     "devDependencies": {
-        "@scm/build-utils": "*",
+        "build-utils": "*",
         "prettier": "^3.2.4",
         "turbo": "^1.11.3"
     },

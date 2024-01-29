@@ -1,5 +1,5 @@
 {
-    "name": "@scm/build-utils",
+    "name": "build-utils",
     "version": "1.0.0",
     "main": "buildScript.mjs",
     "scripts": {
