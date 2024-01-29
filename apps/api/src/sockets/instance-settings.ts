@@ -5,8 +5,16 @@ import { io } from "..";
 
 export default function HandleInstanceSettings(socket: Socket) {
     socket.on("server:update-instance-settings", (data: StorageInstance) => {
-        ManageDatabase.instances.updateInstance(data);
-        io.emit("client:update-instance-settings", data);
+        const instanceName = ManageDatabase.instances.getInstance(data.id).name;
+
+        console.log(`Updating instance settings for ${instanceName}`);
+
+        socket.emit("client:instance-settings-updated", data);
+
+        ManageDatabase.instances.updateInstance({
+            ...data,
+            name: instanceName,
+        });
     });
 
     socket.on("server:fetch-instance-settings", (id: string) => {
