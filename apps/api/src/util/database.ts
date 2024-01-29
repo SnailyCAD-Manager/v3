@@ -100,7 +100,7 @@ export default class ManageDatabase {
                 ...instance,
                 settings: parsedSettings,
             };
-            return formattedInstance;
+            return formattedInstance as StorageInstance;
         },
         getInstances: () => {
             const stmt = db.prepare("SELECT * FROM instances");

@@ -9,6 +9,8 @@ import fs from "fs";
 import readEnv from "../util/readEnv";
 import ManageProcess from "../util/manageProcess";
 import { io } from "..";
+import ManageDatabase from "../util/database";
+import { Webhook, MessageBuilder } from "discord-webhook-nodejs";
 
 const ansi = new ansi_to_html();
 
@@ -16,6 +18,8 @@ type StartData = {
     id: string;
     build: boolean;
 };
+
+let restartAttempts: { [key: string]: number } = {};
 
 function getStartCommand(build: boolean) {
     const startCommands = commands.start as CommandTree;
@@ -92,6 +96,71 @@ export default function HandleStartInstance(socket: Socket) {
                     log: ansi.toHtml(`CAD Process exited with code ${code}`),
                     type: "console",
                 } as LogData);
+
+                if (code !== 0) {
+                    const { settings } =
+                        ManageDatabase.instances.getInstance(id);
+
+                    if (settings.autoRestart.enabled) {
+                        if (restartAttempts[id] === undefined) {
+                            restartAttempts[id] = 0;
+                        }
+
+                        if (
+                            !settings.autoRestart.maxRestarts ||
+                            settings.autoRestart.maxRestarts === 0
+                        ) {
+                            return;
+                        }
+
+                        if (
+                            restartAttempts[id] >=
+                            settings.autoRestart.maxRestarts
+                        ) {
+                            io.emit(
+                                "error",
+                                `Instance ${id} has reached the maximum amount of restarts`
+                            );
+                            return;
+                        }
+
+                        restartAttempts[id]++;
+
+                        socket.emit("server:start-instance", {
+                            id,
+                            build: data.build,
+                        } as StartData);
+
+                        io.emit("instance-log", {
+                            id,
+                            log: `<span style="background-color: darkorange; color: white; padding: 0 10px">Instance ${id} is restarting... (${restartAttempts[id]}/${settings.autoRestart.maxRestarts})</span>`,
+                            type: "stdout",
+                        } as LogData);
+                    }
+
+                    if (settings.crashDetection.enabled) {
+                        if (
+                            !settings.crashDetection.webhook ||
+                            settings.crashDetection.webhook === ""
+                        ) {
+                            return;
+                        }
+
+                        const webhook = new Webhook(
+                            settings.crashDetection.webhook
+                        );
+                        const embed = new MessageBuilder()
+                            .setTitle("SnailyCAD Crash Detection")
+                            .setColor("#ff0000")
+                            .addField("Instance", id)
+                            .addField("Reason", "Crashed")
+                            .addField("Crash Code", `${code}`)
+                            .setTimestamp()
+                            .setFooter("Sent from SnailyCAD Manager");
+
+                        webhook.send(embed);
+                    }
+                }
             });
         } catch (err: any) {
             io.emit("instance-log", {
@@ -131,5 +200,34 @@ function FilterLog(data: string, id: string, socket: Socket) {
             log: `<span style="background-color: red; padding: 0 10px;">PORT IS ALREADY IN USE</span>`,
         } as LogData);
         ManageProcess.killProcess(id);
+    }
+
+    // Online Webhook
+    if (data.includes("SnailyCADv4 is running with version")) {
+        const { settings } = ManageDatabase.instances.getInstance(id);
+
+        if (settings.onStartup.enabled) {
+            if (
+                !settings.onStartup.webhook ||
+                settings.onStartup.webhook === ""
+            ) {
+                return;
+            }
+
+            const webhook = new Webhook(settings.onStartup.webhook);
+            const embed = new MessageBuilder()
+                .setTitle("SnailyCAD Online")
+                .setColor("#00ff00")
+                .addField("Instance", id)
+                .addField("Version", data.split(" ")[5])
+                .addField(
+                    "Open SnailyCAD",
+                    `[Click here](${readEnv(id).parsed.NEXT_PUBLIC_CLIENT_URL})`
+                )
+                .setTimestamp()
+                .setFooter("Sent from SnailyCAD Manager");
+
+            webhook.send(embed);
+        }
     }
 }

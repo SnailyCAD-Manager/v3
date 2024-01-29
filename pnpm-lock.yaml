@@ -38,6 +38,9 @@ importers:
       cors:
         specifier: ^2.8.5
         version: 2.8.5
+      discord-webhook-nodejs:
+        specifier: ^1.2.2
+        version: 1.2.2
       dotenv:
         specifier: ^16.3.2
         version: 16.4.1
@@ -203,6 +206,8 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.11.10)(typescript@5.3.3)
+
+  packages/types: {}
 
 packages:
 
@@ -2523,6 +2528,15 @@ packages:
       path-type: 4.0.0
     dev: true
 
+  /discord-webhook-nodejs@1.2.2:
+    resolution: {integrity: sha512-jEzU0mkSN1IfEJJTPpvHQm9Jn+fsI4bxT/91Ik8mllDTzIws0rnzgJ/Ly3+p1mt1vosTn9iG9rK+NH8SZKDjQw==}
+    dependencies:
+      form-data: 3.0.1
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
     dev: false
@@ -3386,6 +3400,15 @@ packages:
       combined-stream: 1.0.8
       mime-types: 2.1.35
     dev: true
+
+  /form-data@3.0.1:
+    resolution: {integrity: sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==}
+    engines: {node: '>= 6'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+    dev: false
 
   /form-data@4.0.0:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}

@@ -155,6 +155,9 @@ export default function InstanceCreatePage() {
                                 >
                                     {loading.message}
                                 </Code>
+                                <span className="text-red-500 text-sm font-bold">
+                                    DO NOT CLOSE THIS TAB
+                                </span>
                             </span>
                         ),
                     }}
