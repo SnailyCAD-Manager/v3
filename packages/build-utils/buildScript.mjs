@@ -32,7 +32,7 @@ if (!fs.existsSync(buildPath)) {
 }
 
 const gitignoreRegex = new RegExp(
-    `(${gitignorePatterns.join("|")}|yarn\\.lock|\\.git$)`
+    `(${gitignorePatterns.join("|")}|yarn\\.lock|\\.git$|pnpm-lock\\.yaml)`
 );
 
 const spinner = ora("Copying files").start();
