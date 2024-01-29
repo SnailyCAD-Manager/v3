@@ -73,7 +73,9 @@ type PageState = {
 };
 
 const defaultPage: ValidPageId =
-    process.env.NODE_ENV === "development" ? "instance-selector" : "login";
+    process.env.NODE_ENV === "development"
+        ? "instance-selector"
+        : "instance-selector";
 
 export const usePage = create<PageState>((set) => ({
     page: AppPages.find((p) => p.id === defaultPage)!,

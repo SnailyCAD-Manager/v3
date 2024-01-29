@@ -2,7 +2,8 @@
     "name": "manager-client",
     "private": true,
     "scripts": {
-        "build": "turbo build && yarn moveBuild",
+        "start": "turbo start",
+        "build": "yarn moveBuild",
         "moveBuild": "yarn workspace @scm/build-utils postbuild",
         "dev": "turbo dev",
         "lint": "turbo lint",

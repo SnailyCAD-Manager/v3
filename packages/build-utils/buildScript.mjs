@@ -1,116 +1,89 @@
-import path from "path";
 import fs from "fs";
+import path from "path";
 import ora from "ora";
-import copy from "copy";
+import ncp from "ncp";
+import escapeStringRegexp from "escape-string-regexp";
 
-const buildPath = path.resolve(process.cwd(), "../../build");
+const rootPath = path.resolve(process.cwd(), "../../");
+const buildPath = path.resolve(rootPath, "build");
+const gitignorePath = path.resolve(rootPath, ".gitignore");
 
-const clientPath = path.resolve(process.cwd(), "../../apps/client/dist");
-const apiPath = path.resolve(process.cwd(), "../../apps/api/dist");
-const cliPath = path.resolve(process.cwd(), "../../apps/cli/dist");
-
-async function buildScript() {
-    const doesBuildExist = fs.existsSync(buildPath);
-
-    if (doesBuildExist) {
-        const spinner = ora("Removing build folder").start();
-        try {
-            await fs.promises.rm(path.resolve(buildPath, "api"), {
-                recursive: true,
-            });
-            await fs.promises.rm(path.resolve(buildPath, "client"), {
-                recursive: true,
-            });
-            await fs.promises.rm(path.resolve(buildPath, "cli"), {
-                recursive: true,
-            });
-            spinner.succeed();
-        } catch (e) {
-            spinner.fail("Failed to remove build folder");
-            fs.writeFileSync(
-                path.resolve(buildPath, "../build-error.txt"),
-                e.toString()
-            );
-        }
-    }
-
-    const spinner = ora("Creating build folder").start();
-    try {
-        await fs.promises.mkdir(buildPath);
-        spinner.succeed();
-    } catch (e) {
-        spinner.fail("Failed to create build folder");
-        fs.writeFileSync(
-            path.resolve(buildPath, "../build-error.txt"),
-            e.toString()
-        );
-    }
-
-    const clientSpinner = ora("Copying client build").start();
-    if (!fs.existsSync(clientPath)) {
-        clientSpinner.info("Client build does not exist — skipping");
-    } else {
-        copy(
-            `${clientPath}/**/*`,
-            path.resolve(buildPath, "client"),
-            {},
-            (err, files) => {
-                if (err) {
-                    clientSpinner.fail("Failed to copy client build");
-                    fs.writeFileSync(
-                        path.resolve(buildPath, "../build-error.txt"),
-                        e.toString()
-                    );
-                } else {
-                    clientSpinner.succeed();
-                }
-            }
-        );
-    }
-
-    const apiSpinner = ora("Copying api build").start();
-    if (!fs.existsSync(apiPath)) {
-        apiSpinner.info("API build does not exist — skipping");
-    } else {
-        copy(
-            `${apiPath}/**/*`,
-            path.resolve(buildPath, "api"),
-            {},
-            (err, files) => {
-                if (err) {
-                    apiSpinner.fail("Failed to copy api build");
-                    fs.writeFileSync(
-                        path.resolve(buildPath, "../build-error.txt"),
-                        e.toString()
-                    );
-                } else {
-                    apiSpinner.succeed();
-                }
-            }
-        );
-    }
-
-    const cliSpinner = ora("Copying cli build").start();
-    if (!fs.existsSync(cliPath)) {
-        cliSpinner.info("CLI build does not exist — skipping");
-    } else {
-        copy(
-            `${cliPath}/**/*`,
-            path.resolve(buildPath, "cli"),
-            {},
-            (err, files) => {
-                if (err) {
-                    cliSpinner.fail("Failed to copy cli build");
-                    fs.writeFileSync(
-                        path.resolve(buildPath, "../build-error.txt"),
-                        e.toString()
-                    );
-                } else {
-                    cliSpinner.succeed();
-                }
-            }
-        );
-    }
+let gitignorePatterns;
+try {
+    const gitignoreContent = fs.readFileSync(gitignorePath, "utf-8");
+    gitignorePatterns = gitignoreContent
+        .split(/\r?\n/)
+        .filter((line) => line.trim() !== "" && !line.trim().startsWith("#"))
+        .map(escapeStringRegexp);
+} catch (error) {
+    console.error("Error reading .gitignore:", error);
+    process.exit(1);
 }
 
-await buildScript();
+if (!fs.existsSync(buildPath)) {
+    const createBuildPathSpinner = ora("Creating build directory").start();
+    await fs.promises.mkdir(buildPath);
+    createBuildPathSpinner.succeed("Build directory created");
+} else {
+    const clearBuildPathSpinner = ora("Clearing build directory").start();
+    await fs.promises.rm(buildPath, { recursive: true });
+    await fs.promises.mkdir(buildPath);
+    clearBuildPathSpinner.succeed("Build directory cleared");
+}
+
+const gitignoreRegex = new RegExp(
+    `(${gitignorePatterns.join("|")}|yarn\\.lock|\\.git$)`
+);
+
+const spinner = ora("Copying files").start();
+ncp(
+    rootPath,
+    buildPath,
+    {
+        filter: (source) => {
+            const relativePath = path.relative(rootPath, source);
+            const shouldCopy = !gitignoreRegex.test(relativePath);
+            if (!shouldCopy) {
+                spinner.text = `Skipping: ${relativePath}`;
+            }
+            return shouldCopy;
+        },
+        stopOnErr: true,
+        limit: 16,
+    },
+    (err) => {
+        if (err) {
+            console.error("Error copying files:", err);
+            process.exit(1);
+        } else {
+            spinner.succeed("Files copied successfully");
+            cleanUp();
+        }
+    }
+);
+
+async function cleanUp() {
+    const cleanUpSpinner = ora("Cleaning up").start();
+    /* 
+        !apps/api/data/database.db (file)    - Removed
+        !apps/api/data/settings.json (file)  - Removed
+        !apps/api/types (directory)          - Removed
+        !apps/client/src/types (directory)   - Removed
+    */
+    await fs.promises.rm(path.resolve(buildPath, "apps/api/data/database.db"), {
+        force: true,
+    });
+    await fs.promises.rm(
+        path.resolve(buildPath, "apps/api/data/settings.json"),
+        {
+            force: true,
+        }
+    );
+    await fs.promises.rm(path.resolve(buildPath, "apps/api/types"), {
+        recursive: true,
+    });
+    await fs.promises.rm(path.resolve(buildPath, "apps/client/src/types"), {
+        recursive: true,
+    });
+    cleanUpSpinner.succeed("Clean up complete");
+}

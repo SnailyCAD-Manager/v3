@@ -29,10 +29,10 @@ async function initAPI() {
     if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
         await fs.promises.writeFile(
             path.resolve(process.cwd(), "data/settings.json"),
-            await fs.promises.readFile(
-                path.resolve(process.cwd(), "data/settings.default.json")
-            )
+            `{"port": "60120"}`,
+            "utf-8"
         );
+        console.log("Created settings.json");
     }
 
     if (!fs.existsSync(GetPlatformStorageDirectory())) {
@@ -82,10 +82,10 @@ async function initAPI() {
     // #endregion
 
     // #region Serve client and API
-    app.use(express.static(path.resolve(process.cwd(), "../client")));
+    app.use(express.static(path.resolve(process.cwd(), "../client/dist")));
 
     app.get("/", (req, res) => {
-        res.sendFile(path.resolve(process.cwd(), "../client/index.html"));
+        res.sendFile(path.resolve(process.cwd(), "../client/dist/index.html"));
     });
     // #endregion
 
