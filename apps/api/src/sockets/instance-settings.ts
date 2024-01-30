@@ -1,5 +1,5 @@
 import type { Socket } from "socket.io";
-import { StorageInstance } from "../../types/types";
+import { StorageInstance } from "@scm/types";
 import ManageDatabase from "../util/database";
 import { io } from "..";
 

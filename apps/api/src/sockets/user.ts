@@ -1,5 +1,5 @@
 import type { Socket } from "socket.io";
-import { AddUserData, UserLoginData } from "../../types/types";
+import { AddUserData, UserLoginData } from "@scm/types";
 import ManageUser from "../util/user";
 import ManageDatabase from "../util/database";
 import { v4 as uuid } from "uuid";

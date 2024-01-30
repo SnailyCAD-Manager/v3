@@ -4,7 +4,7 @@ import {
     useInstance,
 } from "@/hooks/useInstance";
 import socket from "../socket";
-import { StartData } from "@/types/socket";
+import { StartData } from "@scm/types";
 import invalidValues from "../env/invalidValues";
 import { notifications } from "@mantine/notifications";
 import useKeys from "@/hooks/useKeys";
@@ -27,8 +27,8 @@ async function invalidValueCheck() {
         const test_CORS_ORIGIN_URL = async () => {
             const value = instance?.env.CORS_ORIGIN_URL;
             if (
-                invalidValues.CORS_ORIGIN_URL.some(
-                    (v) => v.includes?.some((i) => value?.includes(i))
+                invalidValues.CORS_ORIGIN_URL.some((v) =>
+                    v.includes?.some((i) => value?.includes(i))
                 )
             ) {
                 notifications.show({
@@ -51,8 +51,8 @@ async function invalidValueCheck() {
         const test_NEXT_PUBLIC_CLIENT_URL = async () => {
             const value = instance?.env.NEXT_PUBLIC_CLIENT_URL;
             if (
-                invalidValues.NEXT_PUBLIC_CLIENT_URL.some(
-                    (v) => v.includes?.some((i) => value?.includes(i))
+                invalidValues.NEXT_PUBLIC_CLIENT_URL.some((v) =>
+                    v.includes?.some((i) => value?.includes(i))
                 )
             ) {
                 notifications.show({
@@ -76,8 +76,8 @@ async function invalidValueCheck() {
         const test_NEXT_PUBLIC_PROD_ORIGIN = async () => {
             const value = instance?.env.NEXT_PUBLIC_PROD_ORIGIN;
             if (
-                invalidValues.NEXT_PUBLIC_PROD_ORIGIN.some(
-                    (v) => v.includes?.some((i) => value?.includes(i))
+                invalidValues.NEXT_PUBLIC_PROD_ORIGIN.some((v) =>
+                    v.includes?.some((i) => value?.includes(i))
                 )
             ) {
                 notifications.show({

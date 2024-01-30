@@ -1,5 +1,5 @@
 import type { Socket } from "socket.io";
-import { DeleteData } from "../../types/types";
+import { DeleteData } from "@scm/types";
 import readEnv from "../util/readEnv";
 import killPort from "kill-port";
 import fs from "fs";

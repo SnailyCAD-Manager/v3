@@ -1,7 +1,7 @@
 import type { Socket } from "socket.io";
 import fs from "fs";
 import path from "path";
-import { Instance, Env, PackageJson, StorageInstance } from "../../types/types";
+import { Instance, Env, PackageJson, StorageInstance } from "@scm/types";
 import { default as findProcess } from "find-process";
 import dotenv from "dotenv";
 import GetPlatformStorageDirectory from "../util/directories";

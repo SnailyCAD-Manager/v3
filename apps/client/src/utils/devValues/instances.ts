@@ -1,4 +1,4 @@
-import type { Instance } from "@/types/instance";
+import type { Instance } from "@scm/types";
 
 function generateDevInstances(): Instance[] {
     return [];

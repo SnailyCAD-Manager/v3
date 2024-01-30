@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
 import killPort from "kill-port";
-import { Env, LogData } from "../../types/types";
+import { Env, LogData } from "@scm/types";
 import ManageProcess from "../util/manageProcess";
 import { io } from "..";
 

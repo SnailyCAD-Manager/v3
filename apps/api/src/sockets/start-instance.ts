@@ -3,7 +3,7 @@ import path from "path";
 import { spawn } from "child_process";
 import commands, { CommandTree } from "../util/commands";
 import ansi_to_html from "ansi-to-html";
-import type { LogData } from "../../types/types";
+import type { LogData } from "@scm/types";
 import GetPlatformStorageDirectory from "../util/directories";
 import fs from "fs";
 import readEnv from "../util/readEnv";

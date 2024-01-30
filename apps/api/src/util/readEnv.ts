@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import GetPlatformStorageDirectory from "./directories";
 import dotenv from "dotenv";
-import { Env } from "../../types/types";
+import { Env } from "@scm/types";
 export default function readEnv(id: string) {
     if (
         fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id, ".env"))

@@ -1,4 +1,4 @@
-import { User, UserWithoutId } from "../../types/types";
+import { User, UserWithoutId } from "@scm/types";
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";

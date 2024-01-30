@@ -1,5 +1,5 @@
 {
-    "name": "client",
+    "name": "@scm/client",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -19,7 +19,8 @@
         "@mantine/nprogress": "^7.4.2",
         "@mantine/spotlight": "^7.4.2",
         "@tabler/icons-react": "^2.46.0",
-        "api": "latest",
+        "@scm/api": "latest",
+        "@scm/types": "latest",
         "autoprefixer": "^10.4.17",
         "postcss": "^8.4.33",
         "react": "^18.2.0",

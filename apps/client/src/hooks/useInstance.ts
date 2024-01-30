@@ -1,4 +1,4 @@
-import { Instance } from "@/types/instance";
+import { Instance } from "@scm/types";
 import { create } from "zustand";
 
 type InstanceState = {

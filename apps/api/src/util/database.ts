@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
-import { StorageInstance, User } from "../../types/types";
+import { StorageInstance, User } from "@scm/types";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 

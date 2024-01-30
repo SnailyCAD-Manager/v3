@@ -1,7 +1,6 @@
 import { useInstance } from "@/hooks/useInstance";
 import { useSocket } from "@/hooks/useSocket";
-import { Instance } from "@/types/instance";
-import { LogData } from "@/types/socket";
+import { Instance, LogData } from "@scm/types";
 import logs from "@/utils/debug/logs";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";

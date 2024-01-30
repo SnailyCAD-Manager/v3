@@ -3,12 +3,20 @@
     "private": true,
     "scripts": {
         "start": "turbo start",
-        "build": "pnpm moveBuild",
-        "moveBuild": "pnpm --filter=\"build-utils\" postbuild",
+        "build": "turbo build && pnpm run moveBuild",
+        "moveBuild": "pnpm --filter=\"@scm/build\" postbuild",
         "dev": "turbo dev",
         "lint": "turbo lint",
         "lint:fix": "turbo lint -- --fix",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\""
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "api:add": "pnpm --filter=\"@scm/api\" add",
+        "api:remove": "pnpm --filter=\"@scm/api\" remove",
+        "client:add": "pnpm --filter=\"@scm/client\" add",
+        "client:remove": "pnpm --filter=\"@scm/client\" remove",
+        "build:add": "pnpm --filter=\"@scm/build\" add",
+        "build:remove": "pnpm --filter=\"@scm/build\" remove",
+        "types:add": "pnpm --filter=\"@scm/types\" add",
+        "types:remove": "pnpm --filter=\"@scm/types\" remove"
     },
     "devDependencies": {
         "build-utils": "*",

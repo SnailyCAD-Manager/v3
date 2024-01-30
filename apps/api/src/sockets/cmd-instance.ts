@@ -2,7 +2,7 @@ import type { Socket } from "socket.io";
 import { spawn } from "child_process";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
-import { LogData } from "../../types/types";
+import { LogData } from "@scm/types";
 import { io } from "../index";
 
 type CommandData = {

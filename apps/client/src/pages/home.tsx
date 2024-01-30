@@ -2,7 +2,7 @@ import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import useKeys from "@/hooks/useKeys";
 import { usePage } from "@/hooks/usePage";
-import { CommandData } from "@/types/socket";
+import { CommandData } from "@scm/types";
 import Delete from "@/utils/controls/delete";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";

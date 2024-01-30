@@ -2,7 +2,7 @@ import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { useInstanceSettings } from "@/hooks/useInstanceSettings";
 import { usePage } from "@/hooks/usePage";
-import { StorageInstance } from "@/types/instance";
+import { StorageInstance } from "@scm/types";
 import socket from "@/utils/socket";
 import {
     Button,
