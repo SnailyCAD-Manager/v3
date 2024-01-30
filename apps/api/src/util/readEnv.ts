@@ -7,17 +7,15 @@ export default function readEnv(id: string) {
     if (
         fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id, ".env"))
     ) {
-        dotenv.config({
+        const env = dotenv.config({
             path: path.resolve(GetPlatformStorageDirectory(), id, ".env"),
-        });
+        }).parsed as Env;
         const raw = fs.readFileSync(
             path.resolve(GetPlatformStorageDirectory(), id, ".env")
         );
 
         return {
-            parsed: dotenv.parse(
-                path.resolve(GetPlatformStorageDirectory(), id, ".env")
-            ) as Env,
+            parsed: env,
             raw,
         };
     } else {

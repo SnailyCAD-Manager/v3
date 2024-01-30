@@ -11,6 +11,7 @@ import ManageProcess from "../util/manageProcess";
 import { io } from "..";
 import ManageDatabase from "../util/database";
 import { Webhook, MessageBuilder } from "discord-webhook-nodejs";
+import { ManualStop } from "./stop-instance";
 
 const ansi = new ansi_to_html();
 
@@ -146,11 +147,20 @@ export default function HandleStartInstance(socket: Socket) {
                             return;
                         }
 
+                        if (ManualStop()) {
+                            ManualStop(false);
+                            return;
+                        }
+
                         const webhook = new Webhook(
                             settings.crashDetection.webhook
                         );
                         const embed = new MessageBuilder()
                             .setTitle("SnailyCAD Crash Detection")
+                            .setDescription(
+                                settings.crashDetection.message ||
+                                    "SnailyCAD has crashed"
+                            )
                             .setColor("#ff0000")
                             .addField("Instance", id)
                             .addField("Reason", "Crashed")
@@ -217,6 +227,9 @@ function FilterLog(data: string, id: string, socket: Socket) {
             const webhook = new Webhook(settings.onStartup.webhook);
             const embed = new MessageBuilder()
                 .setTitle("SnailyCAD Online")
+                .setDescription(
+                    settings.onStartup.message || "SnailyCAD is online"
+                )
                 .setColor("#00ff00")
                 .addField("Instance", id)
                 .addField("Version", data.split(" ")[5])

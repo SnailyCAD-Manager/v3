@@ -11,12 +11,15 @@ type StopData = {
     id: string;
 };
 
+let _manualStop = false;
+
 export default function HandleStopInstance(socket: Socket) {
     socket.on("server:stop-instance", async (data: StopData) => {
         const env = dotenv.config({
             path: path.resolve(GetPlatformStorageDirectory(), data.id, ".env"),
         }).parsed as Env;
 
+        _manualStop = true;
         ManageProcess.killProcess(data.id);
 
         io.emit("instance-log", {
@@ -25,4 +28,12 @@ export default function HandleStopInstance(socket: Socket) {
             type: "stdout",
         } as LogData);
     });
+}
+
+export function ManualStop(newVal?: boolean) {
+    if (newVal !== undefined) {
+        _manualStop = newVal;
+    }
+
+    return _manualStop;
 }
