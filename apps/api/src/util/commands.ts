@@ -32,13 +32,24 @@ const commands: CommandTree = {
     },
     start: {
         withBuild: {
-            command:
-                "node scripts/copy-env.mjs --client --api && pnpm run build && pnpm run start",
-            args: [],
+            command: "node",
+            args: [
+                "scripts/copy-env.mjs",
+                "--client",
+                "--api",
+                "&&",
+                "pnpm",
+                "run",
+                "build",
+                "&&",
+                "pnpm",
+                "run",
+                "start",
+            ],
         },
         withoutBuild: {
-            command: "pnpm run start",
-            args: [],
+            command: "pnpm",
+            args: ["run", "start"],
         },
     },
 };

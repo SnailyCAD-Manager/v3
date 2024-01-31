@@ -64,6 +64,7 @@ export default function HandleStartInstance(socket: Socket) {
                 {
                     cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
                     shell: true,
+                    stdio: "pipe",
                     env: readEnv(data.id).parsed,
                 }
             );
