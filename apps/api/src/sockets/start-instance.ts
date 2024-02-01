@@ -66,7 +66,7 @@ export default function HandleStartInstance(socket: Socket) {
                 }
             );
 
-            // ManageProcess.addProcess(id, startProcess.pid as number);
+            ManageProcess.addProcess(id, startProcess.pid as number);
 
             startProcess.stdout.on("data", (data: Buffer) => {
                 FilterLog(data.toString(), id, socket);
