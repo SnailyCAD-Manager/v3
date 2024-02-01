@@ -2,13 +2,8 @@ import type { Socket } from "socket.io";
 import { spawn } from "child_process";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
-import { LogData } from "@scm/types";
+import { CommandData, LogData } from "@scm/types";
 import { io } from "../index";
-
-type CommandData = {
-    id: string;
-    command: string;
-};
 
 export default function HandleCommands(socket: Socket) {
     socket.on("server:command", (data: CommandData) => {

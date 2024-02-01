@@ -26,16 +26,10 @@ function getStartCommand(build: boolean) {
     const startCommands = commands.start as CommandTree;
 
     if (build) {
-        return {
-            command: startCommands.withBuild.command as string,
-            args: startCommands.withBuild.args as string[],
-        };
+        return "node scripts/copy-env.mjs && pnpm run build && pnpm run start";
     }
 
-    return {
-        command: startCommands.withoutBuild.command as string,
-        args: startCommands.withoutBuild.args as string[],
-    };
+    return "pnpm run start";
 }
 
 export default function HandleStartInstance(socket: Socket) {
@@ -59,17 +53,20 @@ export default function HandleStartInstance(socket: Socket) {
 
         try {
             const startProcess = spawn(
-                startCommand.command,
-                startCommand.args,
+                startCommand.split(" ")[0],
+                startCommand.split(" ").slice(1),
                 {
                     cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
                     shell: true,
                     stdio: "pipe",
-                    env: readEnv(data.id).parsed,
+                    env: {
+                        ...readEnv(data.id).parsed,
+                        PATH: process.env.PATH,
+                    },
                 }
             );
 
-            ManageProcess.addProcess(id, startProcess.pid as number);
+            // ManageProcess.addProcess(id, startProcess.pid as number);
 
             startProcess.stdout.on("data", (data: Buffer) => {
                 FilterLog(data.toString(), id, socket);
