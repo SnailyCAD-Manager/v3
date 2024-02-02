@@ -1,5 +1,7 @@
 import { useInstance } from "@/hooks/useInstance";
 import { AppPages, usePage } from "@/hooks/usePage";
+import { useUpdate } from "@/hooks/useUpdate";
+import UpdatingModal from "@/utils/modals/updating";
 import SpotlightActions from "@/utils/spotlight/spotlight";
 import {
     Anchor,
@@ -29,6 +31,8 @@ export function Layout(props: Props) {
     const activeInstanceData = instances.find(
         (i) => i.id === useInstance.getState().activeInstance
     );
+    const updateInProgress = useUpdate((state) => state.inProgress);
+    const activeInstance = useInstance((state) => state.activeInstance);
 
     return (
         <>
@@ -162,6 +166,13 @@ export function Layout(props: Props) {
                     "cmd + p",
                     "/",
                 ]}
+            />
+
+            <UpdatingModal
+                opened={
+                    updateInProgress.id === activeInstance &&
+                    updateInProgress.inProgress
+                }
             />
         </>
     );

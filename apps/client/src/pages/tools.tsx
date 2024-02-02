@@ -1,5 +1,6 @@
 import CustomCard from "@/components/ui/CustomCard";
 import Downgrade from "@/utils/controls/downgrade";
+import forceUpdate from "@/utils/controls/forceUpdate";
 import {
     Button,
     Checkbox,
@@ -121,6 +122,9 @@ export default function ToolsPage() {
                                     variant="light"
                                     color="orange"
                                     className="justify-self-end"
+                                    onClick={() => {
+                                        forceUpdate();
+                                    }}
                                 >
                                     Force Update SnailyCAD
                                 </Button>

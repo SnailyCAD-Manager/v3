@@ -6,6 +6,7 @@ import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
 import { nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
+import { useUpdate } from "@/hooks/useUpdate";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();
@@ -14,6 +15,7 @@ export default function SocketProvider(): null {
     const updateInstance = useInstance((state) => state.updateInstance);
     const addLog = useInstance((state) => state.addLog);
     const setInstancesLoaded = useInstance((state) => state.setInstancesLoaded);
+    const setUpdateInProgress = useUpdate((state) => state.setInProgress);
 
     useEffect(() => {
         function onConnect() {
@@ -87,6 +89,21 @@ export default function SocketProvider(): null {
             addLog(data.id, data.log);
         }
 
+        function onUpdate(data: {
+            inProgress: boolean;
+            id: string;
+            error?: boolean;
+        }) {
+            setUpdateInProgress(data.id, data.inProgress);
+            if (data.error) {
+                notifications.show({
+                    title: "Update Error",
+                    message: "An error occurred while updating SnailyCAD",
+                    color: "red",
+                });
+            }
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("load-instances", onInstanceUpdate);
@@ -102,6 +119,7 @@ export default function SocketProvider(): null {
             useInstance.getState().setInstanceDeletionInProgress(false);
             window.location.reload();
         });
+        socket.on("client:update-instance", onUpdate);
         socket.connect();
 
         return () => {

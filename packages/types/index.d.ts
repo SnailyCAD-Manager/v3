@@ -85,6 +85,11 @@ declare module "@scm/types" {
         id: string;
     };
 
+    export type UpdateData = {
+        id: string;
+        force: boolean;
+    };
+
     export type AddUserData = {
         username: string;
         password: string;
