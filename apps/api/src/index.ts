@@ -9,6 +9,7 @@ import { exec } from "child_process";
 import GetPlatformStorageDirectory from "./util/directories";
 import { StartVersionCheck } from "./util/version";
 import ManageDatabase from "./util/database";
+import Startup from "./util/internal/startup";
 
 let settings: any = null;
 // #region Create App
@@ -113,6 +114,11 @@ async function initAPI() {
 
     // #region Start Version Check
     StartVersionCheck();
+    // #endregion
+
+    // #region Startup Logic
+    console.log("Running startup logic...");
+    await Startup();
     // #endregion
 }
 

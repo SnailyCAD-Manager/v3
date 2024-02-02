@@ -26,6 +26,7 @@ export default function InstanceSettingsPage() {
         (state) => state.setInstanceSettings
     );
     const page = usePage((state) => state.page);
+    const setPage = usePage((state) => state.setPage);
 
     useEffect(() => {
         if (page.id === "instance-settings") {
@@ -37,6 +38,7 @@ export default function InstanceSettingsPage() {
 
                     // Set form values
                     settingsForm.setValues({
+                        autoStart: data.settings.autoStart || false,
                         autoUpdateEnabled:
                             data.settings.autoUpdate.enabled || false,
                         enableStartupWebhook:
@@ -76,6 +78,7 @@ export default function InstanceSettingsPage() {
 
     const settingsForm = useForm({
         initialValues: {
+            autoStart: instanceSettings.settings.autoStart || false,
             autoUpdateEnabled: instanceSettings.settings.autoUpdate.enabled,
             enableStartupWebhook: instanceSettings.settings.onStartup.enabled,
             startupWebhookURL:
@@ -98,6 +101,7 @@ export default function InstanceSettingsPage() {
             name: null,
             id: activeInstance,
             settings: {
+                autoStart: values.autoStart,
                 autoUpdate: {
                     enabled: values.autoUpdateEnabled,
                 },
@@ -117,6 +121,8 @@ export default function InstanceSettingsPage() {
                 },
             },
         });
+
+        setPage("home");
     }
 
     return (
@@ -130,6 +136,22 @@ export default function InstanceSettingsPage() {
                                 handleFormSubmit(values)
                             )}
                         >
+                            <h1 className="text-2xl font-bold">Auto Start</h1>
+                            <p className="text-xs text-muted">
+                                Configure automatic start for this instance. If
+                                enabled, the instance will build and start when
+                                SnailyCAD Manager is started.
+                            </p>
+
+                            <Switch
+                                label="Enable?&nbsp;&nbsp;"
+                                {...settingsForm.getInputProps("autoStart", {
+                                    type: "checkbox",
+                                })}
+                            />
+
+                            <Divider className="my-2" />
+
                             <h1 className="text-2xl font-bold">Auto Updates</h1>
                             <p className="text-xs text-muted">
                                 Configure automatic updates for this instance.
