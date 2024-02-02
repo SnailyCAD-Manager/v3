@@ -40,7 +40,7 @@ export default class ManageProcess {
                 exec(`taskkill /PID ${found.pid} /T /F`);
                 return;
             }
-            process.kill(-found.pid, "SIGKILL");
+            process.kill(found.pid, "SIGKILL");
         }
 
         _processes = _processes.filter(
@@ -56,7 +56,7 @@ export default class ManageProcess {
                 return;
             }
 
-            process.kill(-found.pid, "SIGKILL");
+            process.kill(found.pid, "SIGKILL");
         }
 
         _processes = _processes.filter((process) => process.pid !== pid);
@@ -69,7 +69,7 @@ export default class ManageProcess {
                 return;
             }
 
-            process.kill(-itm.pid, "SIGKILL");
+            process.kill(itm.pid, "SIGKILL");
         });
 
         _processes = [];
