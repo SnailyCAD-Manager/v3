@@ -4,6 +4,8 @@ import ManageProcess from "../util/manageProcess";
 import { spawn } from "child_process";
 import axios from "axios";
 import { io } from "..";
+import path from "path";
+import GetPlatformStorageDirectory from "../util/directories";
 
 export default function HandleUpdateInstance(socket: Socket) {
     socket.on("server:update-instance", async (data: UpdateData) => {
@@ -17,7 +19,7 @@ export default function HandleUpdateInstance(socket: Socket) {
             usedCommand.split(" ")[0],
             usedCommand.split(" ").slice(1),
             {
-                cwd: process.cwd(),
+                cwd: path.resolve(GetPlatformStorageDirectory(), id),
                 stdio: "pipe",
                 shell: true,
             }
