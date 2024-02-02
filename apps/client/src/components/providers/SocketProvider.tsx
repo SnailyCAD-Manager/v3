@@ -101,6 +101,12 @@ export default function SocketProvider(): null {
                     message: "An error occurred while updating SnailyCAD",
                     color: "red",
                 });
+            } else {
+                notifications.show({
+                    title: "Update Complete",
+                    message: "SnailyCAD has been updated",
+                    color: "teal",
+                });
             }
         }
 
@@ -129,6 +135,7 @@ export default function SocketProvider(): null {
             socket.off("instance-log", onInstanceLog);
             socket.off("error");
             socket.off("instance-delete-complete");
+            socket.off("client:update-instance", onUpdate);
             socket.disconnect();
         };
     }, []);

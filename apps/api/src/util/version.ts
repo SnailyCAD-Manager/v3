@@ -8,8 +8,8 @@ export function GetLatestVersion() {
 
 export async function StartVersionCheck() {
     const { data } = await axios.get(
-        "https://raw.githubusercontent.com/SnailyCAD/snaily-cadv4/main/package.json"
+        "https://api.github.com/repos/SnailyCAD/snaily-cadv4/releases/latest"
     );
-    latestVersion = data.version;
-    setTimeout(StartVersionCheck, 1000 * 60 * 60);
+    latestVersion = data.tag_name;
+    setTimeout(StartVersionCheck, 1000 * 60 * 60); //? 1 hour
 }

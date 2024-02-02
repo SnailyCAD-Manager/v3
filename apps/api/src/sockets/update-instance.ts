@@ -74,6 +74,6 @@ async function updateCommand(force: boolean) {
             "https://api.github.com/repos/SnailyCAD/snaily-cadv4/releases/latest"
         );
         // Checkout the latest release
-        return `git fetch && git checkout tags/${data.tag_name} && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build`;
+        return `git stash && git fetch && git checkout tags/${data.tag_name} && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build`;
     }
 }

@@ -8,6 +8,7 @@ import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
 import socket from "@/utils/socket";
 import invalidTerminalCommands from "@/utils/terminal/invalid";
+import { compareVersions } from "compare-versions";
 import {
     ActionIcon,
     Button,
@@ -28,6 +29,7 @@ import {
     IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
+import Update from "@/utils/controls/update";
 
 export default function HomePage() {
     const clearLogs = useInstance((state) => state.clearLogs);
@@ -116,6 +118,10 @@ export default function HomePage() {
         }
     }, [activeInstance]);
 
+    function updateAvailable(current: string, latest: string) {
+        return compareVersions(latest, current) === 1;
+    }
+
     return (
         <div className="flex flex-col gap-5 items-center justify-center w-full h-full">
             <CustomCard className="w-full">
@@ -153,6 +159,7 @@ export default function HomePage() {
                                     leftSection={<IconDownload size={16} />}
                                     variant="light"
                                     color="blue"
+                                    onClick={() => Update(activeInstance)}
                                 >
                                     Update to v
                                     {activeInstanceData?.versions.latest}
@@ -263,22 +270,21 @@ export default function HomePage() {
             </CustomCard>
             <div className="w-full text-center text-xs text-muted">
                 {`${activeInstanceData?.name} running SnailyCAD v${activeInstanceData?.versions.current}`}{" "}
-                {activeInstanceData?.versions.latest === "ERROR" && (
+                {activeInstanceData?.versions.latest === "ERROR" ? (
                     <span className="text-red-500">
-                        {"[ERROR FETCHING LATEST VERSION]"}
+                        Error fetching latest version
                     </span>
+                ) : updateAvailable(
+                      activeInstanceData?.versions.current as string,
+                      activeInstanceData?.versions.latest as string
+                  ) ? (
+                    <span className="text-orange-500">
+                        {"Update available: v"}
+                        {activeInstanceData?.versions.latest}
+                    </span>
+                ) : (
+                    <span className="text-green-500">{"Up to date"}</span>
                 )}
-                {activeInstanceData?.versions.current ===
-                    activeInstanceData?.versions.latest && (
-                    <span className="text-green-500">{"[UP TO DATE]"}</span>
-                )}
-                {activeInstanceData?.versions.current !==
-                    activeInstanceData?.versions.latest &&
-                    activeInstanceData?.versions.latest !== "ERROR" && (
-                        <span className="text-yellow-500">
-                            {"[UPDATE AVAILABLE]"}
-                        </span>
-                    )}
             </div>
         </div>
     );
