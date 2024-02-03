@@ -108,7 +108,6 @@ async function initAPI() {
     // #region Start Server
     server.listen(settings?.port, () => {
         console.log(`Server listening on port ${settings?.port}`);
-        openInBrowser();
     });
     // #endregion
 
