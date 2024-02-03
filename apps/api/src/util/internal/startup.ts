@@ -10,7 +10,7 @@ export default async function Startup() {
         if (!ManageProcess.getProcessByInstanceId(instance.id)) {
             console.log(`Auto Start: ${instance.name} (ID: ${instance.id})`);
 
-            fireStart({
+            await fireStart({
                 id: instance.id,
                 build: true,
             } as StartData);

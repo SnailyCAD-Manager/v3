@@ -1,7 +1,6 @@
 import type { Socket } from "socket.io";
 import path from "path";
 import { spawn } from "child_process";
-import commands, { CommandTree } from "../util/commands";
 import ansi_to_html from "ansi-to-html";
 import type { LogData } from "@scm/types";
 import GetPlatformStorageDirectory from "../util/directories";
@@ -23,8 +22,6 @@ type StartData = {
 let restartAttempts: { [key: string]: number } = {};
 
 function getStartCommand(build: boolean) {
-    const startCommands = commands.start as CommandTree;
-
     if (build) {
         return "node scripts/copy-env.mjs && pnpm run build && pnpm run start";
     }
@@ -34,11 +31,11 @@ function getStartCommand(build: boolean) {
 
 export default function HandleStartInstance(socket: Socket) {
     socket.on("server:start-instance", async (data: StartData) => {
-        fireStart(data);
+        await fireStart(data);
     });
 }
 
-export function fireStart(data: StartData) {
+export async function fireStart(data: StartData) {
     if (!data.id) {
         io.emit(
             "error",
@@ -93,7 +90,7 @@ export function fireStart(data: StartData) {
             } as LogData);
         });
 
-        startProcess.on("close", (code) => {
+        startProcess.on("close", async (code) => {
             ManageProcess.removeProcess(id);
             io.emit("instance-log", {
                 id,
@@ -128,7 +125,7 @@ export function fireStart(data: StartData) {
 
                     restartAttempts[id]++;
 
-                    fireStart({ id, build: data.build });
+                    await fireStart({ id, build: data.build });
 
                     io.emit("instance-log", {
                         id,
@@ -166,7 +163,7 @@ export function fireStart(data: StartData) {
                         .setTimestamp()
                         .setFooter("Sent from SnailyCAD Manager");
 
-                    webhook.send(embed);
+                    await webhook.send(embed);
                 }
             }
         });
@@ -180,7 +177,7 @@ export function fireStart(data: StartData) {
     }
 }
 
-function FilterLog(data: string, id: string) {
+async function FilterLog(data: string, id: string) {
     // Common Database Errors
     if (data.includes("Authentication failed against database server")) {
         io.emit("error", `Authentication failed (${id})`);
@@ -237,7 +234,7 @@ function FilterLog(data: string, id: string) {
                 .setTimestamp()
                 .setFooter("Sent from SnailyCAD Manager");
 
-            webhook.send(embed);
+            await webhook.send(embed);
         }
     }
 }

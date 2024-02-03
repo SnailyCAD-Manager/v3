@@ -1,7 +1,7 @@
 import type { Socket } from "socket.io";
 import path from "path";
 import fs from "fs";
-import { Env, LogData } from "@scm/types";
+import type { LogData } from "@scm/types";
 import ansi_to_html from "ansi-to-html";
 import { default as styles } from "ansi-colors";
 import GetPlatformStorageDirectory from "../util/directories";
@@ -9,10 +9,7 @@ import dotenv from "dotenv";
 
 const ansi = new ansi_to_html();
 
-type SaveEnvData = {
-    id: string;
-    env: Env;
-};
+
 
 export default function HandleSaveEnv(socket: Socket) {
     socket.on("server:save-env", (data) => {

@@ -25,8 +25,8 @@ const SpotlightActions: (SpotlightActionData | SpotlightActionGroupData)[] = [
                 description:
                     "Start the currently selected instance of SnailyCAD",
                 leftSection: <IconPlayerPlay />,
-                onClick: () => {
-                    Controls.Start();
+                onClick: async () => {
+                    await Controls.Start();
                 },
             },
             {

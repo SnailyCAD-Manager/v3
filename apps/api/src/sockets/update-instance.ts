@@ -1,4 +1,4 @@
-import { LogData, UpdateData } from "@scm/types";
+import type { LogData, UpdateData } from "@scm/types";
 import type { Socket } from "socket.io";
 import ManageProcess from "../util/manageProcess";
 import { spawn } from "child_process";

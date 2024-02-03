@@ -1,11 +1,4 @@
-type Command = {
-    command: string;
-    args: string[];
-};
-
-export type CommandTree = {
-    [key: string]: Command | CommandTree;
-};
+import type { CommandTree } from "@scm/types";
 
 const commands: CommandTree = {
     install: {
