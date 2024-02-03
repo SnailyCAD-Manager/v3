@@ -1,4 +1,5 @@
 import path from "path";
+
 export default function GetPlatformStorageDirectory() {
     switch (process.platform) {
         case "win32":

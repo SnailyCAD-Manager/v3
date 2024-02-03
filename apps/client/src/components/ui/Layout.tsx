@@ -58,6 +58,7 @@ export function Layout(props: Props) {
                             <img
                                 src="/logo.png"
                                 className="h-full aspect-square"
+                                alt="logo"
                             />
                             <h1 className="text-xl font-bold">
                                 SnailyCAD Manager

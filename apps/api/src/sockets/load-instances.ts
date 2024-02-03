@@ -1,8 +1,7 @@
 import type { Socket } from "socket.io";
 import fs from "fs";
 import path from "path";
-import { Instance, Env, PackageJson, StorageInstance } from "@scm/types";
-import { default as findProcess } from "find-process";
+import type { Instance, Env, PackageJson, StorageInstance } from "@scm/types";
 import dotenv from "dotenv";
 import GetPlatformStorageDirectory from "../util/directories";
 import { GetLatestVersion } from "../util/version";
@@ -16,50 +15,44 @@ export default function HandleLoadInstances(socket: Socket) {
 
         const instances = [] as Instance[];
 
-        instanceStore.forEach(
-            async (instance: { name: string; id: string }) => {
-                const env = dotenv.config({
-                    path: path.resolve(
-                        GetPlatformStorageDirectory(),
-                        instance.id,
-                        ".env"
-                    ),
-                }).parsed as Env;
+        for (const instance of instanceStore) {
+            const env = dotenv.config({
+                path: path.resolve(
+                    GetPlatformStorageDirectory(),
+                    instance.id,
+                    ".env"
+                ),
+            }).parsed as Env;
 
-                const status = {
-                    api: ManageProcess.getProcessByInstanceId(instance.id)
-                        ? true
-                        : false,
-                    client: ManageProcess.getProcessByInstanceId(instance.id)
-                        ? true
-                        : false,
-                };
+            const status = {
+                api: !!ManageProcess.getProcessByInstanceId(instance.id),
+                client: !!ManageProcess.getProcessByInstanceId(instance.id),
+            };
 
-                const packageJson: PackageJson = JSON.parse(
-                    fs
-                        .readFileSync(
-                            path.resolve(
-                                GetPlatformStorageDirectory(),
-                                instance.id,
-                                "package.json"
-                            )
+            const packageJson: PackageJson = JSON.parse(
+                fs
+                    .readFileSync(
+                        path.resolve(
+                            GetPlatformStorageDirectory(),
+                            instance.id,
+                            "package.json"
                         )
-                        .toString()
-                );
+                    )
+                    .toString()
+            );
 
-                instances.push({
-                    name: instance.name,
-                    id: instance.id,
-                    logs: [],
-                    versions: {
-                        current: packageJson.version,
-                        latest: GetLatestVersion(),
-                    },
-                    env: env,
-                    status,
-                });
-            }
-        );
+            instances.push({
+                name: instance.name,
+                id: instance.id,
+                logs: [],
+                versions: {
+                    current: packageJson.version,
+                    latest: GetLatestVersion(),
+                },
+                env: env,
+                status,
+            });
+        }
 
         const interval = setInterval(() => {
             if (instances.length === instanceStore.length) {

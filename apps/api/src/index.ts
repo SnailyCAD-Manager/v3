@@ -11,7 +11,7 @@ import { StartVersionCheck } from "./util/version";
 import ManageDatabase from "./util/database";
 import Startup from "./util/internal/startup";
 
-let settings: any = null;
+let settings: { port: number } | null = null;
 // #region Create App
 const app = express();
 app.use(cors());
@@ -24,7 +24,7 @@ export const io = new Server(server, {
 // #endregion
 
 async function initAPI() {
-    ManageDatabase.init(); // Initialize the database.
+    await ManageDatabase.init(); // Initialize the database.
 
     // #region Create Files & Directories if they don't exist
     if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
@@ -85,7 +85,7 @@ async function initAPI() {
     // #region Serve client and API
     app.use(express.static(path.resolve(process.cwd(), "../client/dist")));
 
-    app.get("/", (req, res) => {
+    app.get("/", (_, res) => {
         res.sendFile(path.resolve(process.cwd(), "../client/dist/index.html"));
     });
     // #endregion
@@ -106,14 +106,14 @@ async function initAPI() {
     // #endregion
 
     // #region Start Server
-    server.listen(settings.port, () => {
-        console.log(`Server listening on port ${settings.port}`);
+    server.listen(settings?.port, () => {
+        console.log(`Server listening on port ${settings?.port}`);
         openInBrowser();
     });
     // #endregion
 
     // #region Start Version Check
-    StartVersionCheck();
+    await StartVersionCheck();
     // #endregion
 
     // #region Startup Logic
@@ -126,6 +126,6 @@ initAPI();
 
 function openInBrowser() {
     if (process.env.NODE_ENV === "development") {
-        exec(`start http://localhost:${settings.port}`);
+        exec(`start http://localhost:${settings?.port}`);
     }
 }

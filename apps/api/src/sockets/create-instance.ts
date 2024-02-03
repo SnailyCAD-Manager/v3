@@ -2,11 +2,11 @@ import type { Socket } from "socket.io";
 import path from "path";
 import fs from "fs";
 import { spawn } from "child_process";
-import commands, { CommandTree } from "../util/commands";
+import commands from "../util/commands";
 import GetPlatformStorageDirectory from "../util/directories";
 import axios from "axios";
 import dotenv from "dotenv";
-import { Env } from "@scm/types";
+import type { Env, CommandTree } from "@scm/types";
 import ManageDatabase from "../util/database";
 
 export default function HandleCreateInstance(socket: Socket) {

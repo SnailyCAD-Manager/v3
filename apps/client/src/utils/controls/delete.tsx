@@ -2,7 +2,7 @@ import { getActiveInstance } from "@/hooks/useInstance";
 import { modals } from "@mantine/modals";
 import socket from "../socket";
 import { DeleteData } from "@scm/types";
-import { useInstance } from "../../hooks/useInstance";
+import { useInstance } from "@/hooks/useInstance.ts";
 import { usePage } from "@/hooks/usePage";
 
 export default function Delete(id?: string) {

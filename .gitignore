@@ -39,6 +39,8 @@ yarn-error.log
 # Misc
 .DS_Store
 *.pem
+.idea
+.vscode
 
 # API Exclude
 apps/api/data/*.json

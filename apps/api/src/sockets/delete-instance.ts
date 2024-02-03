@@ -1,10 +1,7 @@
 import type { Socket } from "socket.io";
-import { DeleteData } from "@scm/types";
+import type { DeleteData } from "@scm/types";
 import readEnv from "../util/readEnv";
 import killPort from "kill-port";
-import fs from "fs";
-import path from "path";
-import GetPlatformStorageDirectory from "../util/directories";
 import ManageProcess from "../util/manageProcess";
 import ManageDatabase from "../util/database";
 

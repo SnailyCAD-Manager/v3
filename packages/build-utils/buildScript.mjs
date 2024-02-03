@@ -67,13 +67,13 @@ ncp(
         stopOnErr: true,
         limit: 16,
     },
-    (err) => {
+    async (err) => {
         if (err) {
             console.error("Error copying files:", err);
             process.exit(1);
         } else {
             spinner.succeed("Files copied successfully");
-            cleanUp();
+            await cleanUp();
         }
     }
 );

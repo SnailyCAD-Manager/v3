@@ -130,4 +130,15 @@ declare module "@scm/types" {
         password: string;
         role: "admin" | "user";
     };
+
+    export type SaveEnvData = {
+        id: string;
+        env: Env;
+    };
+    export type CommandTree = {
+        [key: string]: {
+            command: string;
+            args: string[];
+        } | CommandTree;
+    };
 }

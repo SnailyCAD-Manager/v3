@@ -1,9 +1,9 @@
 import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
-import { StorageInstance, User } from "@scm/types";
+import type {StorageInstance, User} from "@scm/types";
 import bcrypt from "bcrypt";
-import { v4 as uuid } from "uuid";
+import {v4 as uuid} from "uuid";
 
 const dbPath = path.resolve(process.cwd(), "data/database.db");
 
@@ -105,17 +105,15 @@ export default class ManageDatabase {
         getInstances: () => {
             const stmt = db.prepare("SELECT * FROM instances");
             const instances = stmt.all() as unknown as StorageInstance[];
-            const formattedInstances = instances.map((instance) => {
+            return instances.map((instance) => {
                 const parsedSettings = JSON.parse(
                     instance.settings as unknown as string
                 );
-                const formattedInstance = {
+                return {
                     ...instance,
                     settings: parsedSettings,
                 };
-                return formattedInstance;
             });
-            return formattedInstances;
         },
         deleteInstance: (id: string) => {
             const stmt = db.prepare("DELETE FROM instances WHERE id = ?");
