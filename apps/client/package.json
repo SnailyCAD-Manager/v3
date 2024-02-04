@@ -22,6 +22,7 @@
         "@scm/types": "latest",
         "@tabler/icons-react": "^2.46.0",
         "autoprefixer": "^10.4.17",
+        "axios": "^1.6.5",
         "compare-versions": "^6.1.0",
         "postcss": "^8.4.33",
         "react": "^18.2.0",

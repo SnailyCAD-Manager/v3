@@ -6,6 +6,7 @@ import axios from "axios";
 import { io } from "..";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
+import { GetLatestVersion } from "../util/version";
 
 export default function HandleUpdateInstance(socket: Socket) {
     socket.on("server:update-instance", async (data: UpdateData) => {
@@ -70,10 +71,6 @@ async function updateCommand(force: boolean) {
     if (force) {
         return "git stash && git pull origin main && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build";
     } else {
-        const { data } = await axios.get(
-            "https://api.github.com/repos/SnailyCAD/snaily-cadv4/releases/latest"
-        );
-        // Checkout the latest release
-        return `git stash && git fetch && git checkout tags/${data.tag_name} && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build`;
+        return `git stash && git fetch && git checkout tags/${GetLatestVersion} && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build`;
     }
 }

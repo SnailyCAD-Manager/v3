@@ -105,7 +105,7 @@ export default function ToolsPage() {
                                 <Button
                                     variant="light"
                                     color="yellow"
-                                    onClick={Downgrade}
+                                    onClick={async () => await Downgrade()}
                                     className="justify-self-end"
                                 >
                                     Downgrade SnailyCAD
