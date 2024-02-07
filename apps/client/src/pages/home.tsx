@@ -153,13 +153,17 @@ export default function HomePage() {
                         )}
                         {/* If the latest version is not "ERROR" and the current version is not equal to the latest version, show an update button in blue */}
                         {activeInstanceData?.versions.latest !== "ERROR" &&
-                            activeInstanceData?.versions.current !==
-                                activeInstanceData?.versions.latest && (
+                            updateAvailable(
+                                activeInstanceData?.versions.current as string,
+                                activeInstanceData?.versions.latest as string
+                            ) && (
                                 <Button
                                     leftSection={<IconDownload size={16} />}
                                     variant="light"
                                     color="blue"
-                                    onClick={() => Update(activeInstance)}
+                                    onClick={async () =>
+                                        await Update(activeInstance)
+                                    }
                                 >
                                     Update to v
                                     {activeInstanceData?.versions.latest}
