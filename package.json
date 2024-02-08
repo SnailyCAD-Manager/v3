@@ -19,6 +19,7 @@
         "types:remove": "pnpm --filter=\"@scm/types\" remove"
     },
     "devDependencies": {
+        "@types/tar": "^6.1.11",
         "build-utils": "*",
         "prettier": "^3.2.4",
         "turbo": "^1.11.3"
@@ -30,5 +31,8 @@
     "workspaces": [
         "apps/*",
         "packages/*"
-    ]
+    ],
+    "dependencies": {
+        "tar": "^6.2.0"
+    }
 }

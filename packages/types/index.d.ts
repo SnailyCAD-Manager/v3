@@ -61,6 +61,10 @@ declare module "@scm/types" {
         STEAM_API_KEY?: string;
     };
 
+    export type ResetDependenciesData = {
+        id: string;
+    };
+
     export type LogData = {
         id: string;
         log: string;
@@ -136,9 +140,11 @@ declare module "@scm/types" {
         env: Env;
     };
     export type CommandTree = {
-        [key: string]: {
-            command: string;
-            args: string[];
-        } | CommandTree;
+        [key: string]:
+            | {
+                  command: string;
+                  args: string[];
+              }
+            | CommandTree;
     };
 }

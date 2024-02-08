@@ -1,6 +1,7 @@
 import CustomCard from "@/components/ui/CustomCard";
 import Downgrade from "@/utils/controls/downgrade";
 import forceUpdate from "@/utils/controls/forceUpdate";
+import ResetDependencies from "@/utils/controls/resetDependencies";
 import {
     Button,
     Checkbox,
@@ -63,7 +64,7 @@ export default function ToolsPage() {
                                     ></TextInput>
                                     <div className="flex items-center justify-end gap-2">
                                         <Checkbox
-                                            label="Use SSL (HTTPS)?"
+                                            label="Use SSL (HTTPS)?&nbsp;"
                                             {...domainForm.getInputProps(
                                                 "useSSL",
                                                 { type: "checkbox" }
@@ -90,7 +91,10 @@ export default function ToolsPage() {
                                     Uninstall & reinstall SnailyCAD
                                     dependencies.
                                 </p>
-                                <Button variant="light">
+                                <Button
+                                    variant="light"
+                                    onClick={async () => ResetDependencies()}
+                                >
                                     Reset Dependencies
                                 </Button>
                             </CustomCard>

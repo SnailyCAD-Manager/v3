@@ -39,7 +39,6 @@ export default async function Stop(id?: string) {
             }
         });
 
-        // Time out after 10 seconds
         setTimeout(() => {
             notifications.update({
                 id: stopNotify,
@@ -49,7 +48,7 @@ export default async function Stop(id?: string) {
                 loading: false,
                 autoClose: true,
             });
-            reject();
+            reject("Timeout exceeded. Failed to stop instance.");
         }, 10000);
     });
 }

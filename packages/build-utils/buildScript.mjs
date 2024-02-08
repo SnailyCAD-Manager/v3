@@ -3,6 +3,8 @@ import path from "path";
 import ora from "ora";
 import ncp from "ncp";
 import escapeStringRegexp from "escape-string-regexp";
+import gzip from "zlib";
+import tar from "tar";
 
 const rootPath = path.resolve(process.cwd(), "../../");
 const buildPath = path.resolve(rootPath, "build");
@@ -88,4 +90,23 @@ async function cleanUp() {
     fs.promises.rm(path.resolve(buildPath, "apps/api/data/database.db"));
     fs.promises.rm(path.resolve(buildPath, "apps/api/data/settings.json"));
     cleanupSpinner.succeed("Cleaned up");
+
+    await gzipFiles();
+}
+
+async function gzipFiles() {
+    const gzipSpinner = ora("Gzipping files").start();
+    // The files are in the build path, and contains both files and directories. gzip everything including the directories, subdirectories and files and subfiles
+    const gzipStream = await tar.c(
+        {
+            gzip: true,
+            file: path.resolve(buildPath, "linux.tar.gz"),
+            cwd: buildPath, // Set the current working directory to the buildPath
+            filter: (path, stat) => {
+                return path !== "linux.tar.gz"; // Exclude the build.tar.gz file from the archive
+            },
+        },
+        ["./"] // Gzip only the current directory (buildPath)
+    );
+    gzipSpinner.succeed("Files gzipped successfully");
 }
