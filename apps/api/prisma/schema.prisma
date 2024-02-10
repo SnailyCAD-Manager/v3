@@ -11,10 +11,11 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String
-  password String
-  role     String
+  id                       String  @id @default(uuid())
+  username                 String
+  password                 String
+  passwordResetAtNextLogin Boolean @default(false)
+  role                     String
 }
 
 model StorageInstance {
