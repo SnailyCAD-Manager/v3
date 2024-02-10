@@ -1,8 +1,11 @@
 import CustomCard from "@/components/ui/CustomCard";
+import { useInstance } from "@/hooks/useInstance";
 import Downgrade from "@/utils/controls/downgrade";
+import SaveEnv from "@/utils/controls/env";
 import forceUpdate from "@/utils/controls/forceUpdate";
 import ResetDependencies from "@/utils/controls/resetDependencies";
 import {
+    Anchor,
     Button,
     Checkbox,
     Fieldset,
@@ -12,6 +15,8 @@ import {
 import { useForm } from "@mantine/form";
 
 export default function ToolsPage() {
+    const activeInstanceData = useInstance((state) => state.activeInstanceData);
+
     const domainForm = useForm({
         initialValues: {
             client: "",
@@ -21,7 +26,15 @@ export default function ToolsPage() {
     });
 
     function handleDomainSubmit(values: typeof domainForm.values) {
-        console.log(values);
+        SaveEnv({
+            ...activeInstanceData?.env,
+            CORS_ORIGIN_URL: values.useSSL
+                ? `https://${values.client}`
+                : `http://${values.client}`,
+            NEXT_PUBLIC_CLIENT_URL: values.useSSL
+                ? `https://${values.client}`
+                : `http://${values.client}`,
+        });
     }
 
     return (
@@ -36,6 +49,16 @@ export default function ToolsPage() {
                                 Want to use a domain for SnailyCAD? Enter the
                                 information required below, and SnailyCAD
                                 Manager will automatically update your ENV
+                            </p>
+                            <p className="text-xs font-bold text-red-500/50">
+                                THIS WILL STILL REQUIRE A{" "}
+                                <Anchor
+                                    className="!text-inherit !text-xs !font-bold !underline"
+                                    href="https://docs.snailycad.org/docs/installations/reverse-proxies/cf-tunnels"
+                                    target="_blank"
+                                >
+                                    PROXY METHOD
+                                </Anchor>
                             </p>
                             <form
                                 onSubmit={domainForm.onSubmit((values) =>

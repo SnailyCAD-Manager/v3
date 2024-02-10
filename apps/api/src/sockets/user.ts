@@ -27,14 +27,23 @@ export default function HandleUser(socket: Socket) {
     });
 
     socket.on("server:user-login", async (data: UserLoginData) => {
-        const user = ManageDatabase.users.getUser(data.username);
-        if (!user) return socket.emit("error", "User not found.");
+        const user = await ManageDatabase.users.getUser(data.username);
+        if (!user) {
+            socket.emit("error", "User not found.");
+            console.log("User not found.");
+            return;
+        }
         const passwordMatch = await bcrypt.compare(
             data.password,
             user.password
         );
-        if (!passwordMatch) return socket.emit("error", "Incorrect password.");
+        if (!passwordMatch) {
+            socket.emit("error", "Incorrect password.");
+            console.log("Incorrect password.");
+            return;
+        }
 
         socket.emit("client:user-login", user);
+        console.log("User logged in.");
     });
 }

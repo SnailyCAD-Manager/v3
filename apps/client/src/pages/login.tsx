@@ -1,26 +1,54 @@
-import { Button, Card, PasswordInput, TextInput } from "@mantine/core";
+import CustomCard from "@/components/ui/CustomCard";
+import socket from "@/utils/socket";
+import { Button, PasswordInput, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { UserLoginData } from "@scm/types";
 
 export default function LoginPage() {
-    function handleSubmit() {}
+    const loginForm = useForm({
+        initialValues: {
+            username: "",
+            password: "",
+        },
+    });
+
+    function handleSubmit(values: typeof loginForm.values) {
+        socket.emit("server:user-login", values as UserLoginData);
+        loginForm.reset();
+    }
 
     return (
         <div className="flex flex-col items-center justify-center h-full w-full">
-            <Card className="w-full sm:w-3/4 md:w-1/2 lg:w-1/4" shadow="md">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+            <CustomCard
+                className="w-full sm:w-3/4 md:w-1/2 lg:w-1/4"
+                shadow="md"
+            >
+                <form
+                    onSubmit={loginForm.onSubmit((values) =>
+                        handleSubmit(values)
+                    )}
+                    className="flex flex-col gap-2"
+                >
                     <div className="flex flex-col items-center justify-center gap-2 mb-6">
-                        <img src="/logo.png" className="w-16 aspect-square" alt="logo"/>
+                        <img
+                            src="/logo.png"
+                            className="w-16 aspect-square"
+                            alt="logo"
+                        />
                         <h1 className="text-3xl font-bold">Manager Login</h1>
                     </div>
                     <div className="flex flex-col gap-2">
                         <TextInput
-                            type="email"
-                            label="Email"
-                            placeholder="Email"
+                            type="text"
+                            label="Username"
+                            placeholder="Username"
+                            {...loginForm.getInputProps("username")}
                             required
                         />
                         <PasswordInput
                             label="Password"
                             placeholder="Password"
+                            {...loginForm.getInputProps("password")}
                             required
                         />
 
@@ -29,7 +57,7 @@ export default function LoginPage() {
                         </Button>
                     </div>
                 </form>
-            </Card>
+            </CustomCard>
         </div>
     );
 }

@@ -99,7 +99,8 @@ export async function fireStart(data: StartData) {
             } as LogData);
 
             if (code !== 0) {
-                const { settings } = ManageDatabase.instances.getInstance(id);
+                const { settings } =
+                    await ManageDatabase.instances.getInstance(id);
 
                 if (settings.autoRestart.enabled) {
                     if (restartAttempts[id] === undefined) {
@@ -208,7 +209,7 @@ async function FilterLog(data: string, id: string) {
 
     // Online Webhook
     if (data.includes("SnailyCADv4 is running with version")) {
-        const { settings } = ManageDatabase.instances.getInstance(id);
+        const { settings } = await ManageDatabase.instances.getInstance(id);
 
         if (settings.onStartup.enabled) {
             if (

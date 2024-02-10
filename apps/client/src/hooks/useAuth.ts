@@ -1,11 +1,16 @@
+import { User } from "@scm/types";
 import { create } from "zustand";
 
 type AuthState = {
     isAuth: boolean;
     setIsAuth: (isAuth: boolean) => void;
+    user: User | null;
+    setUser: (user: User) => void;
 };
 
 export const useAuth = create<AuthState>((set) => ({
-    isAuth: true,
+    isAuth: false,
     setIsAuth: (isAuth) => set({ isAuth }),
+    user: null,
+    setUser: (user: User) => set({ user }),
 }));

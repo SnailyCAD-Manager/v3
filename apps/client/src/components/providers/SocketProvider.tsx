@@ -1,12 +1,13 @@
 import { useInstance } from "@/hooks/useInstance";
 import { useSocket } from "@/hooks/useSocket";
-import { Instance, LogData } from "@scm/types";
+import { Instance, LogData, User } from "@scm/types";
 import logs from "@/utils/debug/logs";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
 import { nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import { useUpdate } from "@/hooks/useUpdate";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();
@@ -16,6 +17,8 @@ export default function SocketProvider(): null {
     const addLog = useInstance((state) => state.addLog);
     const setInstancesLoaded = useInstance((state) => state.setInstancesLoaded);
     const setUpdateInProgress = useUpdate((state) => state.setInProgress);
+    const setIsAuth = useAuth((state) => state.setIsAuth);
+    const setUser = useAuth((state) => state.setUser);
 
     useEffect(() => {
         function onConnect() {
@@ -110,6 +113,11 @@ export default function SocketProvider(): null {
             }
         }
 
+        function onLogin(data: User) {
+            setUser(data);
+            setIsAuth(true);
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("load-instances", onInstanceUpdate);
@@ -126,6 +134,7 @@ export default function SocketProvider(): null {
             window.location.reload();
         });
         socket.on("client:update-instance", onUpdate);
+        socket.on("client:user-login", onLogin);
         socket.connect();
 
         return () => {
@@ -136,6 +145,7 @@ export default function SocketProvider(): null {
             socket.off("error");
             socket.off("instance-delete-complete");
             socket.off("client:update-instance", onUpdate);
+            socket.off("client:user-login", onLogin);
             socket.disconnect();
         };
     }, []);

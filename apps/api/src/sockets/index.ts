@@ -9,6 +9,7 @@ import HandleDeleteInstance from "./delete-instance";
 import HandleInstanceSettings from "./instance-settings";
 import HandleUpdateInstance from "./update-instance";
 import HandleResetDependencies from "./reset-dependencies";
+import HandleUser from "./user";
 
 export default function HandleAllSockets(socket: Socket) {
     HandleCreateInstance(socket);
@@ -21,6 +22,7 @@ export default function HandleAllSockets(socket: Socket) {
     HandleInstanceSettings(socket);
     HandleUpdateInstance(socket);
     HandleResetDependencies(socket);
+    HandleUser(socket);
 
     process.on("uncaughtException", (err) => {
         socket.emit("error", err.toString());

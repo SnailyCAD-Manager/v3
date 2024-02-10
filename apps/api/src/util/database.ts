@@ -1,51 +1,72 @@
 import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
-import type {StorageInstance, User} from "@scm/types";
+import type { StorageInstance, User } from "@scm/types";
 import bcrypt from "bcrypt";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
+import { PrismaClient } from "@prisma/client";
 
-const dbPath = path.resolve(process.cwd(), "data/database.db");
-
-const db = new Database(dbPath);
+export const prisma = new PrismaClient();
 
 export default class ManageDatabase {
     static async init() {
-        console.log(fs.existsSync(dbPath));
-        if (!fs.existsSync(dbPath)) {
-            await fs.promises.mkdir(path.resolve(process.cwd(), "data"));
-            await fs.promises.writeFile(dbPath, "");
-            console.log("Created database file.");
-        }
+        // console.log(fs.existsSync(dbPath));
+        // if (!fs.existsSync(dbPath)) {
+        //     await fs.promises.mkdir(path.resolve(process.cwd(), "data"));
+        //     await fs.promises.writeFile(dbPath, "");
+        //     console.log("Created database file.");
+        // }
 
-        db.exec(`
-            CREATE TABLE IF NOT EXISTS users (
-                id TEXT,
-                username TEXT,
-                password TEXT,
-                role TEXT
-            )
-        `);
-        console.log("Created users table.");
+        // db.exec(`
+        //     CREATE TABLE IF NOT EXISTS users (
+        //         id TEXT,
+        //         username TEXT,
+        //         password TEXT,
+        //         role TEXT
+        //     )
+        // `);
+        // console.log("Created users table.");
 
-        db.exec(`
-            CREATE TABLE IF NOT EXISTS instances (
-                id TEXT,
-                name TEXT,
-                settings TEXT
-            )
-        `);
+        // db.exec(`
+        //     CREATE TABLE IF NOT EXISTS instances (
+        //         id TEXT,
+        //         name TEXT,
+        //         settings TEXT
+        //     )
+        // `);
 
-        // Insert into users if the user doesn't already exist, a default admin user.
-        const adminUserExists = db.prepare(
-            "SELECT * FROM users WHERE role = ?"
-        );
-        if (!adminUserExists.get("admin")) {
-            const adminPassword = uuid();
+        // // Insert into users if the user doesn't already exist, a default admin user.
+        // const adminUserExists = db.prepare(
+        //     "SELECT * FROM users WHERE role = ?"
+        // );
+        // if (!adminUserExists.get("admin")) {
+        //     const adminPassword = uuid();
+        //     const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
+        //     db.prepare(
+        //         "INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)"
+        //     ).run(uuid(), "admin", adminPasswordHash, "admin");
+        //     console.log(
+        //         `Created default admin user with password: ${adminPassword}`
+        //     );
+        // }
+
+        const defaultAdminExists = await prisma.user.findFirst({
+            where: {
+                username: "admin",
+            },
+        });
+
+        if (!defaultAdminExists) {
+            const adminPassword = "admin";
             const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
-            db.prepare(
-                "INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)"
-            ).run(uuid(), "admin", adminPasswordHash, "admin");
+            await prisma.user.create({
+                data: {
+                    id: uuid(),
+                    username: "admin",
+                    password: adminPasswordHash,
+                    role: "admin",
+                },
+            });
             console.log(
                 `Created default admin user with password: ${adminPassword}`
             );
@@ -53,48 +74,66 @@ export default class ManageDatabase {
     }
 
     static users = {
-        addUser: (data: User) => {
-            const stmt = db.prepare(
-                "INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)"
-            );
-            stmt.run(data.id, data.username, data.password, data.role);
+        addUser: async (data: User) => {
+            const passwordHash = await bcrypt.hash(data.password, 10);
+            await prisma.user.create({
+                data: {
+                    id: uuid(),
+                    username: data.username,
+                    password: passwordHash,
+                    role: data.role,
+                },
+            });
         },
         getUser: (username: string) => {
-            const stmt = db.prepare("SELECT * FROM users WHERE username = ?");
-            return stmt.get(username) as User;
+            return prisma.user.findFirst({
+                where: {
+                    username,
+                },
+            });
         },
         getUsers: () => {
-            const stmt = db.prepare("SELECT * FROM users");
-            return stmt.all();
+            return prisma.user.findMany();
         },
         deleteUser: (id: string) => {
-            const stmt = db.prepare("DELETE FROM users WHERE id = ?");
-            stmt.run(id);
+            return prisma.user.delete({
+                where: {
+                    id,
+                },
+            });
         },
-        updateUser: (data: User) => {
-            const stmt = db.prepare(
-                "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?"
-            );
-            stmt.run(data.username, data.password, data.role, data.id);
+        updateUser: async (data: User) => {
+            return prisma.user.update({
+                where: {
+                    id: data.id,
+                },
+                data: {
+                    username: data.username,
+                    role: data.role,
+                    password: await bcrypt.hash(data.password, 10),
+                },
+            });
         },
     };
 
     static instances = {
         addInstance: (instance: StorageInstance) => {
-            const stmt = db.prepare(
-                "INSERT INTO instances (id, name, settings) VALUES (?, ?, ?)"
-            );
-            stmt.run(
-                instance.id,
-                instance.name,
-                JSON.stringify(instance.settings)
-            );
+            prisma.storageInstance.create({
+                data: {
+                    id: instance.id,
+                    name: instance.name,
+                    settings: JSON.stringify(instance.settings),
+                },
+            });
         },
-        getInstance: (id: string) => {
-            const stmt = db.prepare("SELECT * FROM instances WHERE id = ?");
-            const instance = stmt.get(id) as unknown as StorageInstance;
+        getInstance: async (id: string) => {
+            const instance = await prisma.storageInstance.findFirst({
+                where: {
+                    id,
+                },
+            });
             const parsedSettings = JSON.parse(
-                instance.settings as unknown as string
+                instance?.settings as unknown as string
             );
             const formattedInstance = {
                 ...instance,
@@ -102,9 +141,8 @@ export default class ManageDatabase {
             };
             return formattedInstance as StorageInstance;
         },
-        getInstances: () => {
-            const stmt = db.prepare("SELECT * FROM instances");
-            const instances = stmt.all() as unknown as StorageInstance[];
+        getInstances: async () => {
+            const instances = await prisma.storageInstance.findMany();
             return instances.map((instance) => {
                 const parsedSettings = JSON.parse(
                     instance.settings as unknown as string
@@ -116,18 +154,22 @@ export default class ManageDatabase {
             });
         },
         deleteInstance: (id: string) => {
-            const stmt = db.prepare("DELETE FROM instances WHERE id = ?");
-            stmt.run(id);
+            return prisma.storageInstance.delete({
+                where: {
+                    id,
+                },
+            });
         },
         updateInstance: (instance: StorageInstance) => {
-            const stmt = db.prepare(
-                "UPDATE instances SET name = ?, settings = ? WHERE id = ?"
-            );
-            stmt.run(
-                instance.name,
-                JSON.stringify(instance.settings),
-                instance.id
-            );
+            return prisma.storageInstance.update({
+                where: {
+                    id: instance.id,
+                },
+                data: {
+                    name: instance.name,
+                    settings: JSON.stringify(instance.settings),
+                },
+            });
         },
     };
 }

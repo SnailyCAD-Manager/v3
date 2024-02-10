@@ -11,7 +11,7 @@ import ManageDatabase from "../util/database";
 export default function HandleLoadInstances(socket: Socket) {
     async function sendInstances() {
         const instanceStore =
-            ManageDatabase.instances.getInstances() as unknown as StorageInstance[];
+            (await ManageDatabase.instances.getInstances()) as StorageInstance[];
 
         const instances = [] as Instance[];
 
