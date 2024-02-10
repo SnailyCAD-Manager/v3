@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 
 export default function HandleUser(socket: Socket) {
     socket.on("server:add-user", async (data: AddUserData) => {
-        ManageDatabase.users.addUser({
+        await ManageDatabase.users.addUser({
             id: uuid(),
             username: data.username,
             password: await bcrypt.hash(data.password, 10),
@@ -14,16 +14,17 @@ export default function HandleUser(socket: Socket) {
         });
     });
 
-    socket.on("server:get-users", () => {
-        socket.emit("client:get-users", ManageDatabase.users.getUsers());
+    socket.on("server:get-users", async () => {
+        const users = await ManageDatabase.users.getUsers();
+        socket.emit("client:get-users", users);
     });
 
-    socket.on("server:delete-user", (id: string) => {
-        ManageDatabase.users.deleteUser(id);
+    socket.on("server:delete-user", async (id: string) => {
+        await ManageDatabase.users.deleteUser(id);
     });
 
-    socket.on("server:update-user", (data: any) => {
-        ManageDatabase.users.updateUser(data);
+    socket.on("server:update-user", async (data: any) => {
+        await ManageDatabase.users.updateUser(data);
     });
 
     socket.on("server:user-login", async (data: UserLoginData) => {

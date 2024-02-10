@@ -14,7 +14,7 @@ export default function HandleInstanceSettings(socket: Socket) {
 
             socket.emit("client:instance-settings-updated", data);
 
-            ManageDatabase.instances.updateInstance({
+            await ManageDatabase.instances.updateInstance({
                 ...data,
                 name: instanceName,
             });

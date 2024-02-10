@@ -147,13 +147,13 @@ export default function HandleCreateInstance(socket: Socket) {
                 socket.emit("create-instance-stderr", data.toString());
             });
 
-            moveEnvProcess.on("close", (code) => {
+            moveEnvProcess.on("close", async (code) => {
                 if (code === 0) {
                     socket.emit(
                         "create-instance-stdout",
                         "Moved env files successfully"
                     );
-                    ManageDatabase.instances.addInstance({
+                    await ManageDatabase.instances.addInstance({
                         id,
                         name,
                         settings: {

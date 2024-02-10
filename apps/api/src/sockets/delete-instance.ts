@@ -37,7 +37,7 @@ export default function HandleDeleteInstance(socket: Socket) {
         }
 
         try {
-            ManageDatabase.instances.deleteInstance(data.id);
+            await ManageDatabase.instances.deleteInstance(data.id);
         } catch (err) {
             socket.emit(
                 "error",

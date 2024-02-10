@@ -10,46 +10,6 @@ export const prisma = new PrismaClient();
 
 export default class ManageDatabase {
     static async init() {
-        // console.log(fs.existsSync(dbPath));
-        // if (!fs.existsSync(dbPath)) {
-        //     await fs.promises.mkdir(path.resolve(process.cwd(), "data"));
-        //     await fs.promises.writeFile(dbPath, "");
-        //     console.log("Created database file.");
-        // }
-
-        // db.exec(`
-        //     CREATE TABLE IF NOT EXISTS users (
-        //         id TEXT,
-        //         username TEXT,
-        //         password TEXT,
-        //         role TEXT
-        //     )
-        // `);
-        // console.log("Created users table.");
-
-        // db.exec(`
-        //     CREATE TABLE IF NOT EXISTS instances (
-        //         id TEXT,
-        //         name TEXT,
-        //         settings TEXT
-        //     )
-        // `);
-
-        // // Insert into users if the user doesn't already exist, a default admin user.
-        // const adminUserExists = db.prepare(
-        //     "SELECT * FROM users WHERE role = ?"
-        // );
-        // if (!adminUserExists.get("admin")) {
-        //     const adminPassword = uuid();
-        //     const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
-        //     db.prepare(
-        //         "INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)"
-        //     ).run(uuid(), "admin", adminPasswordHash, "admin");
-        //     console.log(
-        //         `Created default admin user with password: ${adminPassword}`
-        //     );
-        // }
-
         const defaultAdminExists = await prisma.user.findFirst({
             where: {
                 username: "admin",
@@ -85,40 +45,43 @@ export default class ManageDatabase {
                 },
             });
         },
-        getUser: (username: string) => {
-            return prisma.user.findFirst({
+        getUser: async (username: string) => {
+            const user = await prisma.user.findFirst({
                 where: {
                     username,
                 },
             });
+
+            return user;
         },
-        getUsers: () => {
-            return prisma.user.findMany();
+        getUsers: async () => {
+            const users = await prisma.user.findMany();
         },
-        deleteUser: (id: string) => {
-            return prisma.user.delete({
+        deleteUser: async (id: string) => {
+            await prisma.user.delete({
                 where: {
                     id,
                 },
             });
         },
         updateUser: async (data: User) => {
-            return prisma.user.update({
+            const passwordHash = await bcrypt.hash(data.password, 10);
+            await prisma.user.update({
                 where: {
                     id: data.id,
                 },
                 data: {
                     username: data.username,
+                    password: passwordHash,
                     role: data.role,
-                    password: await bcrypt.hash(data.password, 10),
                 },
             });
         },
     };
 
     static instances = {
-        addInstance: (instance: StorageInstance) => {
-            prisma.storageInstance.create({
+        addInstance: async (instance: StorageInstance) => {
+            await prisma.storageInstance.create({
                 data: {
                     id: instance.id,
                     name: instance.name,
@@ -153,15 +116,15 @@ export default class ManageDatabase {
                 };
             });
         },
-        deleteInstance: (id: string) => {
-            return prisma.storageInstance.delete({
+        deleteInstance: async (id: string) => {
+            await prisma.storageInstance.delete({
                 where: {
                     id,
                 },
             });
         },
-        updateInstance: (instance: StorageInstance) => {
-            return prisma.storageInstance.update({
+        updateInstance: async (instance: StorageInstance) => {
+            await prisma.storageInstance.update({
                 where: {
                     id: instance.id,
                 },
