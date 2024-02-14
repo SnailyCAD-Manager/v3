@@ -101,6 +101,13 @@ export default function EnvEditorPage() {
                     return null;
                 }
             },
+            SECURE_COOKIES_FOR_IFRAME: (value) => {
+                if (value !== "true" && value !== "false") {
+                    return "SECURE_COOKIES_FOR_IFRAME must be true or false";
+                }
+
+                return null;
+            },
         },
     });
 
@@ -152,11 +159,22 @@ export default function EnvEditorPage() {
                                     key === "ENCRYPTION_TOKEN" ? (
                                         <span className="flex flex-row gap-1 items-center">
                                             <span>{key}</span>
-                                            <Tooltip label="Generate Again">
+                                            <Tooltip label="Generate">
                                                 <ActionIcon
                                                     className="!rounded-full"
                                                     size={20}
                                                     variant="subtle"
+                                                    onClick={() => {
+                                                        envForm.setFieldValue(
+                                                            key,
+                                                            stringGen(
+                                                                key ===
+                                                                    "JWT_SECRET"
+                                                                    ? 24
+                                                                    : 32
+                                                            )
+                                                        );
+                                                    }}
                                                 >
                                                     <IconRefresh size={15} />
                                                 </ActionIcon>
