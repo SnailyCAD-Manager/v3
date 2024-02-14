@@ -56,6 +56,8 @@ export default class ManageDatabase {
         },
         getUsers: async () => {
             const users = await prisma.user.findMany();
+
+            return users;
         },
         deleteUser: async (id: string) => {
             await prisma.user.delete({

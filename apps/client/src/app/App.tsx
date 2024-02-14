@@ -12,6 +12,7 @@ import KeyboardShortcutsPage from "@/pages/keyboard-shortcuts";
 import LoginPage from "@/pages/login";
 import ToolsPage from "@/pages/tools";
 import InstanceSettingsPage from "@/pages/instance-settings";
+import UsersPage from "@/pages/users";
 
 export default function App() {
     const { page } = usePage();
@@ -61,6 +62,12 @@ export default function App() {
             return (
                 <Layout>
                     <InstanceSettingsPage />
+                </Layout>
+            );
+        case "users":
+            return (
+                <Layout>
+                    <UsersPage />
                 </Layout>
             );
         default:

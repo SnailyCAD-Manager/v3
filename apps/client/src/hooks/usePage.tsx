@@ -4,6 +4,7 @@ import {
     IconKeyboard,
     IconSettings,
     IconTools,
+    IconUsersGroup,
 } from "@tabler/icons-react";
 import { create } from "zustand";
 
@@ -15,12 +16,14 @@ type ValidPageId =
     | "instance-create"
     | "tools"
     | "keyboard-shortcuts"
-    | "instance-settings";
+    | "instance-settings"
+    | "users";
 
 type Page = {
     name: string;
     id: ValidPageId;
     icon?: React.ReactNode;
+    roleRequired?: string;
     noNav?: boolean;
 };
 
@@ -64,6 +67,12 @@ export const AppPages: Page[] = [
         name: "Instance Create",
         id: "instance-create",
         noNav: true,
+    },
+    {
+        name: "Users",
+        roleRequired: "admin",
+        icon: <IconUsersGroup size={20} />,
+        id: "users",
     },
 ];
 

@@ -104,7 +104,15 @@ declare module "@scm/types" {
         id: string;
         username: string;
         password: string;
+        passwordResetAtNextLogin?: boolean;
+        createdAt?: string;
+        updatedAt?: string;
         role: "admin" | "user";
+    };
+
+    export type UserLoginReturnData = {
+        user: User;
+        sessionId: string;
     };
 
     export type UserLoginData = {

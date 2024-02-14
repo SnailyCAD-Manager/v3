@@ -1,11 +1,14 @@
+import { useAuth } from "@/hooks/useAuth";
 import { useInstance } from "@/hooks/useInstance";
 import { AppPages, usePage } from "@/hooks/usePage";
 import { useUpdate } from "@/hooks/useUpdate";
 import UpdatingModal from "@/utils/modals/updating";
 import SpotlightActions from "@/utils/spotlight/spotlight";
+import UserLogout from "@/utils/user/logout";
 import {
     Anchor,
     AppShell,
+    Badge,
     Burger,
     Divider,
     Group,
@@ -17,7 +20,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Spotlight, spotlight } from "@mantine/spotlight";
-import { IconSwitchHorizontal, IconTerminal } from "@tabler/icons-react";
+import {
+    IconLogout,
+    IconSwitchHorizontal,
+    IconTerminal,
+} from "@tabler/icons-react";
 import { IconBrandDiscord, IconSearch } from "@tabler/icons-react";
 
 interface Props {
@@ -33,6 +40,7 @@ export function Layout(props: Props) {
     );
     const updateInProgress = useUpdate((state) => state.inProgress);
     const activeInstance = useInstance((state) => state.activeInstance);
+    const user = useAuth((state) => state.user);
 
     return (
         <>
@@ -115,9 +123,22 @@ export function Layout(props: Props) {
                                 !page.noNav && (
                                     <NavLink
                                         active={page.id === activePage.id}
-                                        className="rounded-md"
+                                        // If the page.roleRequired is there, and the user does not have the role, hide the link.
+                                        className={`rounded-md ${page.roleRequired && !(user?.role === page.roleRequired) && "!hidden"}`}
                                         key={page.id}
                                         leftSection={page.icon}
+                                        rightSection={
+                                            page.roleRequired && (
+                                                <Badge
+                                                    color="orange"
+                                                    radius={"sm"}
+                                                    size="sm"
+                                                    variant="light"
+                                                >
+                                                    {page.roleRequired}
+                                                </Badge>
+                                            )
+                                        }
                                         label={page.name}
                                         onClick={() => {
                                             setPage(page.id);
@@ -127,6 +148,14 @@ export function Layout(props: Props) {
                                 )
                         )}
                     </AppShell.Section>
+                    <NavLink
+                        label="Logout"
+                        onClick={UserLogout}
+                        active
+                        color="red"
+                        leftSection={<IconLogout size={20} />}
+                        className="rounded-md"
+                    />
                     <Divider className="my-4" />
                     <AppShell.Section className="opacity-75 hover:opacity-100">
                         <div className="text-center flex flex-row items-center justify-center gap-2 text-xs">

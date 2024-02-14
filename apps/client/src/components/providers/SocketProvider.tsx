@@ -1,6 +1,6 @@
 import { useInstance } from "@/hooks/useInstance";
 import { useSocket } from "@/hooks/useSocket";
-import { Instance, LogData, User } from "@scm/types";
+import { Instance, LogData, UserLoginReturnData } from "@scm/types";
 import logs from "@/utils/debug/logs";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
@@ -8,6 +8,7 @@ import { nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import { useUpdate } from "@/hooks/useUpdate";
 import { useAuth } from "@/hooks/useAuth";
+import HandlePasswordReset from "@/utils/user/passwordReset";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();
@@ -113,9 +114,21 @@ export default function SocketProvider(): null {
             }
         }
 
-        function onLogin(data: User) {
-            setUser(data);
+        function onLogin(data: UserLoginReturnData) {
+            setUser(data.user);
             setIsAuth(true);
+
+            if (data.user.passwordResetAtNextLogin) {
+                HandlePasswordReset();
+            }
+
+            notifications.show({
+                title: "Logged in",
+                message: "Successfully logged in",
+                color: "green",
+            });
+
+            localStorage.setItem("snailycad-manager:session", data.sessionId);
         }
 
         socket.on("connect", onConnect);

@@ -11,11 +11,23 @@ datasource db {
 }
 
 model User {
-  id                       String  @id @default(uuid())
+  id                       String    @id @default(uuid())
   username                 String
   password                 String
-  passwordResetAtNextLogin Boolean @default(false)
+  passwordResetAtNextLogin Boolean?  @default(false)
   role                     String
+  createdAt                DateTime? @default(now())
+  updatedAt                DateTime? @default(now()) @updatedAt
+  Session                  Session[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime @default(now())
 }
 
 model StorageInstance {

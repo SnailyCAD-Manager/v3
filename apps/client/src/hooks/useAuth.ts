@@ -5,12 +5,12 @@ type AuthState = {
     isAuth: boolean;
     setIsAuth: (isAuth: boolean) => void;
     user: User | null;
-    setUser: (user: User) => void;
+    setUser: (user: User | null) => void;
 };
 
 export const useAuth = create<AuthState>((set) => ({
     isAuth: false,
     setIsAuth: (isAuth) => set({ isAuth }),
     user: null,
-    setUser: (user: User) => set({ user }),
+    setUser: (user) => set({ user }),
 }));
