@@ -13,7 +13,12 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { User } from "@scm/types";
-import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
+import {
+    IconEdit,
+    IconPlus,
+    IconRefresh,
+    IconTrash,
+} from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 export default function UsersPage() {
@@ -22,12 +27,13 @@ export default function UsersPage() {
     const [userModalOpen, setUserModalOpen] = useState(false);
     const [editMode, setEditMode] = useState<{
         user: User;
+        allUsers: User[];
     } | null>(null);
 
     useEffect(() => {
         socket.emit("server:get-users");
         socket.on("client:get-users", (users: User[]) => {
-            setUsers(users.filter((user) => user.id !== currentUser?.id));
+            setUsers(users);
         });
 
         return () => {
@@ -37,13 +43,24 @@ export default function UsersPage() {
 
     return (
         <div className="w-full h-full">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
                 <Tooltip label="Add User">
                     <ActionIcon
                         variant="light"
                         onClick={() => setUserModalOpen(true)}
                     >
                         <IconPlus size={20} />
+                    </ActionIcon>
+                </Tooltip>
+
+                <Tooltip label="Refresh Users">
+                    <ActionIcon
+                        variant="light"
+                        onClick={() => {
+                            socket.emit("server:get-users");
+                        }}
+                    >
+                        <IconRefresh size={20} />
                     </ActionIcon>
                 </Tooltip>
             </div>
@@ -80,7 +97,10 @@ export default function UsersPage() {
                                                         <IconEdit size={16} />
                                                     }
                                                     onClick={() => {
-                                                        setEditMode({ user });
+                                                        setEditMode({
+                                                            user,
+                                                            allUsers: users,
+                                                        });
                                                         setUserModalOpen(true);
                                                     }}
                                                 >
@@ -92,6 +112,18 @@ export default function UsersPage() {
                                                     color="red"
                                                     leftSection={
                                                         <IconTrash size={16} />
+                                                    }
+                                                    onClick={() => {
+                                                        socket.emit(
+                                                            "server:delete-user",
+                                                            user.id
+                                                        );
+                                                    }}
+                                                    disabled={
+                                                        user.username ===
+                                                            "admin" ||
+                                                        currentUser?.id ===
+                                                            user.id
                                                     }
                                                 >
                                                     Delete
@@ -176,10 +208,13 @@ interface AddUserModalProps {
     onClose: () => void;
     editMode?: {
         user: User;
+        allUsers: User[];
     } | null;
 }
 
 function AddUserModal(props: AddUserModalProps) {
+    const user = useAuth((state) => state.user);
+
     const addUserForm = useForm({
         initialValues: {
             username: "",
@@ -188,9 +223,18 @@ function AddUserModal(props: AddUserModalProps) {
         },
         validate: {
             username: (value) => {
+                const usernameExists = props.editMode?.allUsers.find(
+                    (user) => user.username === value
+                );
+
                 if (value.length < 3) {
                     return "Username must be at least 3 characters long";
                 }
+
+                if (!props.editMode && usernameExists) {
+                    return "Username already exists";
+                }
+
                 return null;
             },
             password: (value) => {
@@ -255,10 +299,14 @@ function AddUserModal(props: AddUserModalProps) {
                 <TextInput
                     label="Username"
                     required
+                    disabled={
+                        props.editMode?.user.username === "admin" ||
+                        user?.id === props.editMode?.user.id
+                    }
                     {...addUserForm.getInputProps("username")}
                 />
                 <PasswordInput
-                    label="Password"
+                    label={props.editMode ? "Temp Password" : "Password"}
                     required={!props.editMode}
                     description={
                         props.editMode
@@ -270,6 +318,10 @@ function AddUserModal(props: AddUserModalProps) {
                 />
                 <Select
                     label="Role"
+                    disabled={
+                        props.editMode?.user.username === "admin" ||
+                        user?.id === props.editMode?.user.id
+                    }
                     required
                     data={[
                         { label: "User", value: "user" },
@@ -288,7 +340,7 @@ function AddUserModal(props: AddUserModalProps) {
                         Cancel
                     </Button>
                     <Button type="submit" variant="light" color="blue">
-                        Add User
+                        {props.editMode ? "Save" : "Add"}
                     </Button>
                 </div>
             </form>

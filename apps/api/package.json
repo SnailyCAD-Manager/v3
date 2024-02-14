@@ -5,7 +5,7 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "dev": "nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/index.ts --ignore \"data/**/*\"",
+        "dev": "prisma migrate deploy && prisma generate && nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/index.ts --ignore \"data/**/*\"",
         "start": "prisma migrate deploy && prisma generate && node dist/index.js",
         "prisma": "prisma",
         "build": "tsc -p ."

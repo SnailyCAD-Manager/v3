@@ -13,6 +13,7 @@ import LoginPage from "@/pages/login";
 import ToolsPage from "@/pages/tools";
 import InstanceSettingsPage from "@/pages/instance-settings";
 import UsersPage from "@/pages/users";
+import PasswordResetPage from "@/pages/password-reset";
 
 export default function App() {
     const { page } = usePage();
@@ -70,6 +71,8 @@ export default function App() {
                     <UsersPage />
                 </Layout>
             );
+        case "password-reset":
+            return <PasswordResetPage />;
         default:
             return <NotFound />;
     }

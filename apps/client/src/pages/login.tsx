@@ -22,6 +22,12 @@ export default function LoginPage() {
         const session = localStorage.getItem("snailycad-manager:session");
 
         session && socket.emit("server:user-session", session);
+
+        socket.on("error", (error: string) => {
+            if (error.includes("session not found")) {
+                localStorage.removeItem("snailycad-manager:session");
+            }
+        });
     }, []);
 
     return (

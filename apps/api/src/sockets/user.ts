@@ -3,13 +3,14 @@ import { AddUserData, UserLoginData, UserLoginReturnData } from "@scm/types";
 import ManageDatabase, { prisma } from "../util/database";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
+import { io } from "..";
 
 export default function HandleUser(socket: Socket) {
     socket.on("server:add-user", async (data: AddUserData) => {
         await ManageDatabase.users.addUser({
             id: uuid(),
             username: data.username,
-            password: await bcrypt.hash(data.password, 10),
+            password: data.password,
             passwordResetAtNextLogin: true,
             role: data.role,
         });
@@ -18,6 +19,21 @@ export default function HandleUser(socket: Socket) {
         socket.emit("client:get-users", users);
     });
 
+    socket.on(
+        "server:user-password-reset",
+        async (data: { id: string; newPassword: string }) => {
+            await prisma.user.update({
+                where: {
+                    id: data.id,
+                },
+                data: {
+                    password: await bcrypt.hash(data.newPassword, 10),
+                    passwordResetAtNextLogin: false,
+                },
+            });
+        }
+    );
+
     socket.on("server:get-users", async () => {
         const users = await ManageDatabase.users.getUsers();
         socket.emit("client:get-users", users);
@@ -25,6 +41,11 @@ export default function HandleUser(socket: Socket) {
 
     socket.on("server:delete-user", async (id: string) => {
         await ManageDatabase.users.deleteUser(id);
+
+        io.emit("client:delete-user", id);
+
+        const users = await ManageDatabase.users.getUsers();
+        socket.emit("client:get-users", users);
     });
 
     socket.on("server:update-user", async (data: any) => {
@@ -44,6 +65,7 @@ export default function HandleUser(socket: Socket) {
             data.password,
             user.password
         );
+
         if (!passwordMatch) {
             socket.emit("error", "Incorrect password.");
             return;

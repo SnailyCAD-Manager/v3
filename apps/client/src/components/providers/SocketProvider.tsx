@@ -8,7 +8,7 @@ import { nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import { useUpdate } from "@/hooks/useUpdate";
 import { useAuth } from "@/hooks/useAuth";
-import HandlePasswordReset from "@/utils/user/passwordReset";
+import { usePage } from "@/hooks/usePage";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();
@@ -20,6 +20,7 @@ export default function SocketProvider(): null {
     const setUpdateInProgress = useUpdate((state) => state.setInProgress);
     const setIsAuth = useAuth((state) => state.setIsAuth);
     const setUser = useAuth((state) => state.setUser);
+    const setPage = usePage((state) => state.setPage);
 
     useEffect(() => {
         function onConnect() {
@@ -117,7 +118,7 @@ export default function SocketProvider(): null {
             setIsAuth(true);
 
             if (data.user.passwordResetAtNextLogin) {
-                HandlePasswordReset();
+                setPage("password-reset");
             }
 
             notifications.show({
@@ -146,6 +147,18 @@ export default function SocketProvider(): null {
         });
         socket.on("client:update-instance", onUpdate);
         socket.on("client:user-login", onLogin);
+        socket.on("client:delete-user", (id: string) => {
+            if (id === useAuth.getState().user?.id) {
+                setIsAuth(false);
+                setUser(null);
+                localStorage.removeItem("snailycad-manager:session");
+                notifications.show({
+                    title: "User Deleted",
+                    message: "Your user has been deleted",
+                    color: "red",
+                });
+            }
+        });
         socket.connect();
 
         return () => {
@@ -157,6 +170,7 @@ export default function SocketProvider(): null {
             socket.off("instance-delete-complete");
             socket.off("client:update-instance", onUpdate);
             socket.off("client:user-login", onLogin);
+            socket.off("client:delete-user");
             socket.disconnect();
         };
     }, []);

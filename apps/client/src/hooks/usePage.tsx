@@ -8,7 +8,7 @@ import {
 } from "@tabler/icons-react";
 import { create } from "zustand";
 
-type ValidPageId =
+export type ValidPageId =
     | "login"
     | "instance-selector"
     | "home"
@@ -17,7 +17,8 @@ type ValidPageId =
     | "tools"
     | "keyboard-shortcuts"
     | "instance-settings"
-    | "users";
+    | "users"
+    | "password-reset";
 
 type Page = {
     name: string;
@@ -74,6 +75,11 @@ export const AppPages: Page[] = [
         icon: <IconUsersGroup size={20} />,
         id: "users",
     },
+    {
+        name: "Password Reset",
+        id: "password-reset",
+        noNav: true,
+    },
 ];
 
 type PageState = {
@@ -89,6 +95,10 @@ const defaultPage: ValidPageId =
 export const usePage = create<PageState>((set) => ({
     page: AppPages.find((p) => p.id === defaultPage)!,
     setPage: (page) => {
+        if (!AppPages.find((p) => p.id === page)) {
+            console.error(`Invalid page ID: ${page}`);
+            return;
+        }
         set(() => ({ page: AppPages.find((p) => p.id === page) }));
     },
 }));

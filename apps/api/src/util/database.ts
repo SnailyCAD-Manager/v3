@@ -24,6 +24,7 @@ export default class ManageDatabase {
                     id: uuid(),
                     username: "admin",
                     password: adminPasswordHash,
+                    passwordResetAtNextLogin: true,
                     role: "admin",
                 },
             });
@@ -38,6 +39,7 @@ export default class ManageDatabase {
                     id: uuid(),
                     username: data.username,
                     password: passwordHash,
+                    passwordResetAtNextLogin: data.passwordResetAtNextLogin,
                     role: data.role,
                 },
             });
@@ -57,6 +59,12 @@ export default class ManageDatabase {
             return users;
         },
         deleteUser: async (id: string) => {
+            await prisma.session.deleteMany({
+                where: {
+                    userId: id,
+                },
+            });
+
             await prisma.user.delete({
                 where: {
                     id,
