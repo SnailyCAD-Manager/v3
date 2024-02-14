@@ -96,6 +96,12 @@ export default function UsersPage() {
                                                     leftSection={
                                                         <IconEdit size={16} />
                                                     }
+                                                    disabled={
+                                                        user.username ===
+                                                            "admin" &&
+                                                        currentUser?.username !==
+                                                            "admin"
+                                                    }
                                                     onClick={() => {
                                                         setEditMode({
                                                             user,
