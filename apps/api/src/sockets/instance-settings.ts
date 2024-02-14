@@ -10,8 +10,6 @@ export default function HandleInstanceSettings(socket: Socket) {
                 await ManageDatabase.instances.getInstance(data.id)
             ).name;
 
-            console.log(`Updating instance settings for ${instanceName}`);
-
             socket.emit("client:instance-settings-updated", data);
 
             await ManageDatabase.instances.updateInstance({

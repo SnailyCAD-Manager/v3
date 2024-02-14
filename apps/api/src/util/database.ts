@@ -27,9 +27,6 @@ export default class ManageDatabase {
                     role: "admin",
                 },
             });
-            console.log(
-                `Created default admin user with password: ${adminPassword}`
-            );
         }
     }
 
@@ -66,16 +63,34 @@ export default class ManageDatabase {
                 },
             });
         },
-        updateUser: async (data: User) => {
-            const passwordHash = await bcrypt.hash(data.password, 10);
+        /* 
+        username:
+            values.username === ""
+                ? props.editMode.user.username
+                : values.username,
+        newPassword: values.password === "" ? null : values.password,
+        role: values.role,
+        id: props.editMode.user.id,
+        */
+        updateUser: async (data: {
+            username: string;
+            newPassword: string | null;
+            role: string;
+            id: string;
+        }) => {
+            let passwordHash = null;
+            if (data.newPassword) {
+                passwordHash = await bcrypt.hash(data.newPassword, 10);
+            }
+            // Update the user, but if there is no new password, don't update the password
             await prisma.user.update({
                 where: {
                     id: data.id,
                 },
                 data: {
                     username: data.username,
-                    password: passwordHash,
                     role: data.role,
+                    password: passwordHash ? passwordHash : undefined,
                 },
             });
         },

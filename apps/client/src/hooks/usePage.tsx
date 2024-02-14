@@ -90,6 +90,5 @@ export const usePage = create<PageState>((set) => ({
     page: AppPages.find((p) => p.id === defaultPage)!,
     setPage: (page) => {
         set(() => ({ page: AppPages.find((p) => p.id === page) }));
-        console.log("Set page to", page);
     },
 }));

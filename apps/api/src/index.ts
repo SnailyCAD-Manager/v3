@@ -33,7 +33,6 @@ async function initAPI() {
             `{"port": "60120"}`,
             "utf-8"
         );
-        console.log("Created settings.json");
     }
 
     if (!fs.existsSync(GetPlatformStorageDirectory())) {
@@ -92,13 +91,10 @@ async function initAPI() {
 
     // #region Socket.io
     io.on("connection", (socket) => {
-        console.log(`New Client: ${socket.id}`);
-
         HandleAllSockets(socket);
 
         socket.on("disconnect", () => {
             socket.removeAllListeners();
-            console.log(`Client disconnected: ${socket.id}`);
         });
     });
 
@@ -116,7 +112,6 @@ async function initAPI() {
     // #endregion
 
     // #region Startup Logic
-    console.log("Running startup logic...");
     await Startup();
     // #endregion
 }

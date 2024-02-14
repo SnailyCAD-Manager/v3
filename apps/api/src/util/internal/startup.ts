@@ -9,13 +9,8 @@ export default async function Startup() {
     for (const instance of instances) {
         if (!ManageProcess.getProcessByInstanceId(instance.id)) {
             if (!instance.settings.autoStart) {
-                console.log(
-                    `Skipping Auto Start: ${instance.name} (Not configured to auto start)`
-                );
                 continue;
             }
-
-            console.log(`Auto Start: ${instance.name} (ID: ${instance.id})`);
 
             await fireStart({
                 id: instance.id,

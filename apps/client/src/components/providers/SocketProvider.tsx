@@ -72,7 +72,6 @@ export default function SocketProvider(): null {
                         versions: instance.versions,
                         env: instance.env,
                     });
-                    console.log(instance);
                     logs.info(`Added instance ${instance.name}`);
                 }
             });
@@ -86,7 +85,6 @@ export default function SocketProvider(): null {
 
         function onInstanceLog(data: LogData) {
             if (data.type === "console") {
-                console.log(data.log);
                 return;
             }
 

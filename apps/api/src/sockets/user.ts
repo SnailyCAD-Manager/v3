@@ -13,11 +13,13 @@ export default function HandleUser(socket: Socket) {
             passwordResetAtNextLogin: true,
             role: data.role,
         });
+
+        const users = await ManageDatabase.users.getUsers();
+        socket.emit("client:get-users", users);
     });
 
     socket.on("server:get-users", async () => {
         const users = await ManageDatabase.users.getUsers();
-        console.log(users);
         socket.emit("client:get-users", users);
     });
 
@@ -27,13 +29,15 @@ export default function HandleUser(socket: Socket) {
 
     socket.on("server:update-user", async (data: any) => {
         await ManageDatabase.users.updateUser(data);
+
+        const users = await ManageDatabase.users.getUsers();
+        socket.emit("client:get-users", users);
     });
 
     socket.on("server:user-login", async (data: UserLoginData) => {
         const user = await ManageDatabase.users.getUser(data.username);
         if (!user) {
             socket.emit("error", "User not found.");
-            console.log("User not found.");
             return;
         }
         const passwordMatch = await bcrypt.compare(
@@ -42,7 +46,6 @@ export default function HandleUser(socket: Socket) {
         );
         if (!passwordMatch) {
             socket.emit("error", "Incorrect password.");
-            console.log("Incorrect password.");
             return;
         }
 
@@ -64,7 +67,6 @@ export default function HandleUser(socket: Socket) {
             user,
             sessionId: session?.id,
         } as unknown as UserLoginReturnData);
-        console.log("User logged in.");
     });
 
     socket.on("server:user-session", async (id: string) => {

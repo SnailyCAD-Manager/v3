@@ -55,7 +55,6 @@ export default function InstanceSelector() {
                         color="blue"
                         leftSection={<IconPlus size={16} />}
                         onClick={() => {
-                            console.log("Create new instance");
                             setPage("instance-create");
                         }}
                     >

@@ -3,6 +3,7 @@ import socket from "@/utils/socket";
 import {
     ActionIcon,
     Button,
+    Modal,
     PasswordInput,
     Select,
     Skeleton,
@@ -11,7 +12,6 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { modals } from "@mantine/modals";
 import { User } from "@scm/types";
 import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -19,32 +19,10 @@ import { useEffect, useState } from "react";
 export default function UsersPage() {
     const [users, setUsers] = useState<User[] | null>(null);
     const currentUser = useAuth((state) => state.user);
-
-    const addUserForm = useForm({
-        initialValues: {
-            username: "",
-            password: "",
-            role: "user",
-        },
-        validate: {
-            username: (value) => {
-                if (value.length < 3) {
-                    return "Username must be at least 3 characters long";
-                }
-                return null;
-            },
-            password: (value) => {
-                if (value.length < 8) {
-                    return "Password must be at least 8 characters long";
-                }
-                return null;
-            },
-        },
-    });
-
-    function handleAddUserSubmit(values: typeof addUserForm.values) {
-        console.log(values);
-    }
+    const [userModalOpen, setUserModalOpen] = useState(false);
+    const [editMode, setEditMode] = useState<{
+        user: User;
+    } | null>(null);
 
     useEffect(() => {
         socket.emit("server:get-users");
@@ -57,51 +35,14 @@ export default function UsersPage() {
         };
     }, []);
 
-    function addUser() {
-        modals.open({
-            title: <span className="text-lg font-bold">Add User</span>,
-            centered: true,
-            children: (
-                <form
-                    onSubmit={addUserForm.onSubmit((values) =>
-                        handleAddUserSubmit(values)
-                    )}
-                    className="flex flex-col gap-4"
-                >
-                    <TextInput
-                        label="Username"
-                        required
-                        {...addUserForm.getInputProps("username")}
-                    />
-                    <PasswordInput
-                        label="Password"
-                        required
-                        {...addUserForm.getInputProps("password")}
-                    />
-                    <Select
-                        label="Role"
-                        required
-                        data={[
-                            { value: "user", label: "User" },
-                            { value: "admin", label: "Admin" },
-                        ]}
-                        {...addUserForm.getInputProps("role")}
-                    />
-                    <div className="flex justify-end">
-                        <Button type="submit" variant="light">
-                            Add User
-                        </Button>
-                    </div>
-                </form>
-            ),
-        });
-    }
-
     return (
         <div className="w-full h-full">
             <div className="flex justify-end">
                 <Tooltip label="Add User">
-                    <ActionIcon variant="light" onClick={addUser}>
+                    <ActionIcon
+                        variant="light"
+                        onClick={() => setUserModalOpen(true)}
+                    >
                         <IconPlus size={20} />
                     </ActionIcon>
                 </Tooltip>
@@ -138,6 +79,10 @@ export default function UsersPage() {
                                                     leftSection={
                                                         <IconEdit size={16} />
                                                     }
+                                                    onClick={() => {
+                                                        setEditMode({ user });
+                                                        setUserModalOpen(true);
+                                                    }}
                                                 >
                                                     Edit
                                                 </Button>
@@ -171,6 +116,14 @@ export default function UsersPage() {
                     </Table.Tbody>
                 </Table>
             </Table.ScrollContainer>
+            <AddUserModal
+                open={userModalOpen}
+                onClose={() => {
+                    setUserModalOpen(false);
+                    setEditMode(null);
+                }}
+                editMode={editMode}
+            />
         </div>
     );
 }
@@ -215,5 +168,130 @@ function UsersLoading() {
                     );
                 })}
         </>
+    );
+}
+
+interface AddUserModalProps {
+    open: boolean;
+    onClose: () => void;
+    editMode?: {
+        user: User;
+    } | null;
+}
+
+function AddUserModal(props: AddUserModalProps) {
+    const addUserForm = useForm({
+        initialValues: {
+            username: "",
+            password: "",
+            role: "user",
+        },
+        validate: {
+            username: (value) => {
+                if (value.length < 3) {
+                    return "Username must be at least 3 characters long";
+                }
+                return null;
+            },
+            password: (value) => {
+                if (value.length < 8 && !props.editMode) {
+                    return "Password must be at least 8 characters long";
+                }
+                return null;
+            },
+        },
+    });
+
+    useEffect(() => {
+        if (props.editMode) {
+            addUserForm.setValues({
+                username: props.editMode.user.username,
+                password: "",
+                role: props.editMode.user.role,
+            });
+        } else {
+            addUserForm.setValues({
+                username: "",
+                password: "",
+                role: "user",
+            });
+        }
+    }, [props.editMode]);
+
+    function handleSubmitUser(values: typeof addUserForm.values) {
+        if (props.editMode) {
+            const data = {
+                username:
+                    values.username === ""
+                        ? props.editMode.user.username
+                        : values.username,
+                newPassword: values.password === "" ? null : values.password,
+                role: values.role,
+                id: props.editMode.user.id,
+            };
+
+            socket.emit("server:update-user", data);
+        } else {
+            socket.emit("server:add-user", values);
+            props.onClose();
+        }
+
+        props.onClose();
+    }
+
+    return (
+        <Modal
+            opened={props.open}
+            onClose={props.onClose}
+            centered
+            title={<span className="text-lg font-bold">Add User</span>}
+        >
+            <form
+                onSubmit={addUserForm.onSubmit((values) =>
+                    handleSubmitUser(values)
+                )}
+                className="flex flex-col gap-2"
+            >
+                <TextInput
+                    label="Username"
+                    required
+                    {...addUserForm.getInputProps("username")}
+                />
+                <PasswordInput
+                    label="Password"
+                    required={!props.editMode}
+                    description={
+                        props.editMode
+                            ? "Leave blank to keep the same password. Changing this password will prompt the user to change their password on next login."
+                            : ""
+                    }
+                    defaultVisible
+                    {...addUserForm.getInputProps("password")}
+                />
+                <Select
+                    label="Role"
+                    required
+                    data={[
+                        { label: "User", value: "user" },
+                        { label: "Admin", value: "admin" },
+                    ]}
+                    {...addUserForm.getInputProps("role")}
+                />
+
+                <div className="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        onClick={props.onClose}
+                        variant="light"
+                        color="red"
+                    >
+                        Cancel
+                    </Button>
+                    <Button type="submit" variant="light" color="blue">
+                        Add User
+                    </Button>
+                </div>
+            </form>
+        </Modal>
     );
 }
