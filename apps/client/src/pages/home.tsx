@@ -151,6 +151,22 @@ export default function HomePage() {
                                 Start {shiftKey ? "(Skip Build)" : ""}
                             </Button>
                         )}
+                        {activeInstanceData?.status.client &&
+                            activeInstanceData?.status.api && (
+                                <Button
+                                    color="teal"
+                                    variant="light"
+                                    leftSection={<IconExternalLink size={16} />}
+                                    component="a"
+                                    href={
+                                        activeInstanceData?.env
+                                            .NEXT_PUBLIC_CLIENT_URL
+                                    }
+                                    target="_blank"
+                                >
+                                    Open in new tab
+                                </Button>
+                            )}
                         {/* If the latest version is not "ERROR" and the current version is not equal to the latest version, show an update button in blue */}
                         {activeInstanceData?.versions.latest !== "ERROR" &&
                             updateAvailable(
@@ -183,17 +199,6 @@ export default function HomePage() {
 
                             <Menu.Dropdown>
                                 <Menu.Label>Instance Management</Menu.Label>
-                                <Menu.Item
-                                    leftSection={<IconExternalLink size={16} />}
-                                    component="a"
-                                    href={
-                                        activeInstanceData?.env
-                                            .NEXT_PUBLIC_CLIENT_URL
-                                    }
-                                    target="_blank"
-                                >
-                                    Open in new tab
-                                </Menu.Item>
                                 <Menu.Item
                                     leftSection={<IconReload size={16} />}
                                     disabled={

@@ -1,3 +1,4 @@
+import CustomCard from "@/components/ui/CustomCard";
 import { useAuth } from "@/hooks/useAuth";
 import socket from "@/utils/socket";
 import {
@@ -17,12 +18,14 @@ import {
     IconEdit,
     IconPlus,
     IconRefresh,
+    IconSearch,
     IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 export default function UsersPage() {
     const [users, setUsers] = useState<User[] | null>(null);
+    const [search, setSearch] = useState<string>("");
     const currentUser = useAuth((state) => state.user);
     const [userModalOpen, setUserModalOpen] = useState(false);
     const [editMode, setEditMode] = useState<{
@@ -42,29 +45,43 @@ export default function UsersPage() {
     }, []);
 
     return (
-        <div className="w-full h-full">
-            <div className="flex justify-end gap-2">
-                <Tooltip label="Add User">
-                    <ActionIcon
-                        variant="light"
-                        onClick={() => setUserModalOpen(true)}
-                    >
-                        <IconPlus size={20} />
-                    </ActionIcon>
-                </Tooltip>
+        <CustomCard className="w-full h-full flex flex-col gap-2">
+            <div className="flex gap-2 justify-between">
+                <div className="flex grow items-center">
+                    <TextInput
+                        className="w-full"
+                        leftSection={<IconSearch size={20} />}
+                        placeholder="Search Username..."
+                        onChange={(event) =>
+                            setSearch(event.currentTarget.value)
+                        }
+                    />
+                </div>
+                <div className="flex items-center gap-2">
+                    <Tooltip label="Add User">
+                        <ActionIcon
+                            style={{ height: 36, width: 36 }}
+                            variant="light"
+                            onClick={() => setUserModalOpen(true)}
+                        >
+                            <IconPlus size={20} />
+                        </ActionIcon>
+                    </Tooltip>
 
-                <Tooltip label="Refresh Users">
-                    <ActionIcon
-                        variant="light"
-                        onClick={() => {
-                            socket.emit("server:get-users");
-                        }}
-                    >
-                        <IconRefresh size={20} />
-                    </ActionIcon>
-                </Tooltip>
+                    <Tooltip label="Refresh Users">
+                        <ActionIcon
+                            style={{ height: 36, width: 36 }}
+                            variant="light"
+                            onClick={() => {
+                                socket.emit("server:get-users");
+                            }}
+                        >
+                            <IconRefresh size={20} />
+                        </ActionIcon>
+                    </Tooltip>
+                </div>
             </div>
-            <Table.ScrollContainer minWidth={500} className="max-h-full">
+            <Table.ScrollContainer minWidth={500} className="h-full">
                 <Table>
                     <Table.Thead>
                         <Table.Tr>
@@ -77,77 +94,86 @@ export default function UsersPage() {
 
                     <Table.Tbody>
                         {users ? (
-                            users.length > 0 ? (
-                                users.map((user) => {
+                            users
+                                .filter((user) =>
+                                    user.username
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                )
+                                .map((user) => {
                                     return (
                                         <Table.Tr key={user.id}>
                                             <Table.Td>{user.username}</Table.Td>
                                             <Table.Td>
                                                 {new Date(
-                                                    user.createdAt!
-                                                ).toLocaleString()}
+                                                    user.createdAt!.toString()
+                                                ).toLocaleDateString()}
                                             </Table.Td>
-                                            <Table.Td>{user.role}</Table.Td>
-                                            <Table.Td className="flex flex-row gap-2">
-                                                <Button
-                                                    size="xs"
-                                                    variant="light"
-                                                    color="blue"
-                                                    leftSection={
-                                                        <IconEdit size={16} />
-                                                    }
-                                                    disabled={
-                                                        user.username ===
-                                                            "admin" &&
-                                                        currentUser?.username !==
-                                                            "admin"
-                                                    }
-                                                    onClick={() => {
-                                                        setEditMode({
-                                                            user,
-                                                            allUsers: users,
-                                                        });
-                                                        setUserModalOpen(true);
-                                                    }}
-                                                >
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    size="xs"
-                                                    variant="light"
-                                                    color="red"
-                                                    leftSection={
-                                                        <IconTrash size={16} />
-                                                    }
-                                                    onClick={() => {
-                                                        socket.emit(
-                                                            "server:delete-user",
-                                                            user.id
-                                                        );
-                                                    }}
-                                                    disabled={
-                                                        user.username ===
-                                                            "admin" ||
-                                                        currentUser?.id ===
-                                                            user.id
-                                                    }
-                                                >
-                                                    Delete
-                                                </Button>
+                                            <Table.Td>
+                                                {user.role === "admin"
+                                                    ? "Admin"
+                                                    : "User"}
+                                            </Table.Td>
+                                            <Table.Td>
+                                                <div className="flex gap-2">
+                                                    <Tooltip label="Edit User">
+                                                        <ActionIcon
+                                                            disabled={
+                                                                user.id ===
+                                                                    currentUser?.id ||
+                                                                user.username ===
+                                                                    "admin"
+                                                            }
+                                                            variant="light"
+                                                            onClick={() => {
+                                                                setEditMode({
+                                                                    user,
+                                                                    allUsers:
+                                                                        users,
+                                                                });
+                                                                setUserModalOpen(
+                                                                    true
+                                                                );
+                                                            }}
+                                                        >
+                                                            <IconEdit
+                                                                size={20}
+                                                            />
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                    <Tooltip label="Delete User">
+                                                        <ActionIcon
+                                                            color="red"
+                                                            disabled={
+                                                                user.id ===
+                                                                    currentUser?.id ||
+                                                                user.username ===
+                                                                    "admin"
+                                                            }
+                                                            variant="light"
+                                                            onClick={() => {
+                                                                if (
+                                                                    user.username ===
+                                                                    "admin"
+                                                                ) {
+                                                                    return;
+                                                                }
+                                                                socket.emit(
+                                                                    "server:delete-user",
+                                                                    user.id
+                                                                );
+                                                            }}
+                                                        >
+                                                            <IconTrash
+                                                                size={20}
+                                                            />
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                </div>
                                             </Table.Td>
                                         </Table.Tr>
                                     );
                                 })
-                            ) : (
-                                <Table.Tr>
-                                    <Table.Td
-                                        colSpan={4}
-                                        className="text-center"
-                                    >
-                                        No users found.
-                                    </Table.Td>
-                                </Table.Tr>
-                            )
                         ) : (
                             <UsersLoading />
                         )}
@@ -162,7 +188,7 @@ export default function UsersPage() {
                 }}
                 editMode={editMode}
             />
-        </div>
+        </CustomCard>
     );
 }
 

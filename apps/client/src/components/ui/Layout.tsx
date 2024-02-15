@@ -13,6 +13,7 @@ import {
     Divider,
     Group,
     Kbd,
+    Menu,
     NavLink,
     ScrollArea,
     TextInput,
@@ -21,9 +22,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { Spotlight, spotlight } from "@mantine/spotlight";
 import {
+    IconChevronRight,
     IconLogout,
+    IconPassword,
     IconSwitchHorizontal,
     IconTerminal,
+    IconUser,
 } from "@tabler/icons-react";
 import { IconBrandDiscord, IconSearch } from "@tabler/icons-react";
 
@@ -148,14 +152,38 @@ export function Layout(props: Props) {
                                 )
                         )}
                     </AppShell.Section>
-                    <NavLink
-                        label="Logout"
-                        onClick={UserLogout}
-                        active
-                        color="red"
-                        leftSection={<IconLogout size={20} />}
-                        className="rounded-md"
-                    />
+                    <Menu position="top-end">
+                        <Menu.Target>
+                            <UnstyledButton className="!bg-white/5 hover:bg-white/10 rounded-md !p-2 flex flex-row items-center justify-between">
+                                <div className="flex flex-row items-center gap-2">
+                                    <IconUser size={20} />
+                                    <span className="text-sm">
+                                        {user?.username}
+                                    </span>
+                                </div>
+                                <IconChevronRight size={20} />
+                            </UnstyledButton>
+                        </Menu.Target>
+
+                        <Menu.Dropdown>
+                            <Menu.Label>Settings</Menu.Label>
+                            <Menu.Item
+                                leftSection={<IconPassword size={18} />}
+                                onClick={() => setPage("password-reset")}
+                            >
+                                Password Reset
+                            </Menu.Item>
+                            <Menu.Divider />
+                            <Menu.Label>Account</Menu.Label>
+                            <Menu.Item
+                                color="red"
+                                leftSection={<IconLogout size={18} />}
+                                onClick={UserLogout}
+                            >
+                                Logout
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
                     <Divider className="my-4" />
                     <AppShell.Section className="opacity-75 hover:opacity-100">
                         <div className="text-center flex flex-row items-center justify-center gap-2 text-xs">
