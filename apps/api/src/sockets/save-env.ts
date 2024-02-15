@@ -6,15 +6,15 @@ import ansi_to_html from "ansi-to-html";
 import { default as styles } from "ansi-colors";
 import GetPlatformStorageDirectory from "../util/directories";
 import dotenv from "dotenv";
+import ManageDatabase from "../util/database";
 
 const ansi = new ansi_to_html();
 
-
-
 export default function HandleSaveEnv(socket: Socket) {
-    socket.on("server:save-env", (data) => {
+    socket.on("server:save-env", async (data) => {
         const { id, env } = data;
-        const instancePath = path.resolve(GetPlatformStorageDirectory(), id);
+        const instance = await ManageDatabase.instances.getInstance(id);
+        const instancePath = path.resolve(instance.path);
         dotenv.config({
             path: path.resolve(instancePath, ".env"),
         });

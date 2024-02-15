@@ -7,10 +7,12 @@ import { io } from "..";
 import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
 import { GetLatestVersion } from "../util/version";
+import ManageDatabase from "../util/database";
 
 export default function HandleUpdateInstance(socket: Socket) {
     socket.on("server:update-instance", async (data: UpdateData) => {
         const { id, force } = data;
+        const instance = await ManageDatabase.instances.getInstance(id);
 
         ManageProcess.killProcess(id);
 
@@ -20,7 +22,7 @@ export default function HandleUpdateInstance(socket: Socket) {
             usedCommand.split(" ")[0],
             usedCommand.split(" ").slice(1),
             {
-                cwd: path.resolve(GetPlatformStorageDirectory(), id),
+                cwd: path.resolve(instance.path),
                 stdio: "pipe",
                 shell: true,
             }
@@ -71,6 +73,6 @@ async function updateCommand(force: boolean) {
     if (force) {
         return "git stash && git pull origin main && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build";
     } else {
-        return `git stash && git fetch && git checkout tags/${GetLatestVersion} && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build`;
+        return `git stash && git fetch && git checkout tags/${GetLatestVersion()} && pnpm install --config.confirmModulesPurge=false --prod=false && pnpm run build`;
     }
 }

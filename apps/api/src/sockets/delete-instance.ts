@@ -7,7 +7,7 @@ import ManageDatabase from "../util/database";
 
 export default function HandleDeleteInstance(socket: Socket) {
     socket.on("server:delete-instance", async (data: DeleteData) => {
-        const env = readEnv(data.id);
+        const env = await readEnv(data.id);
 
         try {
             ManageProcess.killProcess(data.id);

@@ -17,11 +17,7 @@ export default function HandleLoadInstances(socket: Socket) {
 
         for (const instance of instanceStore) {
             const env = dotenv.config({
-                path: path.resolve(
-                    GetPlatformStorageDirectory(),
-                    instance.id,
-                    ".env"
-                ),
+                path: path.resolve(instance.path, ".env"),
             }).parsed as Env;
 
             const status = {
@@ -31,13 +27,7 @@ export default function HandleLoadInstances(socket: Socket) {
 
             const packageJson: PackageJson = JSON.parse(
                 fs
-                    .readFileSync(
-                        path.resolve(
-                            GetPlatformStorageDirectory(),
-                            instance.id,
-                            "package.json"
-                        )
-                    )
+                    .readFileSync(path.resolve(instance.path, "package.json"))
                     .toString()
             );
 

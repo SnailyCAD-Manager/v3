@@ -18,6 +18,79 @@ export default function HandleCreateInstance(socket: Socket) {
             "https://api.ipify.org?format=json"
         );
 
+        if (data.useExisting) {
+            const pathExists = fs.existsSync(data.existingPath);
+
+            if (!pathExists) {
+                socket.emit("create-instance-fail", "Path does not exist");
+
+                return;
+            }
+
+            const packageJsonExists = fs.existsSync(
+                path.resolve(data.existingPath, "package.json")
+            );
+
+            if (!packageJsonExists) {
+                socket.emit(
+                    "create-instance-fail",
+                    "Path does not contain a package.json"
+                );
+
+                return;
+            }
+
+            const packageJson = await fs.promises.readFile(
+                path.resolve(data.existingPath, "package.json"),
+                "utf-8"
+            );
+
+            const isSnaily = JSON.parse(packageJson).name === "snailycad";
+
+            if (!isSnaily) {
+                socket.emit(
+                    "create-instance-fail",
+                    "Path does not contain a SnailyCAD instance"
+                );
+
+                return;
+            }
+
+            if (!fs.existsSync(path.resolve(data.existingPath, ".env"))) {
+                socket.emit(
+                    "create-instance-fail",
+                    "Path does not contain a .env file (required for SnailyCAD)"
+                );
+
+                return;
+            }
+
+            await ManageDatabase.instances.addInstance({
+                id,
+                name,
+                path: data.existingPath,
+                settings: {
+                    autoRestart: {
+                        enabled: false,
+                        maxRestarts: 0,
+                    },
+                    autoUpdate: {
+                        enabled: true,
+                    },
+                    crashDetection: {
+                        enabled: false,
+                    },
+                    onStartup: {
+                        enabled: false,
+                    },
+                },
+            });
+
+            socket.emit("create-instance-success");
+
+            return;
+        }
+
         function cloneRepo() {
             fs.mkdirSync(path.resolve(GetPlatformStorageDirectory(), id));
 
@@ -156,6 +229,7 @@ export default function HandleCreateInstance(socket: Socket) {
                     await ManageDatabase.instances.addInstance({
                         id,
                         name,
+                        path: path.resolve(GetPlatformStorageDirectory(), id),
                         settings: {
                             autoRestart: {
                                 enabled: false,

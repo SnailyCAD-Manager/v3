@@ -4,15 +4,18 @@ import path from "path";
 import GetPlatformStorageDirectory from "../util/directories";
 import type { CommandData, LogData } from "@scm/types";
 import { io } from "../index";
+import ManageDatabase from "../util/database";
 
 export default function HandleCommands(socket: Socket) {
-    socket.on("server:command", (data: CommandData) => {
+    socket.on("server:command", async (data: CommandData) => {
+        const instance = await ManageDatabase.instances.getInstance(data.id);
+
         try {
             const commandProcess = spawn(
                 data.command.split(" ")[0],
                 data.command.split(" ").slice(1),
                 {
-                    cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
+                    cwd: path.resolve(instance.path),
                     shell: true,
                     stdio: "pipe",
                 }

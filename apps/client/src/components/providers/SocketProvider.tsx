@@ -104,7 +104,7 @@ export default function SocketProvider(): null {
                     message: "An error occurred while updating SnailyCAD",
                     color: "red",
                 });
-            } else {
+            } else if (!data.inProgress) {
                 notifications.show({
                     title: "Update Complete",
                     message: "SnailyCAD has been updated",

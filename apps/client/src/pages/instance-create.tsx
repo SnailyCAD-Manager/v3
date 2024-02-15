@@ -1,7 +1,14 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { usePage } from "@/hooks/usePage";
 import socket from "@/utils/socket";
-import { Button, Code, Loader, LoadingOverlay, TextInput } from "@mantine/core";
+import {
+    Button,
+    Checkbox,
+    Code,
+    Loader,
+    LoadingOverlay,
+    TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconDownload } from "@tabler/icons-react";
@@ -12,6 +19,8 @@ export default function InstanceCreatePage() {
         initialValues: {
             name: "",
             id: "",
+            useExisting: false,
+            existingPath: "",
         },
         validate: {
             id: (value) =>
@@ -54,9 +63,13 @@ export default function InstanceCreatePage() {
     const [instanceInfo, setInstanceInfo] = useState<{
         name: string;
         id: string;
+        useExisting?: boolean;
+        existingPath?: string;
     }>({
         name: "",
         id: "",
+        useExisting: false,
+        existingPath: "",
     });
 
     const [logs, setLogs] = useState<string[]>([]);
@@ -189,6 +202,27 @@ export default function InstanceCreatePage() {
                         disabled={loading.state}
                         {...form.getInputProps("id")}
                     />
+                    <Checkbox
+                        label="Use Existing Instance?&nbsp;"
+                        className="w-full"
+                        {...form.getInputProps("useExisting", {
+                            type: "checkbox",
+                        })}
+                        onChange={(e) => {
+                            form.setFieldValue("useExisting", e.target.checked);
+                        }}
+                    />
+                    {form.values.useExisting && (
+                        <TextInput
+                            label="Absolute Path to Existing Instance"
+                            description="The ABSOLUTE path to the existing instance you want to use."
+                            className="w-full"
+                            required
+                            autoComplete="off"
+                            disabled={loading.state}
+                            {...form.getInputProps("existingPath")}
+                        />
+                    )}
                     <div className="flex flex-row w-full justify-end gap-2">
                         <Button
                             variant="light"

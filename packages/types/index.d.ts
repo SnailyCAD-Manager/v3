@@ -17,6 +17,7 @@ declare module "@scm/types" {
     export type StorageInstance = {
         name: string;
         id: string;
+        path: string;
         settings: {
             autoStart?: boolean;
             onStartup: {

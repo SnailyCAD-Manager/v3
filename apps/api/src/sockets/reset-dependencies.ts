@@ -12,10 +12,8 @@ export default function HandleResetDependencies(socket: Socket) {
         "server:reset-dependencies",
         async (data: ResetDependenciesData) => {
             const { id } = data;
-            const instancePath = path.resolve(
-                GetPlatformStorageDirectory(),
-                id
-            );
+            const instance = await ManageDatabase.instances.getInstance(id);
+            const instancePath = path.resolve(instance.path);
 
             try {
                 await fs.promises.rm(

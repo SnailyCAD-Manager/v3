@@ -110,6 +110,7 @@ export default class ManageDatabase {
                 data: {
                     id: instance.id,
                     name: instance.name,
+                    path: instance.path,
                     settings: JSON.stringify(instance.settings),
                 },
             });

@@ -32,6 +32,7 @@ model Session {
 
 model StorageInstance {
   id       String @id @unique
+  path     String
   name     String
   settings String
 }

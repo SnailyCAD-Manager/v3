@@ -14,11 +14,6 @@ let _manualStop = false;
 
 export default function HandleStopInstance(socket: Socket) {
     socket.on("server:stop-instance", async (data: StopData) => {
-        //going to be used
-        const env = dotenv.config({
-            path: path.resolve(GetPlatformStorageDirectory(), data.id, ".env"),
-        }).parsed as Env;
-
         _manualStop = true;
         ManageProcess.killProcess(data.id);
 

@@ -46,7 +46,9 @@ export async function fireStart(data: StartData) {
 
     const { id } = data;
 
-    if (!fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id))) {
+    const instance = await ManageDatabase.instances.getInstance(id);
+
+    if (!fs.existsSync(path.resolve(instance.path))) {
         io.emit("error", `The instance with the ID ${id} does not exist`);
         return;
     }
@@ -54,15 +56,16 @@ export async function fireStart(data: StartData) {
     const startCommand = getStartCommand(data.build);
 
     try {
+        const env = await readEnv(id);
         const startProcess = spawn(
             startCommand.split(" ")[0],
             startCommand.split(" ").slice(1),
             {
-                cwd: path.resolve(GetPlatformStorageDirectory(), data.id),
+                cwd: path.resolve(instance.path),
                 shell: true,
                 stdio: "pipe",
                 env: {
-                    ...readEnv(data.id).parsed,
+                    ...env.parsed,
                     PATH: process.env.PATH,
                 },
             }
@@ -210,6 +213,7 @@ async function FilterLog(data: string, id: string) {
     // Online Webhook
     if (data.includes("SnailyCADv4 is running with version")) {
         const { settings } = await ManageDatabase.instances.getInstance(id);
+        const env = await readEnv(id);
 
         if (settings.onStartup.enabled) {
             if (
@@ -230,7 +234,7 @@ async function FilterLog(data: string, id: string) {
                 .addField("Version", data.split(" ")[5])
                 .addField(
                     "Open SnailyCAD",
-                    `[Click here](${readEnv(id).parsed.NEXT_PUBLIC_CLIENT_URL})`
+                    `[Click here](${env.parsed.NEXT_PUBLIC_CLIENT_URL})`
                 )
                 .setTimestamp()
                 .setFooter("Sent from SnailyCAD Manager");
