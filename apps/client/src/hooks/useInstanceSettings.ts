@@ -10,6 +10,7 @@ export const useInstanceSettings = create<InstanceSettingsStore>((set) => ({
     instanceSettings: {
         name: "",
         id: "",
+        path: "",
         settings: {
             onStartup: {
                 enabled: false,
