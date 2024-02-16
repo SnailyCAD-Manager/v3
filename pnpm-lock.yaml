@@ -112,13 +112,7 @@ importers:
       commander:
         specifier: ^12.0.0
         version: 12.0.0
-      figlet:
-        specifier: ^1.7.0
-        version: 1.7.0
     devDependencies:
-      '@types/figlet':
-        specifier: ^1.5.8
-        version: 1.5.8
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.11.10)(typescript@5.3.3)
@@ -1186,10 +1180,6 @@ packages:
       '@types/express-serve-static-core': 4.17.42
       '@types/qs': 6.9.11
       '@types/serve-static': 1.15.5
-    dev: true
-
-  /@types/figlet@1.5.8:
-    resolution: {integrity: sha512-G22AUvy4Tl95XLE7jmUM8s8mKcoz+Hr+Xm9W90gJsppJq9f9tHvOGkrpn4gRX0q/cLtBdNkWtWCKDg2UDZoZvQ==}
     dev: true
 
   /@types/http-errors@2.0.4:
@@ -2965,12 +2955,6 @@ packages:
     resolution: {integrity: sha512-zGygtijUMT7jnk3h26kUms3BkSDp4IfIKjmnqI2tvx6nuBfiF1UqOxbnLfzdv+apBy+53oaImsKtMw/xYbW+1w==}
     dependencies:
       reusify: 1.0.4
-
-  /figlet@1.7.0:
-    resolution: {integrity: sha512-gO8l3wvqo0V7wEFLXPbkX83b7MVjRrk1oRLfYlZXol8nEpb/ON9pcKLI4qpBv5YtOTfrINtqb7b40iYY2FTWFg==}
-    engines: {node: '>= 0.4.0'}
-    hasBin: true
-    dev: false
 
   /file-contents@0.2.4:
     resolution: {integrity: sha512-PEz7U6YlXr+dvWCtW63DUY1LUTHOVs1rv4s1/I/39dpvvidQqMSTY6JklazQS60MMoI/ztpo5kMlpdvGagvLbA==}
