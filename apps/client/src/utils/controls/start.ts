@@ -4,7 +4,7 @@ import {
     useInstance,
 } from "@/hooks/useInstance";
 import socket from "../socket";
-import { StartData } from "@scm/types";
+import type { StartData } from "@scm/types";
 import invalidValues from "../env/invalidValues";
 import { notifications } from "@mantine/notifications";
 import useKeys from "@/hooks/useKeys";

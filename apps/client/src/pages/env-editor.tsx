@@ -1,6 +1,6 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
-import { Env } from "@scm/types";
+import type { Env } from "@scm/types";
 import SaveEnv from "@/utils/controls/env";
 import {
     ActionIcon,

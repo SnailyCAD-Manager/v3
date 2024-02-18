@@ -2,7 +2,7 @@ import CustomCard from "@/components/ui/CustomCard";
 import socket from "@/utils/socket";
 import { Button, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { UserLoginData } from "@scm/types";
+import type { UserLoginData } from "@scm/types";
 import { useEffect } from "react";
 
 export default function LoginPage() {

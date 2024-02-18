@@ -13,7 +13,7 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { User } from "@scm/types";
+import type { User } from "@scm/types";
 import {
     IconEdit,
     IconPlus,

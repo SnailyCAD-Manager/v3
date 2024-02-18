@@ -3,7 +3,7 @@ import { modals } from "@mantine/modals";
 import { getActiveInstance } from "@/hooks/useInstance";
 import Stop from "./stop";
 import { notifications } from "@mantine/notifications";
-import { ResetDependenciesData } from "@scm/types";
+import type { ResetDependenciesData } from "@scm/types";
 import socket from "../socket";
 import { usePage } from "@/hooks/usePage";
 

@@ -1,6 +1,6 @@
 import { getActiveInstanceData, useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
-import { Env } from "@scm/types";
+import type { Env } from "@scm/types";
 import { notifications } from "@mantine/notifications";
 import socket from "../socket";
 

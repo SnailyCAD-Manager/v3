@@ -1,5 +1,9 @@
 import type { Socket } from "socket.io";
-import { AddUserData, UserLoginData, UserLoginReturnData } from "@scm/types";
+import type {
+    AddUserData,
+    UserLoginData,
+    UserLoginReturnData,
+} from "@scm/types";
 import ManageDatabase, { prisma } from "../util/database";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";

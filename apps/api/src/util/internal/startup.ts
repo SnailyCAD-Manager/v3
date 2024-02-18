@@ -1,4 +1,4 @@
-import { StartData } from "@scm/types";
+import type { StartData } from "@scm/types";
 import ManageDatabase from "../database";
 import ManageProcess from "../manageProcess";
 import { fireStart } from "../../sockets/start-instance";

@@ -1,4 +1,4 @@
-import { User } from "@scm/types";
+import type { User } from "@scm/types";
 import { create } from "zustand";
 
 type AuthState = {

@@ -2,7 +2,7 @@ import { getActiveInstance, useInstance } from "@/hooks/useInstance";
 import { useUpdate } from "@/hooks/useUpdate";
 import { modals } from "@mantine/modals";
 import socket from "../socket";
-import { UpdateData } from "@scm/types";
+import type { UpdateData } from "@scm/types";
 import Stop from "./stop";
 import { notifications } from "@mantine/notifications";
 
