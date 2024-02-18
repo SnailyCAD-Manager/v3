@@ -23,13 +23,15 @@ export const io = new Server(server, {
 });
 // #endregion
 
+console.log(__dirname);
+
 async function initAPI() {
     await ManageDatabase.init(); // Initialize the database.
 
     // #region Create Files & Directories if they don't exist
-    if (!fs.existsSync(path.resolve(process.cwd(), "data/settings.json"))) {
+    if (!fs.existsSync(path.resolve(__dirname, "../data/settings.json"))) {
         await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/settings.json"),
+            path.resolve(__dirname, "../data/settings.json"),
             `{"port": "60120"}`,
             "utf-8"
         );
@@ -43,13 +45,13 @@ async function initAPI() {
     // #region Check for Settings Updates
     const defaultSettings = JSON.parse(
         await fs.promises.readFile(
-            path.resolve(process.cwd(), "data/settings.default.json"),
+            path.resolve(__dirname, "../data/settings.default.json"),
             "utf-8"
         )
     );
     const currentSettings = JSON.parse(
         await fs.promises.readFile(
-            path.resolve(process.cwd(), "data/settings.json"),
+            path.resolve(__dirname, "../data/settings.json"),
             "utf-8"
         )
     );
@@ -66,7 +68,7 @@ async function initAPI() {
         });
 
         await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/settings.json"),
+            path.resolve(__dirname, "../data/settings.json"),
             JSON.stringify(currentSettings, null, 4)
         );
     }
@@ -75,17 +77,17 @@ async function initAPI() {
     // #region Set Settings
     settings = JSON.parse(
         await fs.promises.readFile(
-            path.resolve(process.cwd(), "data/settings.json"),
+            path.resolve(__dirname, "../data/settings.json"),
             "utf-8"
         )
     );
     // #endregion
 
     // #region Serve client and API
-    app.use(express.static(path.resolve(process.cwd(), "../client/dist")));
+    app.use(express.static(path.resolve(__dirname, "../../client/dist")));
 
     app.get("/", (_, res) => {
-        res.sendFile(path.resolve(process.cwd(), "../client/dist/index.html"));
+        res.sendFile(path.resolve(__dirname, "../../client/dist/index.html"));
     });
     // #endregion
 

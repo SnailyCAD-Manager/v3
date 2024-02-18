@@ -102,6 +102,29 @@ export default class ManageDatabase {
                 },
             });
         },
+
+        resetPassword: async (username: string, newPassword: string) => {
+            const passwordHash = await bcrypt.hash(newPassword, 10);
+            const foundUser = await prisma.user.findFirst({
+                where: {
+                    username,
+                },
+            });
+
+            if (!foundUser) {
+                throw new Error("User not found");
+            }
+
+            await prisma.user.update({
+                where: {
+                    id: foundUser.id,
+                },
+                data: {
+                    password: passwordHash,
+                    passwordResetAtNextLogin: true,
+                },
+            });
+        },
     };
 
     static instances = {

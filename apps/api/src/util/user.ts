@@ -3,10 +3,12 @@ import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
 
+console.log(__dirname);
+
 export default class ManageUser {
     public static async GetUsers(): Promise<User[]> {
         const users = await fs.promises.readFile(
-            path.resolve(process.cwd(), "data/users.json"),
+            path.resolve(__dirname, "../../data/users.json"),
             "utf-8"
         );
 
@@ -35,7 +37,7 @@ export default class ManageUser {
             password: bcrypt.hashSync(user.password, 10),
         });
         await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/users.json"),
+            path.resolve(__dirname, "../../data/users.json"),
             JSON.stringify(users, null, 4)
         );
 
@@ -58,7 +60,7 @@ export default class ManageUser {
             role: user.role,
         };
         await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/users.json"),
+            path.resolve(__dirname, "../../data/users.json"),
             JSON.stringify(users, null, 4)
         );
 
@@ -70,7 +72,7 @@ export default class ManageUser {
         const index = users.findIndex((u) => u.id === id);
         users.splice(index, 1);
         await fs.promises.writeFile(
-            path.resolve(process.cwd(), "data/users.json"),
+            path.resolve(__dirname, "../../data/users.json"),
             JSON.stringify(users, null, 4)
         );
 

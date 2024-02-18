@@ -16,9 +16,7 @@
         "build:add": "pnpm --filter=\"@scm/build\" add",
         "build:remove": "pnpm --filter=\"@scm/build\" remove",
         "types:add": "pnpm --filter=\"@scm/types\" add",
-        "types:remove": "pnpm --filter=\"@scm/types\" remove",
-        "cli:add": "pnpm --filter=\"@scm/cli\" add",
-        "cli:remove": "pnpm --filter=\"@scm/cli\" remove"
+        "types:remove": "pnpm --filter=\"@scm/types\" remove"
     },
     "devDependencies": {
         "@types/tar": "^6.1.11",

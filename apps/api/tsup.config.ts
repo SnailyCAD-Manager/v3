@@ -1,12 +1,13 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-    entryPoints: ["src/index.ts"],
+    entryPoints: ["src/**/*.ts"],
     format: ["cjs", "esm"],
+    treeshake: true,
     dts: true,
     clean: true,
     sourcemap: true,
     minify: true,
-    splitting: true,
+    splitting: false,
     target: "node14",
 });
