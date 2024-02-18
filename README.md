@@ -1,5 +1,9 @@
 # SnailyCAD Manager v3
 
+```
+NOTE: This project is still in development and is not yet ready for production use.
+```
+
 ## Installation
 
 ### Windows
