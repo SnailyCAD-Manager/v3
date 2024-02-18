@@ -5,7 +5,6 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import HandleAllSockets from "./sockets";
-import { exec } from "child_process";
 import GetPlatformStorageDirectory from "./util/directories";
 import { StartVersionCheck } from "./util/version";
 import ManageDatabase from "./util/database";
@@ -119,9 +118,3 @@ async function initAPI() {
 }
 
 initAPI();
-
-function openInBrowser() {
-    if (process.env.NODE_ENV === "development") {
-        exec(`start http://localhost:${settings?.port}`);
-    }
-}
