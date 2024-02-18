@@ -46,4 +46,4 @@ body:
       attributes:
           label: Additional context
           description: "Add any other context about the problem here."
-          placeholder: "I'm using this version of..."
+          placeholder: "Also, ..."

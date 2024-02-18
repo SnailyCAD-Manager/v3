@@ -1,0 +1,16 @@
+name: Feature Request
+description: Want to suggest a new feature or improvement? Let us know!
+labels: "enhancement"
+body:
+    - type: input
+      attributes:
+          label: Describe the feature
+          description: Please describe the feature or improvement you'd like to see.
+          placeholder: "I'd like to see..."
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Additional context
+          description: "Add any other context or screenshots about the feature request here."
+          placeholder: "Also, ..."
