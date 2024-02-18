@@ -3,12 +3,19 @@
     "version": "1.0.0",
     "main": "dist/index.js",
     "license": "MIT",
+    "exports": {
+        ".": {
+            "import": "./dist/exports.js",
+            "require": "./dist/exports.js"
+        }
+    },
+    "types": "dist/index.d.ts",
     "private": true,
     "scripts": {
-        "dev": "prisma migrate deploy && prisma generate && nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/index.ts --ignore \"data/**/*\"",
+        "dev": "prisma migrate deploy && prisma generate && concurrently \"tsup --watch\" \"nodemon --watch dist --ext js,ts --exec node dist/index.js\" \"prisma studio --browser=none\" --kill-others --success first",
         "start": "prisma migrate deploy && prisma generate && node dist/index.js",
         "prisma": "prisma",
-        "build": "tsc -p ."
+        "build": "tsup"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
@@ -20,6 +27,7 @@
         "nodemon": "^3.0.3",
         "prisma": "^5.9.1",
         "ts-node": "^10.9.2",
+        "tsup": "^8.0.2",
         "typescript": "^5.3.3"
     },
     "dependencies": {
