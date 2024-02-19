@@ -1,23 +1,47 @@
 #!/usr/bin/env node
 
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import commandUpdate from "./commands/update";
 import commandPasswordReset from "./commands/passwordReset";
+import commandUpdateEnv from "./commands/updateEnv";
 
 const program = new Command();
-
-program.version("v3.0.0");
-
-program
-    .command("update")
-    .description("Update SnailyCAD Manager to the latest version.")
-    .action(commandUpdate);
+const options = program.opts();
 
 program
-    .command("password-reset")
-    .description('Reset default "admin" password.')
-    .action(async () => {
-        await commandPasswordReset();
+    .option("-v, --version", "output the version number")
+    .option("-h, --help", "display help for command")
+    .option("-u, --update", "update the app")
+    .option("-p, --password-reset", "reset the password")
+    .parse(process.argv);
+
+program
+    .command("env")
+    .option("-r, --read", "Get a readout for all environment variables")
+    .option("-s, --set <key> <value>", "Set an environment variable")
+    .parse(process.argv)
+    .action((options) => {
+        if (options.read) {
+            commandUpdateEnv();
+        }
     });
 
-program.parse(process.argv);
+if (options.update) {
+    commandUpdate();
+}
+
+if (options.passwordReset) {
+    commandPasswordReset();
+}
+
+if (options.version) {
+    console.log(options.version);
+}
+
+if (options.help) {
+    program.help();
+}
+
+if (!process.argv.slice(2).length) {
+    program.help();
+}
