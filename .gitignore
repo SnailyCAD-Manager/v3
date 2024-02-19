@@ -48,3 +48,4 @@ apps/api/data/*.db
 
 # Build Utils
 build-error.txt
+build.tar.gz
