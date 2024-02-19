@@ -9,6 +9,10 @@ import GetPlatformStorageDirectory from "./util/directories";
 import { StartVersionCheck } from "./util/version";
 import ManageDatabase from "./util/database";
 import Startup from "./util/internal/startup";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(__filename);
 
 let settings: { port: number } | null = null;
 // #region Create App
@@ -21,8 +25,6 @@ export const io = new Server(server, {
     },
 });
 // #endregion
-
-console.log(__dirname);
 
 async function initAPI() {
     await ManageDatabase.init(); // Initialize the database.

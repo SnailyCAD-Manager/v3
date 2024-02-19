@@ -1,47 +1,55 @@
 #!/usr/bin/env node
 
-import { Command, Option } from "commander";
-import commandUpdate from "./commands/update";
+import chalk from "chalk";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import commandPasswordReset from "./commands/passwordReset";
-import commandUpdateEnv from "./commands/updateEnv";
+import fs from "node:fs/promises";
+import path from "path";
+import { fileURLToPath } from "node:url";
 
-const program = new Command();
-const options = program.opts();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-program
-    .option("-v, --version", "output the version number")
-    .option("-h, --help", "display help for command")
-    .option("-u, --update", "update the app")
-    .option("-p, --password-reset", "reset the password")
-    .parse(process.argv);
+const packageJson = JSON.parse(
+    await fs.readFile(
+        path.resolve(__dirname, "../../../../package.json"),
+        "utf-8"
+    )
+);
 
-program
-    .command("env")
-    .option("-r, --read", "Get a readout for all environment variables")
-    .option("-s, --set <key> <value>", "Set an environment variable")
-    .parse(process.argv)
-    .action((options) => {
-        if (options.read) {
-            commandUpdateEnv();
-        }
-    });
+const argv = yargs(hideBin(process.argv));
+argv.version(packageJson.version);
 
-if (options.update) {
-    commandUpdate();
-}
+argv.scriptName("").usage("Usage: scm <command> [options]").demandCommand(1);
 
-if (options.passwordReset) {
-    commandPasswordReset();
-}
+argv.alias("h", "help");
+argv.alias("v", "version");
 
-if (options.version) {
-    console.log(options.version);
-}
+argv.command(
+    "password-reset",
+    "Reset the admin password",
+    (yargs) => {
+        yargs.option("length", {
+            alias: "l",
+            coerce: (arg) => Math.max(1, arg),
+            type: "number",
+            description: "The length of the password",
+            default: 10,
+        });
+    },
+    (argv) => {
+        commandPasswordReset(argv.length as number);
+    }
+);
 
-if (options.help) {
-    program.help();
-}
+argv.strict().fail((msg, err, yargs) => {
+    if (err) throw err;
+    console.error(chalk.redBright(msg));
+    yargs.showHelp();
+});
 
-if (!process.argv.slice(2).length) {
-    program.help();
-}
+argv.showHelpOnFail(true, "Use --help for available options")
+    .demandCommand(1, "You need at least one command before moving on")
+    .help()
+    .parse();

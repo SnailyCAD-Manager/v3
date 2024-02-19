@@ -1,6 +1,7 @@
 {
     "name": "manager-client",
     "private": true,
+    "version": "0.0.0",
     "scripts": {
         "start": "turbo start",
         "build": "turbo build && pnpm run moveBuild",

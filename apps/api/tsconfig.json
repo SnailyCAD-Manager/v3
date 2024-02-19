@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs",                                /* Specify what module code is generated. */
+    "module": "ESNext",                                /* Specify what module code is generated. */
+    "moduleResolution": "Node",
     "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     "outDir": "./dist",                                  /* Specify an output folder for all emitted files. */
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
