@@ -30,7 +30,7 @@ export default function ShortcutProvider() {
 
                     if (page.id === "home") {
                         clearLogs(activeInstance);
-                        addLog(activeInstance, "Logs cleared.");
+                        addLog(activeInstance, "Logs cleared!");
                     }
                 }
             }
