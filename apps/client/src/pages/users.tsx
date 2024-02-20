@@ -312,6 +312,8 @@ function AddUserModal(props: AddUserModalProps) {
             props.onClose();
         }
 
+        addUserForm.reset();
+
         props.onClose();
     }
 
