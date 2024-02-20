@@ -127,7 +127,6 @@ export function Layout(props: Props) {
                                 !page.noNav && (
                                     <NavLink
                                         active={page.id === activePage.id}
-                                        // If the page.roleRequired is there, and the user does not have the role, hide the link.
                                         className={`rounded-md ${page.roleRequired && !(user?.role === page.roleRequired) && "!hidden"}`}
                                         key={page.id}
                                         leftSection={page.icon}

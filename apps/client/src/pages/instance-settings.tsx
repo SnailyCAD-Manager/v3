@@ -36,7 +36,6 @@ export default function InstanceSettingsPage() {
                 (data: StorageInstance) => {
                     setInstanceSettings(data);
 
-                    // Set form values
                     settingsForm.setValues({
                         autoStart: data.settings.autoStart || false,
                         autoUpdateEnabled:
@@ -268,7 +267,6 @@ export default function InstanceSettingsPage() {
                             />
 
                             <Divider className="my-2" />
-                            {/* Bottom Right Save Button */}
                             <div className="flex items-center justify-end">
                                 <p className="text-xs text-muted mr-2">
                                     Done editing?

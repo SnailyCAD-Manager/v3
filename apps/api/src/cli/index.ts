@@ -5,8 +5,11 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import commandPasswordReset from "./commands/passwordReset";
 import fs from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "path";
 import { fileURLToPath } from "node:url";
+import commandSettings from "./commands/settings";
+import { commandEnv } from "./commands/updateEnv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,8 +32,8 @@ argv.alias("v", "version");
 argv.command(
     "password-reset",
     "Reset the admin password",
-    (yargs) => {
-        yargs.option("length", {
+    (args) => {
+        args.option("length", {
             alias: "l",
             coerce: (arg) => Math.max(1, arg),
             type: "number",
@@ -38,8 +41,49 @@ argv.command(
             default: 10,
         });
     },
-    (argv) => {
-        commandPasswordReset(argv.length as number);
+    (args) => {
+        commandPasswordReset(args.length as number);
+    }
+);
+
+argv.command(
+    "env",
+    "Read or set environment variables for the provided\ninstance ID",
+    (args) => {
+        args.option("instance", {
+            alias: "i",
+            type: "string",
+            description: "The instance ID",
+            demandOption: true,
+        });
+        args.option("set", {
+            alias: "s",
+            type: "string",
+            description: "Set the environment variable",
+        });
+        args.option("get", {
+            alias: "g",
+            type: "string",
+            description: "Read all environment variables or a specific one",
+        });
+    },
+    async (args) => {
+        await commandEnv(args);
+    }
+);
+
+argv.command(
+    "settings",
+    "Read or set settings for the provided instance ID",
+    (args) => {
+        args.option("port", {
+            alias: "p",
+            type: "number",
+            description: "Set the port",
+        });
+    },
+    async (args) => {
+        await commandSettings(args);
     }
 );
 

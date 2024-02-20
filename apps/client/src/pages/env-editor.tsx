@@ -134,7 +134,6 @@ export default function EnvEditorPage() {
             onSubmit={envForm.onSubmit((values) => handleSaveEnv(values))}
         >
             <CustomCard className="w-full h-full flex flex-col items-center">
-                {/* Header (Just a title with a download button on the right) */}
                 <div className="w-full flex flex-row items-center justify-between border-b border-b-neutral-500 pb-3">
                     <h1 className="text-xl font-semibold">
                         Environment Variables Editor
@@ -148,7 +147,6 @@ export default function EnvEditorPage() {
                         </ActionIcon>
                     </Tooltip>
                 </div>
-                {/* Form */}
                 <ScrollArea className="w-full h-full">
                     <div className="w-full h-full flex flex-col gap-2 mt-3 mb-3">
                         {Object.entries(envForm.values).map(([key], index) => (
@@ -190,7 +188,6 @@ export default function EnvEditorPage() {
                         ))}
                     </div>
                 </ScrollArea>
-                {/* Footer (Just a save button) */}
                 <div className="w-full flex flex-row items-center justify-end gap-2 border-t-neutral-500 border-t pt-3">
                     <Alert>
                         <b>WARNING</b>&nbsp;Editing the ENV can cause issues

@@ -32,16 +32,6 @@ export default function InstanceCard(props: Props) {
 
     function getInstanceStatus(): "offline" | "partial" | "online" {
         const instance = instances.find((i) => i.id === props.id);
-        /* 
-            status: {
-                api: boolean;
-                client: boolean;
-            }
-
-            If both the Client and API are online, return online.
-            If both the Client and API are offline, return offline.
-            If one is on and the other is off, return partial.
-        */
 
         if (instance?.status.api && instance?.status.client) {
             return "online";

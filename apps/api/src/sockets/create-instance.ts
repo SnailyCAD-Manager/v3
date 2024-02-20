@@ -256,7 +256,6 @@ export default function HandleCreateInstance(socket: Socket) {
             });
         }
 
-        // Check to see if the instance directory already exists based on the ID
         if (fs.existsSync(path.resolve(GetPlatformStorageDirectory(), id))) {
             socket.emit("create-instance-fail", "Instance Already Exists");
 

@@ -30,7 +30,6 @@ export default async function Update(id?: string) {
         });
     }
 
-    // Stable update
     modals.openConfirmModal({
         title: <span className="text-lg font-bold">Update SnailyCAD?</span>,
         centered: true,

@@ -42,6 +42,12 @@ const add = [
     "apps/client/src/types",
     ".vscode",
     "README.md",
+    "LICENSE",
+    ".gitattributes",
+    ".gitignore",
+    ".github",
+    ".npmrc",
+    "SECURITY.md",
 ];
 
 gitignorePatterns = gitignorePatterns.filter(
@@ -87,8 +93,16 @@ async function cleanUp() {
     */
 
     const cleanupSpinner = ora("Cleaning up").start();
-    fs.promises.rm(path.resolve(buildPath, "apps/api/data/database.db"));
-    fs.promises.rm(path.resolve(buildPath, "apps/api/data/settings.json"));
+    await fs.promises.rm(path.resolve(buildPath, "apps/api/data/database.db"));
+    await fs.promises.rm(
+        path.resolve(buildPath, "apps/api/data/settings.json")
+    );
+    await fs.promises.rm(path.resolve(buildPath, "apps/api/src/"), {
+        recursive: true,
+    });
+    await fs.promises.rm(path.resolve(buildPath, "apps/client/src/"), {
+        recursive: true,
+    });
     cleanupSpinner.succeed("Cleaned up");
 
     await gzipFiles();
@@ -96,17 +110,16 @@ async function cleanUp() {
 
 async function gzipFiles() {
     const gzipSpinner = ora("Gzipping files").start();
-    // The files are in the build path, and contains both files and directories. gzip everything including the directories, subdirectories and files and subfiles
-    const gzipStream = await tar.c(
+    await tar.c(
         {
             gzip: true,
             file: path.resolve(buildPath, "linux.tar.gz"),
-            cwd: buildPath, // Set the current working directory to the buildPath
+            cwd: buildPath,
             filter: (path, stat) => {
-                return path !== "linux.tar.gz"; // Exclude the build.tar.gz file from the archive
+                return path !== "linux.tar.gz";
             },
         },
-        ["./"] // Gzip only the current directory (buildPath)
+        ["./"]
     );
     gzipSpinner.succeed("Files gzipped successfully");
 }

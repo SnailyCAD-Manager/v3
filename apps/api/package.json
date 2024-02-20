@@ -5,11 +5,8 @@
     "license": "MIT",
     "types": "dist/index.d.ts",
     "private": true,
-    "bin": {
-        "scm": "dist/cli/index.mjs"
-    },
     "scripts": {
-        "dev": "prisma migrate deploy && prisma generate && concurrently \"tsup --watch\" \"nodemon --watch dist/index.mjs --ext js,ts --exec node dist/index.mjs\" \"prisma studio --browser=none\" --kill-others --success first",
+        "dev": "prisma migrate deploy && prisma generate && tsup && concurrently \"tsup --watch\" \"nodemon --watch dist/index.mjs --ext js,ts --exec node dist/index.mjs\" \"prisma studio --browser=none\" --kill-others --success first",
         "start": "prisma migrate deploy && prisma generate && node dist/index.mjs",
         "prisma": "prisma",
         "build": "tsup"
@@ -44,8 +41,8 @@
         "express": "^4.18.2",
         "find-process": "^1.4.7",
         "kill-port": "^2.0.1",
+        "ora": "^8.0.1",
         "socket.io": "^4.7.4",
-        "socket.io-client": "^4.7.4",
         "uuid": "^9.0.1",
         "yargs": "^17.7.2"
     }

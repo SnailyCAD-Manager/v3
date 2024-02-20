@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import type { Instance, Env, PackageJson, StorageInstance } from "@scm/types";
 import dotenv from "dotenv";
-import GetPlatformStorageDirectory from "../util/directories";
 import { GetLatestVersion } from "../util/version";
 import ManageProcess from "../util/manageProcess";
 import ManageDatabase from "../util/database";

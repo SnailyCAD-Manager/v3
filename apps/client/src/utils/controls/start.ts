@@ -98,7 +98,6 @@ async function invalidValueCheck() {
             }
         };
 
-        // Test all above, and if none of them reject, resolve.
         Promise.all([
             test_CORS_ORIGIN_URL(),
             test_NEXT_PUBLIC_CLIENT_URL(),

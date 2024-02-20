@@ -14,6 +14,8 @@ import {
     IconTools,
 } from "@tabler/icons-react";
 import { usePage } from "@/hooks/usePage";
+import RestartInstanceModal from "../modals/restartInstance";
+import { useInstance } from "@/hooks/useInstance";
 
 const SpotlightActions: (SpotlightActionData | SpotlightActionGroupData)[] = [
     {
@@ -36,7 +38,16 @@ const SpotlightActions: (SpotlightActionData | SpotlightActionGroupData)[] = [
                     "Restart the currently selected instance of SnailyCAD",
                 leftSection: <IconRefresh />,
                 onClick: () => {
-                    // Controls.Restart();
+                    RestartInstanceModal({
+                        instanceId: useInstance.getState().activeInstance,
+                        instanceName: useInstance
+                            .getState()
+                            .instances.find(
+                                (i) =>
+                                    i.id ===
+                                    useInstance.getState().activeInstance
+                            )?.name as string,
+                    });
                 },
             },
             {

@@ -1,6 +1,3 @@
-import Database from "better-sqlite3";
-import path from "path";
-import fs from "fs";
 import type { StorageInstance, User } from "@scm/types";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
@@ -71,15 +68,7 @@ export default class ManageDatabase {
                 },
             });
         },
-        /* 
-        username:
-            values.username === ""
-                ? props.editMode.user.username
-                : values.username,
-        newPassword: values.password === "" ? null : values.password,
-        role: values.role,
-        id: props.editMode.user.id,
-        */
+
         updateUser: async (data: {
             username: string;
             newPassword: string | null;
@@ -90,7 +79,6 @@ export default class ManageDatabase {
             if (data.newPassword) {
                 passwordHash = await bcrypt.hash(data.newPassword, 10);
             }
-            // Update the user, but if there is no new password, don't update the password
             await prisma.user.update({
                 where: {
                     id: data.id,

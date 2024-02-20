@@ -2,10 +2,8 @@ import type { LogData, UpdateData } from "@scm/types";
 import type { Socket } from "socket.io";
 import ManageProcess from "../util/manageProcess";
 import { spawn } from "child_process";
-import axios from "axios";
 import { io } from "..";
 import path from "path";
-import GetPlatformStorageDirectory from "../util/directories";
 import { GetLatestVersion } from "../util/version";
 import ManageDatabase from "../util/database";
 

@@ -5,8 +5,6 @@ import axios from "axios";
 let cachedReleases: { tag_name: string }[] = [];
 
 export default async function Downgrade() {
-    // If the releases are already cached, skip the request. Otherwise axios.post https://api.github.com/repos/SnailyCAD/snaily-cadv4/releases
-
     const { data } = await axios.get(
         "https://api.github.com/repos/SnailyCAD/snaily-cadv4/releases"
     );

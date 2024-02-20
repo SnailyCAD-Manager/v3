@@ -72,10 +72,10 @@ importers:
       kill-port:
         specifier: ^2.0.1
         version: 2.0.1
+      ora:
+        specifier: ^8.0.1
+        version: 8.0.1
       socket.io:
-        specifier: ^4.7.4
-        version: 4.7.4
-      socket.io-client:
         specifier: ^4.7.4
         version: 4.7.4
       uuid:

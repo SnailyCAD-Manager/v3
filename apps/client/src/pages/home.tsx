@@ -130,7 +130,6 @@ export default function HomePage() {
                         SnailyCAD Controls
                     </h1>
                     <div className="flex flex-row gap-2 items-center justify-center w-full">
-                        {/* If both client and api are offline, show start, if both are online, show stop */}
                         {activeInstanceData?.status.client &&
                         activeInstanceData?.status.api ? (
                             <Button
@@ -167,7 +166,6 @@ export default function HomePage() {
                                     Open in new tab
                                 </Button>
                             )}
-                        {/* If the latest version is not "ERROR" and the current version is not equal to the latest version, show an update button in blue */}
                         {activeInstanceData?.versions.latest !== "ERROR" &&
                             updateAvailable(
                                 activeInstanceData?.versions.current as string,
@@ -185,7 +183,6 @@ export default function HomePage() {
                                     {activeInstanceData?.versions.latest}
                                 </Button>
                             )}
-                        {/* If the latest version is "ERROR", show a red button */}
                         <Menu>
                             <Menu.Target>
                                 <ActionIcon
@@ -236,7 +233,6 @@ export default function HomePage() {
                     SnailyCAD Console
                 </h1>
                 <Card.Section p={12} className="h-full">
-                    {/* Terminal Style */}
                     <div className="w-full h-full relative rounded-md bg-black/50">
                         <pre
                             ref={terminalRef}

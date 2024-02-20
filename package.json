@@ -2,6 +2,9 @@
     "name": "manager-client",
     "private": true,
     "version": "0.0.0",
+    "bin": {
+        "scm": "apps/api/dist/cli/index.mjs"
+    },
     "scripts": {
         "start": "turbo start",
         "build": "turbo build && pnpm run moveBuild",
