@@ -3,11 +3,11 @@ import {
     getActiveInstanceData,
     useInstance,
 } from "@/hooks/useInstance";
-import socket from "../socket";
+import useKeys from "@/hooks/useKeys";
+import { notifications } from "@mantine/notifications";
 import type { StartData } from "@scm/types";
 import invalidValues from "../env/invalidValues";
-import { notifications } from "@mantine/notifications";
-import useKeys from "@/hooks/useKeys";
+import socket from "../socket";
 
 export default async function Start() {
     const id = getActiveInstance();

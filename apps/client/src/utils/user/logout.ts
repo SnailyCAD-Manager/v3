@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
-import socket from "../socket";
 import { notifications } from "@mantine/notifications";
+import socket from "../socket";
 
 export default function UserLogout() {
     const user = useAuth.getState().user;

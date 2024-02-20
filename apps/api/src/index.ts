@@ -1,15 +1,15 @@
-import express from "express";
-import http from "http";
-import { Server } from "socket.io";
 import cors from "cors";
-import path from "path";
+import express from "express";
 import fs from "fs";
-import HandleAllSockets from "./sockets";
-import GetPlatformStorageDirectory from "./util/directories";
-import { StartVersionCheck } from "./util/version";
-import ManageDatabase from "./util/database";
-import Startup from "./util/internal/startup";
+import http from "http";
 import { fileURLToPath } from "node:url";
+import path from "path";
+import { Server } from "socket.io";
+import HandleAllSockets from "./sockets";
+import ManageDatabase from "./util/database";
+import GetPlatformStorageDirectory from "./util/directories";
+import Startup from "./util/internal/startup";
+import { StartVersionCheck } from "./util/version";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);

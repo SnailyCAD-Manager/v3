@@ -1,8 +1,8 @@
 import { getActiveInstance } from "@/hooks/useInstance";
-import socket from "../socket";
 import { notifications } from "@mantine/notifications";
 import type { LogData } from "@scm/types";
 import { IconCheck } from "@tabler/icons-react";
+import socket from "../socket";
 
 type StopData = {
     id: string;

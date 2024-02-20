@@ -1,11 +1,10 @@
-import type { Socket } from "socket.io";
-import path from "path";
-import fs from "fs";
 import type { LogData } from "@scm/types";
-import ansi_to_html from "ansi-to-html";
 import { default as styles } from "ansi-colors";
-import GetPlatformStorageDirectory from "../util/directories";
+import ansi_to_html from "ansi-to-html";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+import type { Socket } from "socket.io";
 import ManageDatabase from "../util/database";
 
 const ansi = new ansi_to_html();

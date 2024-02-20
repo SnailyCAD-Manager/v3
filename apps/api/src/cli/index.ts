@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 import chalk from "chalk";
+import fs from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import commandPasswordReset from "./commands/passwordReset";
-import fs from "node:fs/promises";
-import { existsSync } from "node:fs";
-import path from "path";
-import { fileURLToPath } from "node:url";
 import commandSettings from "./commands/settings";
 import { commandEnv } from "./commands/updateEnv";
 

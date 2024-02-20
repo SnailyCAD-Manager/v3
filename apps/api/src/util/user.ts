@@ -1,7 +1,7 @@
 import type { User, UserWithoutId } from "@scm/types";
+import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
-import bcrypt from "bcrypt";
 import { __dirname } from "../index";
 
 console.log(__dirname);

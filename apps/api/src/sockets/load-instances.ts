@@ -1,11 +1,11 @@
-import type { Socket } from "socket.io";
+import type { Env, Instance, PackageJson, StorageInstance } from "@scm/types";
+import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import type { Instance, Env, PackageJson, StorageInstance } from "@scm/types";
-import dotenv from "dotenv";
-import { GetLatestVersion } from "../util/version";
-import ManageProcess from "../util/manageProcess";
+import type { Socket } from "socket.io";
 import ManageDatabase from "../util/database";
+import ManageProcess from "../util/manageProcess";
+import { GetLatestVersion } from "../util/version";
 
 export default function HandleLoadInstances(socket: Socket) {
     async function sendInstances() {

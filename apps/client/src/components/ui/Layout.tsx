@@ -22,14 +22,15 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { Spotlight, spotlight } from "@mantine/spotlight";
 import {
+    IconBrandDiscord,
     IconChevronRight,
     IconLogout,
     IconPassword,
+    IconSearch,
     IconSwitchHorizontal,
     IconTerminal,
     IconUser,
 } from "@tabler/icons-react";
-import { IconBrandDiscord, IconSearch } from "@tabler/icons-react";
 
 interface Props {
     children: React.ReactNode;

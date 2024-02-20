@@ -1,5 +1,5 @@
-import type { Socket } from "socket.io";
 import type { StorageInstance } from "@scm/types";
+import type { Socket } from "socket.io";
 import ManageDatabase from "../util/database";
 
 export default function HandleInstanceSettings(socket: Socket) {

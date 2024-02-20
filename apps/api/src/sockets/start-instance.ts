@@ -1,15 +1,14 @@
-import type { Socket } from "socket.io";
-import path from "path";
-import { spawn } from "child_process";
-import ansi_to_html from "ansi-to-html";
 import type { LogData } from "@scm/types";
-import GetPlatformStorageDirectory from "../util/directories";
+import ansi_to_html from "ansi-to-html";
+import { spawn } from "child_process";
+import { MessageBuilder, Webhook } from "discord-webhook-nodejs";
 import fs from "fs";
-import readEnv from "../util/readEnv";
-import ManageProcess from "../util/manageProcess";
+import path from "path";
+import type { Socket } from "socket.io";
 import { io } from "..";
 import ManageDatabase from "../util/database";
-import { Webhook, MessageBuilder } from "discord-webhook-nodejs";
+import ManageProcess from "../util/manageProcess";
+import readEnv from "../util/readEnv";
 import { ManualStop } from "./stop-instance";
 
 const ansi = new ansi_to_html();

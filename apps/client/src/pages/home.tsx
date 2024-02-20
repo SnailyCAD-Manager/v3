@@ -2,13 +2,12 @@ import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import useKeys from "@/hooks/useKeys";
 import { usePage } from "@/hooks/usePage";
-import type { CommandData } from "@scm/types";
 import Delete from "@/utils/controls/delete";
 import Start from "@/utils/controls/start";
 import Stop from "@/utils/controls/stop";
+import Update from "@/utils/controls/update";
 import socket from "@/utils/socket";
 import invalidTerminalCommands from "@/utils/terminal/invalid";
-import { compareVersions } from "compare-versions";
 import {
     ActionIcon,
     Button,
@@ -18,6 +17,7 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import type { CommandData } from "@scm/types";
 import {
     IconChevronRight,
     IconDotsVertical,
@@ -28,8 +28,8 @@ import {
     IconSquare,
     IconTrash,
 } from "@tabler/icons-react";
+import { compareVersions } from "compare-versions";
 import { useEffect, useRef } from "react";
-import Update from "@/utils/controls/update";
 
 export default function HomePage() {
     const clearLogs = useInstance((state) => state.clearLogs);

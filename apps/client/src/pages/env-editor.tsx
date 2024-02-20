@@ -1,7 +1,7 @@
 import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
-import type { Env } from "@scm/types";
 import SaveEnv from "@/utils/controls/env";
+import stringGen from "@/utils/env/stringGen";
 import {
     ActionIcon,
     Alert,
@@ -11,13 +11,13 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import type { Env } from "@scm/types";
 import {
     IconDeviceFloppy,
     IconDownload,
     IconRefresh,
 } from "@tabler/icons-react";
 import invalidValues from "../utils/env/invalidValues";
-import stringGen from "@/utils/env/stringGen";
 
 export default function EnvEditorPage() {
     const activeInstanceData = useInstance((state) => state.activeInstanceData);

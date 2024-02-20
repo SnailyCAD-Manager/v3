@@ -1,8 +1,8 @@
 import { getActiveInstance } from "@/hooks/useInstance";
 import { useUpdate } from "@/hooks/useUpdate";
 import { modals } from "@mantine/modals";
-import socket from "../socket";
 import type { UpdateData } from "@scm/types";
+import socket from "../socket";
 
 export default function forceUpdate() {
     modals.openConfirmModal({

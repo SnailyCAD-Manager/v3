@@ -1,9 +1,8 @@
-import fs from "fs";
-import path from "path";
-import ora from "ora";
-import ncp from "ncp";
 import escapeStringRegexp from "escape-string-regexp";
-import gzip from "zlib";
+import fs from "fs";
+import ncp from "ncp";
+import ora from "ora";
+import path from "path";
 import tar from "tar";
 
 const rootPath = path.resolve(process.cwd(), "../../");

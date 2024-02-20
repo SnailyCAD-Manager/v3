@@ -2,7 +2,7 @@ import CustomCard from "@/components/ui/CustomCard";
 import InstanceCard from "@/components/ui/InstanceCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
-import { Button, ScrollArea, Loader, LoadingOverlay } from "@mantine/core";
+import { Button, Loader, LoadingOverlay, ScrollArea } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export default function InstanceSelector() {

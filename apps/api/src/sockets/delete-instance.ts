@@ -1,9 +1,9 @@
-import type { Socket } from "socket.io";
 import type { DeleteData } from "@scm/types";
-import readEnv from "../util/readEnv";
 import killPort from "kill-port";
-import ManageProcess from "../util/manageProcess";
+import type { Socket } from "socket.io";
 import ManageDatabase from "../util/database";
+import ManageProcess from "../util/manageProcess";
+import readEnv from "../util/readEnv";
 
 export default function HandleDeleteInstance(socket: Socket) {
     socket.on("server:delete-instance", async (data: DeleteData) => {

@@ -1,10 +1,10 @@
 import { getActiveInstance, useInstance } from "@/hooks/useInstance";
 import { useUpdate } from "@/hooks/useUpdate";
 import { modals } from "@mantine/modals";
-import socket from "../socket";
-import type { UpdateData } from "@scm/types";
-import Stop from "./stop";
 import { notifications } from "@mantine/notifications";
+import type { UpdateData } from "@scm/types";
+import socket from "../socket";
+import Stop from "./stop";
 
 export default async function Update(id?: string) {
     if (!id) id = getActiveInstance();

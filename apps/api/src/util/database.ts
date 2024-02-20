@@ -1,7 +1,7 @@
+import { PrismaClient } from "@prisma/client";
 import type { StorageInstance, User } from "@scm/types";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
-import { PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 

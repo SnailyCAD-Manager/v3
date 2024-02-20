@@ -1,13 +1,13 @@
-import type { Socket } from "socket.io";
-import path from "path";
-import fs from "fs";
-import { spawn } from "child_process";
-import commands from "../util/commands";
-import GetPlatformStorageDirectory from "../util/directories";
+import type { CommandTree, Env } from "@scm/types";
 import axios from "axios";
+import { spawn } from "child_process";
 import dotenv from "dotenv";
-import type { Env, CommandTree } from "@scm/types";
+import fs from "fs";
+import path from "path";
+import type { Socket } from "socket.io";
+import commands from "../util/commands";
 import ManageDatabase from "../util/database";
+import GetPlatformStorageDirectory from "../util/directories";
 
 export default function HandleCreateInstance(socket: Socket) {
     const installCommands = commands.install as CommandTree;

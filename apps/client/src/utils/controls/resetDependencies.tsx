@@ -1,11 +1,10 @@
 import { modals } from "@mantine/modals";
-
 import { getActiveInstance } from "@/hooks/useInstance";
-import Stop from "./stop";
+import { usePage } from "@/hooks/usePage";
 import { notifications } from "@mantine/notifications";
 import type { ResetDependenciesData } from "@scm/types";
 import socket from "../socket";
-import { usePage } from "@/hooks/usePage";
+import Stop from "./stop";
 
 export default async function ResetDependencies(id?: string) {
     if (!id) id = getActiveInstance();

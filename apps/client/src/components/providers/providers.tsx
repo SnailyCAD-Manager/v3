@@ -1,10 +1,10 @@
 import { MantineProvider } from "@mantine/core";
-import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
 import { NavigationProgress } from "@mantine/nprogress";
 import PageProvider from "./PageProvider";
-import SocketProvider from "./SocketProvider";
 import ShortcutProvider from "./ShortcutProvider";
+import SocketProvider from "./SocketProvider";
 
 interface Props {
     children: React.ReactNode;

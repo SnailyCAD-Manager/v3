@@ -1,13 +1,13 @@
-import type { Socket } from "socket.io";
 import type {
     AddUserData,
     UserLoginData,
     UserLoginReturnData,
 } from "@scm/types";
-import ManageDatabase, { prisma } from "../util/database";
-import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
+import type { Socket } from "socket.io";
+import { v4 as uuid } from "uuid";
 import { io } from "..";
+import ManageDatabase, { prisma } from "../util/database";
 
 export default function HandleUser(socket: Socket) {
     socket.on("server:add-user", async (data: AddUserData) => {

@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import type { StorageInstance } from "@scm/types";
+import { create } from "zustand";
 
 type InstanceSettingsStore = {
     instanceSettings: StorageInstance;

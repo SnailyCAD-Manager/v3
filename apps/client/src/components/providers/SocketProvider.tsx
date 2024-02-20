@@ -1,14 +1,14 @@
+import { useAuth } from "@/hooks/useAuth";
 import { useInstance } from "@/hooks/useInstance";
+import { usePage } from "@/hooks/usePage";
 import { useSocket } from "@/hooks/useSocket";
-import type { Instance, LogData, UserLoginReturnData } from "@scm/types";
+import { useUpdate } from "@/hooks/useUpdate";
 import logs from "@/utils/debug/logs";
 import socket from "@/utils/socket";
 import { notifications } from "@mantine/notifications";
 import { nprogress } from "@mantine/nprogress";
+import type { Instance, LogData, UserLoginReturnData } from "@scm/types";
 import { useEffect } from "react";
-import { useUpdate } from "@/hooks/useUpdate";
-import { useAuth } from "@/hooks/useAuth";
-import { usePage } from "@/hooks/usePage";
 
 export default function SocketProvider(): null {
     const { setConnected } = useSocket();

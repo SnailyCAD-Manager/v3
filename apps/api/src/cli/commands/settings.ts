@@ -1,8 +1,8 @@
+import chalk from "chalk";
+import { existsSync } from "node:fs";
+import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "path";
-import fs from "node:fs/promises";
-import { existsSync } from "node:fs";
-import chalk from "chalk";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

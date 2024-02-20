@@ -2,7 +2,6 @@ import CustomCard from "@/components/ui/CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { useInstanceSettings } from "@/hooks/useInstanceSettings";
 import { usePage } from "@/hooks/usePage";
-import type { StorageInstance } from "@scm/types";
 import socket from "@/utils/socket";
 import {
     Button,
@@ -15,6 +14,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import type { StorageInstance } from "@scm/types";
 import { useEffect } from "react";
 
 export default function InstanceSettingsPage() {

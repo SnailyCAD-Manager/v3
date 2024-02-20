@@ -1,8 +1,7 @@
+import type { Env } from "@scm/types";
+import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import GetPlatformStorageDirectory from "./directories";
-import dotenv from "dotenv";
-import type { Env } from "@scm/types";
 import ManageDatabase from "./database";
 
 export default async function readEnv(id: string) {

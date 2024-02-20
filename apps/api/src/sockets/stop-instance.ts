@@ -1,10 +1,7 @@
+import type { LogData } from "@scm/types";
 import type { Socket } from "socket.io";
-import dotenv from "dotenv";
-import path from "path";
-import GetPlatformStorageDirectory from "../util/directories";
-import type { Env, LogData } from "@scm/types";
-import ManageProcess from "../util/manageProcess";
 import { io } from "..";
+import ManageProcess from "../util/manageProcess";
 
 type StopData = {
     id: string;

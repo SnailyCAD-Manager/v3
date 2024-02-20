@@ -1,7 +1,7 @@
-import type { Socket } from "socket.io";
+import type { CommandData, LogData } from "@scm/types";
 import { spawn } from "child_process";
 import path from "path";
-import type { CommandData, LogData } from "@scm/types";
+import type { Socket } from "socket.io";
 import { io } from "../index";
 import ManageDatabase from "../util/database";
 

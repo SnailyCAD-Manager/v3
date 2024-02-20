@@ -1,11 +1,10 @@
 import type { ResetDependenciesData } from "@scm/types";
-import type { Socket } from "socket.io";
-import ManageDatabase from "../util/database";
 import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
-import GetPlatformStorageDirectory from "../util/directories";
+import type { Socket } from "socket.io";
 import { io } from "..";
+import ManageDatabase from "../util/database";
 
 export default function HandleResetDependencies(socket: Socket) {
     socket.on(

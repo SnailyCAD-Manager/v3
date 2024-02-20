@@ -1,7 +1,7 @@
 import type { StartData } from "@scm/types";
+import { fireStart } from "../../sockets/start-instance";
 import ManageDatabase from "../database";
 import ManageProcess from "../manageProcess";
-import { fireStart } from "../../sockets/start-instance";
 
 export default async function Startup() {
     const instances = await ManageDatabase.instances.getInstances();

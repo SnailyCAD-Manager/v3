@@ -1,11 +1,11 @@
 import type { LogData, UpdateData } from "@scm/types";
-import type { Socket } from "socket.io";
-import ManageProcess from "../util/manageProcess";
 import { spawn } from "child_process";
-import { io } from "..";
 import path from "path";
-import { GetLatestVersion } from "../util/version";
+import type { Socket } from "socket.io";
+import { io } from "..";
 import ManageDatabase from "../util/database";
+import ManageProcess from "../util/manageProcess";
+import { GetLatestVersion } from "../util/version";
 
 export default function HandleUpdateInstance(socket: Socket) {
     socket.on("server:update-instance", async (data: UpdateData) => {

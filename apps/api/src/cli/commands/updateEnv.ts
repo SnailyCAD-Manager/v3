@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import { ManageDatabase } from "../../exports";
+import dotenv from "dotenv";
 import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import ora from "ora";
 import path from "path";
-import dotenv from "dotenv";
+import { ManageDatabase } from "../../exports";
 
 export async function commandEnv(args: any) {
     const envPath = path.join(

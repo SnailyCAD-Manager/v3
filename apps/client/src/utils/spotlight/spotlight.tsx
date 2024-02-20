@@ -1,8 +1,9 @@
+import { useInstance } from "@/hooks/useInstance";
+import { usePage } from "@/hooks/usePage";
 import type {
     SpotlightActionData,
     SpotlightActionGroupData,
 } from "@mantine/spotlight";
-import Controls from "../controls";
 import {
     IconDashboard,
     IconEdit,
@@ -13,9 +14,8 @@ import {
     IconSquare,
     IconTools,
 } from "@tabler/icons-react";
-import { usePage } from "@/hooks/usePage";
+import Controls from "../controls";
 import RestartInstanceModal from "../modals/restartInstance";
-import { useInstance } from "@/hooks/useInstance";
 
 const SpotlightActions: (SpotlightActionData | SpotlightActionGroupData)[] = [
     {

@@ -1,7 +1,7 @@
 import { getActiveInstanceData, useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
-import type { Env } from "@scm/types";
 import { notifications } from "@mantine/notifications";
+import type { Env } from "@scm/types";
 import socket from "../socket";
 
 export default function SaveEnv(newEnv: Env) {

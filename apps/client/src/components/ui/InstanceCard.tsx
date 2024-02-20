@@ -1,7 +1,8 @@
-import { Button, Divider, Menu } from "@mantine/core";
-import CustomCard from "./CustomCard";
 import { useInstance } from "@/hooks/useInstance";
 import { usePage } from "@/hooks/usePage";
+import Delete from "@/utils/controls/delete";
+import RestartInstanceModal from "@/utils/modals/restartInstance";
+import { Button, Divider, Menu } from "@mantine/core";
 import {
     IconArrowRight,
     IconChevronDown,
@@ -11,8 +12,7 @@ import {
     IconRefreshAlert,
     IconTrash,
 } from "@tabler/icons-react";
-import RestartInstanceModal from "@/utils/modals/restartInstance";
-import Delete from "@/utils/controls/delete";
+import CustomCard from "./CustomCard";
 
 interface Props {
     name: string;
