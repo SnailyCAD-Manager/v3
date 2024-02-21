@@ -40,6 +40,7 @@
         "axios": "^1.6.5",
         "compare-versions": "^6.1.0",
         "concurrently": "^8.2.2",
+        "node-stream-zip": "^1.15.0",
         "tar": "^6.2.0"
     }
 }
