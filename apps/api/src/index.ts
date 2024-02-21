@@ -15,6 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
 let settings: { port: number } | null = null;
+let _updateAvailable: boolean = false;
+
 // #region Create App
 const app = express();
 app.use(cors());
@@ -90,6 +92,10 @@ async function initAPI() {
     app.get("/", (_, res) => {
         res.sendFile(path.resolve(__dirname, "../../client/dist/index.html"));
     });
+
+    app.post("/api/update", async (req, res) => {
+        updateAvailable(req.body.toggle);
+    });
     // #endregion
 
     // #region Socket.io
@@ -120,3 +126,11 @@ async function initAPI() {
 }
 
 initAPI();
+
+export function updateAvailable(toggle?: boolean) {
+    if (toggle !== undefined) {
+        _updateAvailable = toggle;
+    }
+
+    return _updateAvailable;
+}

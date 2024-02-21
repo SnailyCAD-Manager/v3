@@ -6,7 +6,7 @@
         "scm": "apps/api/dist/cli/index.mjs"
     },
     "scripts": {
-        "start": "turbo start",
+        "start": "concurrently \"node scripts/version-check.mjs\" \"turbo start\"",
         "build": "turbo build && pnpm run moveBuild",
         "moveBuild": "pnpm --filter=\"@scm/build\" postbuild",
         "dev": "turbo dev",
@@ -37,6 +37,9 @@
         "packages/*"
     ],
     "dependencies": {
+        "axios": "^1.6.5",
+        "compare-versions": "^6.1.0",
+        "concurrently": "^8.2.2",
         "tar": "^6.2.0"
     }
 }

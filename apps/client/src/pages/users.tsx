@@ -263,6 +263,10 @@ function AddUserModal(props: AddUserModalProps) {
                     return "Username must be at least 3 characters long";
                 }
 
+                if (!/^[a-z0-9_-]+$/i.test(value)) {
+                    return "Username can only contain letters, numbers, underscores, and hyphens";
+                }
+
                 if (!props.editMode && usernameExists) {
                     return "Username already exists";
                 }

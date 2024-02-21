@@ -7,10 +7,15 @@ import path from "path";
 import { ManageDatabase } from "../../exports";
 
 export async function commandEnv(args: any) {
-    const envPath = path.join(
-        (await ManageDatabase.instances.getInstance(args.instance)).path,
-        ".env"
-    );
+    let instance;
+    try {
+        instance = await ManageDatabase.instances.getInstance(args.instance);
+    } catch (e) {
+        console.log(chalk.redBright("Instance not found"));
+        return;
+    }
+
+    const envPath = path.join(instance.path, ".env");
     const envExists = existsSync(envPath);
     if (!envExists) {
         console.log("No env file found");
@@ -70,5 +75,14 @@ export async function commandEnv(args: any) {
             );
             return;
         }
+    }
+
+    if (!("s" in args || "g" in args)) {
+        console.log(
+            chalk.redBright(
+                "You must specify either the set or get argument. Use --help for more info."
+            )
+        );
+        return;
     }
 }

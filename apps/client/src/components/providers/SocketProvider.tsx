@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useInstance } from "@/hooks/useInstance";
+import { useManagerUpdate } from "@/hooks/useManagerUpdate";
 import { usePage } from "@/hooks/usePage";
 import { useSocket } from "@/hooks/useSocket";
 import { useUpdate } from "@/hooks/useUpdate";
@@ -21,6 +22,9 @@ export default function SocketProvider(): null {
     const setIsAuth = useAuth((state) => state.setIsAuth);
     const setUser = useAuth((state) => state.setUser);
     const setPage = usePage((state) => state.setPage);
+    const setManagerUpdateAvailable = useManagerUpdate(
+        (state) => state.setUpdateAvailable
+    );
 
     useEffect(() => {
         function onConnect() {
@@ -159,6 +163,9 @@ export default function SocketProvider(): null {
                 });
             }
         });
+        socket.on("update-available", () => {
+            setManagerUpdateAvailable(true);
+        });
         socket.connect();
 
         return () => {
@@ -171,6 +178,7 @@ export default function SocketProvider(): null {
             socket.off("client:update-instance", onUpdate);
             socket.off("client:user-login", onLogin);
             socket.off("client:delete-user");
+            socket.off("update-available");
             socket.disconnect();
         };
     }, []);

@@ -1,11 +1,13 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useInstance } from "@/hooks/useInstance";
+import { useManagerUpdate } from "@/hooks/useManagerUpdate";
 import { AppPages, usePage } from "@/hooks/usePage";
 import { useUpdate } from "@/hooks/useUpdate";
 import UpdatingModal from "@/utils/modals/updating";
 import SpotlightActions from "@/utils/spotlight/spotlight";
 import UserLogout from "@/utils/user/logout";
 import {
+    Alert,
     Anchor,
     AppShell,
     Badge,
@@ -24,6 +26,7 @@ import { Spotlight, spotlight } from "@mantine/spotlight";
 import {
     IconBrandDiscord,
     IconChevronRight,
+    IconLock,
     IconLogout,
     IconPassword,
     IconSearch,
@@ -46,6 +49,9 @@ export function Layout(props: Props) {
     const updateInProgress = useUpdate((state) => state.inProgress);
     const activeInstance = useInstance((state) => state.activeInstance);
     const user = useAuth((state) => state.user);
+    const managerUpdateAvailable = useManagerUpdate(
+        (state) => state.updateAvailable
+    );
 
     return (
         <>
@@ -152,6 +158,30 @@ export function Layout(props: Props) {
                                 )
                         )}
                     </AppShell.Section>
+                    {!managerUpdateAvailable && user?.role === "admin" && (
+                        <AppShell.Section className="mb-4">
+                            <Alert
+                                color="red"
+                                title="Manager update available!"
+                                children={
+                                    <div className="flex flex-col gap-1">
+                                        <span>
+                                            A new version of SnailyCAD Manager
+                                            is available. Click here to update.
+                                        </span>
+                                        <span className="text-muted text-xs flex flex-row gap-1 items-center">
+                                            <IconLock size={10} />
+                                            Only admins can see this message.
+                                        </span>
+                                    </div>
+                                }
+                                className="cursor-pointer"
+                                onClick={() => {
+                                    console.log("Update");
+                                }}
+                            />
+                        </AppShell.Section>
+                    )}
                     <Menu position="top-end">
                         <Menu.Target>
                             <UnstyledButton className="!bg-white/5 hover:bg-white/10 rounded-md !p-2 flex flex-row items-center justify-between">
