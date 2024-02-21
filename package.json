@@ -1,7 +1,7 @@
 {
     "name": "manager-client",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0-beta.0",
     "bin": {
         "scm": "apps/api/dist/cli/index.mjs"
     },

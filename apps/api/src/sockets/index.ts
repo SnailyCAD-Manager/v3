@@ -10,6 +10,7 @@ import HandleStartInstance from "./start-instance";
 import HandleStopInstance from "./stop-instance";
 import HandleUpdateInstance from "./update-instance";
 import HandleUser from "./user";
+import HandleUpdateManager from "./manager-update";
 
 export default function HandleAllSockets(socket: Socket) {
     HandleCreateInstance(socket);
@@ -23,6 +24,7 @@ export default function HandleAllSockets(socket: Socket) {
     HandleUpdateInstance(socket);
     HandleResetDependencies(socket);
     HandleUser(socket);
+    HandleUpdateManager(socket);
 
     process.on("uncaughtException", (err) => {
         socket.emit("error", err.toString());

@@ -3,6 +3,7 @@ import { useInstance } from "@/hooks/useInstance";
 import { useManagerUpdate } from "@/hooks/useManagerUpdate";
 import { AppPages, usePage } from "@/hooks/usePage";
 import { useUpdate } from "@/hooks/useUpdate";
+import UpdateManager from "@/utils/manager/update";
 import UpdatingModal from "@/utils/modals/updating";
 import SpotlightActions from "@/utils/spotlight/spotlight";
 import UserLogout from "@/utils/user/logout";
@@ -158,7 +159,7 @@ export function Layout(props: Props) {
                                 )
                         )}
                     </AppShell.Section>
-                    {!managerUpdateAvailable && user?.role === "admin" && (
+                    {managerUpdateAvailable && user?.role === "admin" && (
                         <AppShell.Section className="mb-4">
                             <Alert
                                 color="red"
@@ -177,7 +178,7 @@ export function Layout(props: Props) {
                                 }
                                 className="cursor-pointer"
                                 onClick={() => {
-                                    console.log("Update");
+                                    UpdateManager();
                                 }}
                             />
                         </AppShell.Section>
