@@ -1,6 +1,6 @@
 {
 	"name": "@scm/api",
-	"version": "0.0.0",
+	"version": "0.0.0-dev.0",
 	"main": "dist/index.js",
 	"license": "MIT",
 	"types": "dist/index.d.ts",

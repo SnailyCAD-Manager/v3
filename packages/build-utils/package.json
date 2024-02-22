@@ -1,6 +1,6 @@
 {
 	"name": "@scm/build",
-	"version": "0.0.0",
+	"version": "0.0.0-dev.0",
 	"main": "buildScript.mjs",
 	"scripts": {
 		"postbuild": "node buildScript.mjs"

@@ -14,6 +14,7 @@ node_modules
 
 # Testing
 coverage
+tests
 
 # Turbo
 .turbo
@@ -49,3 +50,5 @@ apps/api/data/*.db
 # Build Utils
 build-error.txt
 build.tar.gz
+
+scripts/test-version.mjs
