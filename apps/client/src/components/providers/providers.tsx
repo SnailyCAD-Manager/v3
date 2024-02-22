@@ -7,18 +7,18 @@ import ShortcutProvider from "./ShortcutProvider";
 import SocketProvider from "./SocketProvider";
 
 interface Props {
-    children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 export default function Providers(props: Props) {
-    return (
-        <MantineProvider forceColorScheme="dark" defaultColorScheme="dark">
-            <ShortcutProvider />
-            <PageProvider />
-            <Notifications />
-            <SocketProvider />
-            <NavigationProgress />
-            <ModalsProvider>{props.children}</ModalsProvider>
-        </MantineProvider>
-    );
+	return (
+		<MantineProvider forceColorScheme="dark" defaultColorScheme="dark">
+			<ShortcutProvider />
+			<PageProvider />
+			<Notifications />
+			<SocketProvider />
+			<NavigationProgress />
+			<ModalsProvider>{props.children}</ModalsProvider>
+		</MantineProvider>
+	);
 }

@@ -1,7 +1,7 @@
 import type { Instance } from "@scm/types";
 
 function generateDevInstances(): Instance[] {
-    return [];
+	return [];
 }
 
 export const devInstances = generateDevInstances();

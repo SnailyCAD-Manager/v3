@@ -1,3 +1,3 @@
 export default function commandUpdate() {
-    console.log("Update Command");
+	console.log("Update Command");
 }

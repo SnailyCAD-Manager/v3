@@ -20,117 +20,123 @@ let _updateAvailable: boolean = false;
 // #region Create App
 const app = express();
 app.use(cors());
+app.use(express.json());
 const server = http.createServer(app);
 export const io = new Server(server, {
-    cors: {
-        origin: "*",
-    },
+	cors: {
+		origin: "*",
+	},
 });
 // #endregion
 
 async function initAPI() {
-    await ManageDatabase.init(); // Initialize the database.
+	await ManageDatabase.init(); // Initialize the database.
 
-    // #region Create Files & Directories if they don't exist
-    if (!fs.existsSync(path.resolve(__dirname, "../data/settings.json"))) {
-        await fs.promises.writeFile(
-            path.resolve(__dirname, "../data/settings.json"),
-            `{"port": "60120"}`,
-            "utf-8"
-        );
-    }
+	// #region Create Files & Directories if they don't exist
+	if (!fs.existsSync(path.resolve(__dirname, "../data/settings.json"))) {
+		await fs.promises.writeFile(
+			path.resolve(__dirname, "../data/settings.json"),
+			`{"port": "60120"}`,
+			"utf-8",
+		);
+	}
 
-    if (!fs.existsSync(GetPlatformStorageDirectory())) {
-        await fs.promises.mkdir(GetPlatformStorageDirectory());
-    }
-    // #endregion
+	if (!fs.existsSync(GetPlatformStorageDirectory())) {
+		await fs.promises.mkdir(GetPlatformStorageDirectory());
+	}
+	// #endregion
 
-    // #region Check for Settings Updates
-    const defaultSettings = JSON.parse(
-        await fs.promises.readFile(
-            path.resolve(__dirname, "../data/settings.default.json"),
-            "utf-8"
-        )
-    );
-    const currentSettings = JSON.parse(
-        await fs.promises.readFile(
-            path.resolve(__dirname, "../data/settings.json"),
-            "utf-8"
-        )
-    );
+	// #region Check for Settings Updates
+	const defaultSettings = JSON.parse(
+		await fs.promises.readFile(
+			path.resolve(__dirname, "../data/settings.default.json"),
+			"utf-8",
+		),
+	);
+	const currentSettings = JSON.parse(
+		await fs.promises.readFile(
+			path.resolve(__dirname, "../data/settings.json"),
+			"utf-8",
+		),
+	);
 
-    const isSettingsOutdated = Object.keys(defaultSettings).some(
-        (key) => !currentSettings.hasOwnProperty(key)
-    );
+	const isSettingsOutdated = Object.keys(defaultSettings).some(
+		(key) => !currentSettings.hasOwnProperty(key),
+	);
 
-    if (isSettingsOutdated) {
-        Object.keys(defaultSettings).forEach((key) => {
-            if (!currentSettings.hasOwnProperty(key)) {
-                currentSettings[key] = defaultSettings[key];
-            }
-        });
+	if (isSettingsOutdated) {
+		Object.keys(defaultSettings).forEach((key) => {
+			if (!currentSettings.hasOwnProperty(key)) {
+				currentSettings[key] = defaultSettings[key];
+			}
+		});
 
-        await fs.promises.writeFile(
-            path.resolve(__dirname, "../data/settings.json"),
-            JSON.stringify(currentSettings, null, 4)
-        );
-    }
-    // #endregion
+		await fs.promises.writeFile(
+			path.resolve(__dirname, "../data/settings.json"),
+			JSON.stringify(currentSettings, null, 4),
+		);
+	}
+	// #endregion
 
-    // #region Set Settings
-    settings = JSON.parse(
-        await fs.promises.readFile(
-            path.resolve(__dirname, "../data/settings.json"),
-            "utf-8"
-        )
-    );
-    // #endregion
+	// #region Set Settings
+	settings = JSON.parse(
+		await fs.promises.readFile(
+			path.resolve(__dirname, "../data/settings.json"),
+			"utf-8",
+		),
+	);
+	// #endregion
 
-    // #region Serve client and API
-    app.use(express.static(path.resolve(__dirname, "../../client/dist")));
+	// #region Serve client and API
+	app.use(express.static(path.resolve(__dirname, "../../client/dist")));
 
-    app.get("/", (_, res) => {
-        res.sendFile(path.resolve(__dirname, "../../client/dist/index.html"));
-    });
+	app.get("/", (_, res) => {
+		res.sendFile(path.resolve(__dirname, "../../client/dist/index.html"));
+	});
 
-    app.post("/api/update", async (req, res) => {
-        updateAvailable(req.body.toggle);
-    });
-    // #endregion
+	app.post("/api/update", async (req, res) => {
+		updateAvailable(req.body.toggle);
+		res.sendStatus(200);
 
-    // #region Socket.io
-    io.on("connection", (socket) => {
-        HandleAllSockets(socket);
+		io.emit("update-available", updateAvailable());
+	});
+	// #endregion
 
-        socket.on("disconnect", () => {
-            socket.removeAllListeners();
-        });
-    });
+	// #region Socket.io
+	io.on("connection", (socket) => {
+		HandleAllSockets(socket);
 
-    io.setMaxListeners(20);
-    // #endregion
+		socket.emit("update-available", updateAvailable());
 
-    // #region Start Server
-    server.listen(settings?.port, () => {
-        console.log(`Server listening on port ${settings?.port}`);
-    });
-    // #endregion
+		socket.on("disconnect", () => {
+			socket.removeAllListeners();
+		});
+	});
 
-    // #region Start Version Check
-    await StartVersionCheck();
-    // #endregion
+	io.setMaxListeners(20);
+	// #endregion
 
-    // #region Startup Logic
-    await Startup();
-    // #endregion
+	// #region Start Server
+	server.listen(settings?.port, () => {
+		console.log(`Server listening on port ${settings?.port}`);
+	});
+	// #endregion
+
+	// #region Start Version Check
+	await StartVersionCheck();
+	// #endregion
+
+	// #region Startup Logic
+	await Startup();
+	// #endregion
 }
 
 initAPI();
 
 export function updateAvailable(toggle?: boolean) {
-    if (toggle !== undefined) {
-        _updateAvailable = toggle;
-    }
+	if (toggle !== undefined) {
+		_updateAvailable = toggle;
+	}
 
-    return _updateAvailable;
+	return _updateAvailable;
 }

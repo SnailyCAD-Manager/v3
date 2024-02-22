@@ -5,31 +5,31 @@ import type { Env } from "@scm/types";
 import socket from "../socket";
 
 export default function SaveEnv(newEnv: Env) {
-    const instance = getActiveInstanceData();
+	const instance = getActiveInstanceData();
 
-    if (!instance) {
-        notifications.show({
-            title: "Failed to save env",
-            message: "No active instance selected.",
-            color: "red",
-        });
-        return;
-    }
+	if (!instance) {
+		notifications.show({
+			title: "Failed to save env",
+			message: "No active instance selected.",
+			color: "red",
+		});
+		return;
+	}
 
-    instance.env = newEnv;
+	instance.env = newEnv;
 
-    useInstance.getState().updateInstance(instance);
+	useInstance.getState().updateInstance(instance);
 
-    socket.emit("server:save-env", {
-        id: instance.id,
-        env: newEnv,
-    });
+	socket.emit("server:save-env", {
+		id: instance.id,
+		env: newEnv,
+	});
 
-    notifications.show({
-        title: "Saved env",
-        message: "Successfully saved environment variables.",
-        color: "green",
-    });
+	notifications.show({
+		title: "Saved env",
+		message: "Successfully saved environment variables.",
+		color: "green",
+	});
 
-    usePage.getState().setPage("home");
+	usePage.getState().setPage("home");
 }

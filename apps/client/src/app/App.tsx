@@ -16,64 +16,64 @@ import ToolsPage from "@/pages/tools";
 import UsersPage from "@/pages/users";
 
 export default function App() {
-    const { page } = usePage();
-    const { isAuth } = useAuth();
-    const { connected } = useSocket();
+	const { page } = usePage();
+	const { isAuth } = useAuth();
+	const { connected } = useSocket();
 
-    if (!connected) {
-        return <LoadingOverlay />;
-    }
+	if (!connected) {
+		return <LoadingOverlay />;
+	}
 
-    if (!isAuth) {
-        return <LoginPage />;
-    }
+	if (!isAuth) {
+		return <LoginPage />;
+	}
 
-    switch (page.id) {
-        case "instance-selector":
-            return <InstanceSelector />;
-        case "instance-create":
-            return <InstanceCreatePage />;
-        case "home":
-            return (
-                <Layout>
-                    <HomePage />
-                </Layout>
-            );
-        case "login":
-            return <LoginPage />;
-        case "env-editor":
-            return (
-                <Layout>
-                    <EnvEditorPage />
-                </Layout>
-            );
-        case "tools":
-            return (
-                <Layout>
-                    <ToolsPage />
-                </Layout>
-            );
-        case "keyboard-shortcuts":
-            return (
-                <Layout>
-                    <KeyboardShortcutsPage />
-                </Layout>
-            );
-        case "instance-settings":
-            return (
-                <Layout>
-                    <InstanceSettingsPage />
-                </Layout>
-            );
-        case "users":
-            return (
-                <Layout>
-                    <UsersPage />
-                </Layout>
-            );
-        case "password-reset":
-            return <PasswordResetPage />;
-        default:
-            return <NotFound />;
-    }
+	switch (page.id) {
+		case "instance-selector":
+			return <InstanceSelector />;
+		case "instance-create":
+			return <InstanceCreatePage />;
+		case "home":
+			return (
+				<Layout>
+					<HomePage />
+				</Layout>
+			);
+		case "login":
+			return <LoginPage />;
+		case "env-editor":
+			return (
+				<Layout>
+					<EnvEditorPage />
+				</Layout>
+			);
+		case "tools":
+			return (
+				<Layout>
+					<ToolsPage />
+				</Layout>
+			);
+		case "keyboard-shortcuts":
+			return (
+				<Layout>
+					<KeyboardShortcutsPage />
+				</Layout>
+			);
+		case "instance-settings":
+			return (
+				<Layout>
+					<InstanceSettingsPage />
+				</Layout>
+			);
+		case "users":
+			return (
+				<Layout>
+					<UsersPage />
+				</Layout>
+			);
+		case "password-reset":
+			return <PasswordResetPage />;
+		default:
+			return <NotFound />;
+	}
 }

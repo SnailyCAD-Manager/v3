@@ -17,6 +17,9 @@ importers:
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
+      kill-port:
+        specifier: ^2.0.1
+        version: 2.0.1
       node-stream-zip:
         specifier: ^1.15.0
         version: 1.15.0

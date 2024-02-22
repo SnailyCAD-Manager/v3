@@ -8,49 +8,49 @@ import ManageProcess from "../util/manageProcess";
 import { GetLatestVersion } from "../util/version";
 
 export default function HandleLoadInstances(socket: Socket) {
-    async function sendInstances() {
-        const instanceStore =
-            (await ManageDatabase.instances.getInstances()) as StorageInstance[];
+	async function sendInstances() {
+		const instanceStore =
+			(await ManageDatabase.instances.getInstances()) as StorageInstance[];
 
-        const instances = [] as Instance[];
+		const instances = [] as Instance[];
 
-        for (const instance of instanceStore) {
-            const env = dotenv.config({
-                path: path.resolve(instance.path, ".env"),
-            }).parsed as Env;
+		for (const instance of instanceStore) {
+			const env = dotenv.config({
+				path: path.resolve(instance.path, ".env"),
+			}).parsed as Env;
 
-            const status = {
-                api: !!ManageProcess.getProcessByInstanceId(instance.id),
-                client: !!ManageProcess.getProcessByInstanceId(instance.id),
-            };
+			const status = {
+				api: !!ManageProcess.getProcessByInstanceId(instance.id),
+				client: !!ManageProcess.getProcessByInstanceId(instance.id),
+			};
 
-            const packageJson: PackageJson = JSON.parse(
-                fs
-                    .readFileSync(path.resolve(instance.path, "package.json"))
-                    .toString()
-            );
+			const packageJson: PackageJson = JSON.parse(
+				fs
+					.readFileSync(path.resolve(instance.path, "package.json"))
+					.toString(),
+			);
 
-            instances.push({
-                name: instance.name,
-                id: instance.id,
-                logs: [],
-                versions: {
-                    current: packageJson.version,
-                    latest: GetLatestVersion(),
-                },
-                env: env,
-                status,
-            });
-        }
+			instances.push({
+				name: instance.name,
+				id: instance.id,
+				logs: [],
+				versions: {
+					current: packageJson.version,
+					latest: GetLatestVersion(),
+				},
+				env: env,
+				status,
+			});
+		}
 
-        const interval = setInterval(() => {
-            if (instances.length === instanceStore.length) {
-                socket.emit("load-instances", instances);
-                clearInterval(interval);
-                setTimeout(sendInstances, 500);
-            }
-        }, 100);
-    }
+		const interval = setInterval(() => {
+			if (instances.length === instanceStore.length) {
+				socket.emit("load-instances", instances);
+				clearInterval(interval);
+				setTimeout(sendInstances, 500);
+			}
+		}, 100);
+	}
 
-    sendInstances();
+	sendInstances();
 }

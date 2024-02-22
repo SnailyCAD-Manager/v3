@@ -1,50 +1,50 @@
 import type { CommandTree } from "@scm/types";
 
 const commands: CommandTree = {
-    install: {
-        clone: {
-            command: "git",
-            args: [
-                "clone",
-                "https://github.com/SnailyCAD/snaily-cadv4.git",
-                ".",
-            ],
-        },
-        deps: {
-            command: "pnpm",
-            args: [
-                "install",
-                "--config.confirmModulesPurge=false",
-                "--prod=false",
-            ],
-        },
-        copyEnv: {
-            command: "node",
-            args: ["scripts/copy-env.mjs", "--client", "--api"],
-        },
-    },
-    start: {
-        withBuild: {
-            command: "node",
-            args: [
-                "scripts/copy-env.mjs",
-                "--client",
-                "--api",
-                "&&",
-                "pnpm",
-                "run",
-                "build",
-                "&&",
-                "pnpm",
-                "run",
-                "start",
-            ],
-        },
-        withoutBuild: {
-            command: "pnpm",
-            args: ["run", "start"],
-        },
-    },
+	install: {
+		clone: {
+			command: "git",
+			args: [
+				"clone",
+				"https://github.com/SnailyCAD/snaily-cadv4.git",
+				".",
+			],
+		},
+		deps: {
+			command: "pnpm",
+			args: [
+				"install",
+				"--config.confirmModulesPurge=false",
+				"--prod=false",
+			],
+		},
+		copyEnv: {
+			command: "node",
+			args: ["scripts/copy-env.mjs", "--client", "--api"],
+		},
+	},
+	start: {
+		withBuild: {
+			command: "node",
+			args: [
+				"scripts/copy-env.mjs",
+				"--client",
+				"--api",
+				"&&",
+				"pnpm",
+				"run",
+				"build",
+				"&&",
+				"pnpm",
+				"run",
+				"start",
+			],
+		},
+		withoutBuild: {
+			command: "pnpm",
+			args: ["run", "start"],
+		},
+	},
 };
 
 export default commands as CommandTree;

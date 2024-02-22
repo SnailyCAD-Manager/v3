@@ -2,34 +2,34 @@ import type { StorageInstance } from "@scm/types";
 import { create } from "zustand";
 
 type InstanceSettingsStore = {
-    instanceSettings: StorageInstance;
-    setInstanceSettings: (instance: StorageInstance) => void;
+	instanceSettings: StorageInstance;
+	setInstanceSettings: (instance: StorageInstance) => void;
 };
 
 export const useInstanceSettings = create<InstanceSettingsStore>((set) => ({
-    instanceSettings: {
-        name: "",
-        id: "",
-        path: "",
-        settings: {
-            onStartup: {
-                enabled: false,
-                webhook: "",
-                message: "",
-            },
-            crashDetection: {
-                enabled: false,
-                webhook: "",
-                message: "",
-            },
-            autoRestart: {
-                enabled: false,
-                maxRestarts: 0,
-            },
-            autoUpdate: {
-                enabled: false,
-            },
-        },
-    },
-    setInstanceSettings: (instance) => set({ instanceSettings: instance }),
+	instanceSettings: {
+		name: "",
+		id: "",
+		path: "",
+		settings: {
+			onStartup: {
+				enabled: false,
+				webhook: "",
+				message: "",
+			},
+			crashDetection: {
+				enabled: false,
+				webhook: "",
+				message: "",
+			},
+			autoRestart: {
+				enabled: false,
+				maxRestarts: 0,
+			},
+			autoUpdate: {
+				enabled: false,
+			},
+		},
+	},
+	setInstanceSettings: (instance) => set({ instanceSettings: instance }),
 }));

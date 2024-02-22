@@ -13,20 +13,20 @@ import HandleUser from "./user";
 import HandleUpdateManager from "./manager-update";
 
 export default function HandleAllSockets(socket: Socket) {
-    HandleCreateInstance(socket);
-    HandleLoadInstances(socket);
-    HandleStartInstance(socket);
-    HandleSaveEnv(socket);
-    HandleStopInstance(socket);
-    HandleCommands(socket);
-    HandleDeleteInstance(socket);
-    HandleInstanceSettings(socket);
-    HandleUpdateInstance(socket);
-    HandleResetDependencies(socket);
-    HandleUser(socket);
-    HandleUpdateManager(socket);
+	HandleCreateInstance(socket);
+	HandleLoadInstances(socket);
+	HandleStartInstance(socket);
+	HandleSaveEnv(socket);
+	HandleStopInstance(socket);
+	HandleCommands(socket);
+	HandleDeleteInstance(socket);
+	HandleInstanceSettings(socket);
+	HandleUpdateInstance(socket);
+	HandleResetDependencies(socket);
+	HandleUser(socket);
+	HandleUpdateManager(socket);
 
-    process.on("uncaughtException", (err) => {
-        socket.emit("error", err.toString());
-    });
+	process.on("uncaughtException", (err) => {
+		socket.emit("error", err.toString());
+	});
 }

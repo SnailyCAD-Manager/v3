@@ -7,12 +7,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default function HandleUpdateManager(socket: Socket) {
-    socket.on("server:update-manager", () => {
-        spawn("node", ["scripts/update.mjs"], {
-            cwd: path.resolve(__dirname, "../../../../"),
-            detached: true,
-            stdio: "ignore",
-            shell: true,
-        }).unref();
-    });
+	socket.on("server:update-manager", () => {
+		spawn("node", ["scripts/update.mjs"], {
+			cwd: path.resolve(__dirname, "../../../../"),
+			detached: true,
+			stdio: "ignore",
+			windowsHide: true,
+			shell: true,
+		}).unref();
+	});
 }

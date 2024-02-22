@@ -7,82 +7,82 @@ import path from "path";
 import { ManageDatabase } from "../../exports";
 
 export async function commandEnv(args: any) {
-    let instance;
-    try {
-        instance = await ManageDatabase.instances.getInstance(args.instance);
-    } catch (e) {
-        console.log(chalk.redBright("Instance not found"));
-        return;
-    }
+	let instance;
+	try {
+		instance = await ManageDatabase.instances.getInstance(args.instance);
+	} catch (e) {
+		console.log(chalk.redBright("Instance not found"));
+		return;
+	}
 
-    const envPath = path.join(instance.path, ".env");
-    const envExists = existsSync(envPath);
-    if (!envExists) {
-        console.log("No env file found");
-        return;
-    }
+	const envPath = path.join(instance.path, ".env");
+	const envExists = existsSync(envPath);
+	if (!envExists) {
+		console.log("No env file found");
+		return;
+	}
 
-    if ("s" in args && "g" in args) {
-        console.log(
-            chalk.redBright("You can't set and get at the same time, duh.")
-        );
-        return;
-    }
+	if ("s" in args && "g" in args) {
+		console.log(
+			chalk.redBright("You can't set and get at the same time, duh."),
+		);
+		return;
+	}
 
-    if ("s" in args) {
-        if (!args.s.includes("=")) {
-            console.log(
-                chalk.redBright(
-                    "The set argument must be in the format of KEY=VALUE"
-                )
-            );
-            return;
-        }
+	if ("s" in args) {
+		if (!args.s.includes("=")) {
+			console.log(
+				chalk.redBright(
+					"The set argument must be in the format of KEY=VALUE",
+				),
+			);
+			return;
+		}
 
-        const [key, value] = args.s.split("=");
-        const env = dotenv.config({ path: envPath }).parsed;
-        env![key] = value;
-        const newEnv = Object.entries(env!)
-            .map(([key, value]) => `${key}=${value}`)
-            .join("\n");
+		const [key, value] = args.s.split("=");
+		const env = dotenv.config({ path: envPath }).parsed;
+		env![key] = value;
+		const newEnv = Object.entries(env!)
+			.map(([key, value]) => `${key}=${value}`)
+			.join("\n");
 
-        const spinner = ora("Updating .env file").start();
-        await fs.writeFile(envPath, newEnv);
-        spinner.succeed("Updated .env file");
-    }
+		const spinner = ora("Updating .env file").start();
+		await fs.writeFile(envPath, newEnv);
+		spinner.succeed("Updated .env file");
+	}
 
-    if ("g" in args) {
-        const env = dotenv.config({ path: envPath }).parsed;
-        if (args.g) {
-            if (!env![args.g]) {
-                console.log(chalk.redBright("Key not found"));
-                return;
-            }
+	if ("g" in args) {
+		const env = dotenv.config({ path: envPath }).parsed;
+		if (args.g) {
+			if (!env![args.g]) {
+				console.log(chalk.redBright("Key not found"));
+				return;
+			}
 
-            if (env![args.g]) {
-                console.log(chalk.gray(`${args.g}=${env![args.g]}`));
-                return;
-            }
-        }
+			if (env![args.g]) {
+				console.log(chalk.gray(`${args.g}=${env![args.g]}`));
+				return;
+			}
+		}
 
-        if (!args.g) {
-            console.log(
-                chalk.gray(
-                    Object.entries(env!)
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join("\n")
-                )
-            );
-            return;
-        }
-    }
+		if (!args.g) {
+			console.log(
+				chalk.gray(
+					Object.entries(env!)
+						.map(([key, value]) => `${key}=${value}`)
+						.join("\n"),
+				),
+			);
+			return;
+		}
+	}
 
-    if (!("s" in args || "g" in args)) {
-        console.log(
-            chalk.redBright(
-                "You must specify either the set or get argument. Use --help for more info."
-            )
-        );
-        return;
-    }
+	if (!("s" in args || "g" in args)) {
+		console.log(
+			chalk.redBright(
+				"You must specify either the set or get argument. Use --help for more info.",
+			),
+		);
+		return;
+	}
 }
