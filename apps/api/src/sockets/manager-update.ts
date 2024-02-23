@@ -8,8 +8,13 @@ const __dirname = path.dirname(__filename);
 
 export default function HandleUpdateManager(socket: Socket) {
 	socket.on("server:update-manager", () => {
+		if (process.env.NODE_ENV === "development") {
+			console.log("Skipping manager update in development mode");
+			return;
+		}
+
 		spawn("node", ["scripts/update.mjs"], {
-			cwd: path.resolve(__dirname, "../../../../"),
+			cwd: path.resolve(__dirname, "../../../"),
 			detached: true,
 			stdio: "ignore",
 			windowsHide: true,

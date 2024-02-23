@@ -6,10 +6,10 @@
 	"types": "dist/index.d.ts",
 	"private": true,
 	"scripts": {
-		"dev": "prisma migrate deploy && prisma generate && tsup && concurrently \"tsup --watch\" \"nodemon --watch dist/index.mjs --ext js,ts --exec node dist/index.mjs\" \"prisma studio --browser=none\" --kill-others --success first",
+		"dev": "prisma migrate deploy && prisma generate && tsup && concurrently \"tsup --watch\" \"SET NODE_ENV=development&& nodemon --watch dist/index.mjs --ext js,ts --exec node dist/index.mjs\" \"prisma studio --browser=none\" --kill-others --success first",
 		"start": "prisma migrate deploy && prisma generate && node dist/index.mjs",
 		"prisma": "prisma",
-		"build": "tsup"
+		"build": "tsup && prisma generate"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^5.0.2",
