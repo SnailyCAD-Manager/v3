@@ -88,11 +88,20 @@ async function main() {
 		await fs.promises.unlink(path.resolve(__dirname, "../update.zip"));
 
 		await new Promise((resolve, reject) => {
-			const installDependencies = spawn("pnpm", ["install"], {
-				shell: true,
-				stdio: "inherit",
-				cwd: path.resolve(__dirname, "../"),
-			});
+			const installDependencies = spawn(
+				"pnpm",
+				[
+					"install",
+					"--config.confirmModulesPurge=false",
+					"--prod=false",
+				],
+				{
+					shell: true,
+					stdio: "inherit",
+					windowsHide: true,
+					cwd: path.resolve(__dirname, "../"),
+				},
+			);
 
 			installDependencies.on("exit", (code) => {
 				if (code === 0) {
