@@ -9,6 +9,7 @@ import { hideBin } from "yargs/helpers";
 import commandPasswordReset from "./commands/passwordReset";
 import commandSettings from "./commands/settings";
 import { commandEnv } from "./commands/updateEnv";
+import CommandStartManager from "./commands/start";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -83,6 +84,16 @@ argv.command(
 	},
 	async (args) => {
 		await commandSettings(args);
+	},
+);
+
+// Hidden command
+argv.command(
+	"start",
+	false,
+	() => {},
+	() => {
+		CommandStartManager();
 	},
 );
 
