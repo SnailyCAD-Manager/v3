@@ -1,7 +1,7 @@
 {
 	"name": "manager-client",
 	"private": true,
-	"version": "0.0.0-dev.0",
+	"version": "1.0.0-beta.0",
 	"bin": {
 		"scm": "apps/api/dist/cli/index.mjs"
 	},
@@ -31,10 +31,7 @@
 		"node": ">=18"
 	},
 	"packageManager": "pnpm@8.14.1",
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
+	"workspaces": ["apps/*", "packages/*"],
 	"dependencies": {
 		"axios": "^1.6.5",
 		"compare-versions": "^6.1.0",
