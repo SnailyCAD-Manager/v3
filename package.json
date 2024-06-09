@@ -22,22 +22,25 @@
 		"types:remove": "pnpm --filter=\"@scm/types\" remove"
 	},
 	"devDependencies": {
-		"@types/tar": "^6.1.11",
-		"build-utils": "*",
-		"prettier": "^3.2.4",
-		"turbo": "^1.12.4"
+		"@types/tar": "^6.1.13",
+		"build-utils": "2.0.12",
+		"prettier": "^3.3.1",
+		"turbo": "^2.0.3"
 	},
 	"engines": {
 		"node": ">=18"
 	},
-	"packageManager": "pnpm@8.14.1",
-	"workspaces": ["apps/*", "packages/*"],
+	"packageManager": "pnpm@9.1.1",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
 	"dependencies": {
-		"axios": "^1.6.5",
+		"axios": "^1.7.2",
 		"compare-versions": "^6.1.0",
 		"concurrently": "^8.2.2",
 		"kill-port": "^2.0.1",
 		"node-stream-zip": "^1.15.0",
-		"tar": "^6.2.0"
+		"tar": "^6.2.1"
 	}
 }
